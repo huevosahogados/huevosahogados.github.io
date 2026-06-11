@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stuart Zobel — Musician & Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #FFFFFF;
+      --bg2:       #F0F6FF;
+      --bg3:       #DFF0FA;
+      --chrome:    #2A6496;
+      --ink:       #1A2B3C;
+      --ink2:      #4A6278;
+      --ink3:      #7A9AB2;
+      --accent:    #2A6496;
+      --accent2:   #1A4F7A;
+      --accent-fg: #FFFFFF;
+      --border:    rgba(42,100,150,0.15);
+      --border2:   rgba(42,100,150,0.28);
+      --serif: 'Playfair Display', Georgia, serif;
+      --sans: 'Inter', system-ui, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* NAV */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 2.5rem;
+      border-bottom: 0.5px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 100;
+    }
+
+    .nav-name {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      letter-spacing: 0.01em;
+      color: var(--ink);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      font-size: 0.8rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink2);
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    /* HERO */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 3rem;
+      align-items: center;
+      padding: 5rem 2.5rem 3.5rem;
+      max-width: 1100px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.1s;
+    }
+
+    .hero-text {}
+
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+    }
+
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-tagline {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: var(--ink2);
+      max-width: 480px;
+      line-height: 1.75;
+      margin-bottom: 2rem;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--accent-fg);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.65rem 1.4rem;
+      border-radius: 3px;
+    }
+
+    .hero-cta:hover { background: var(--accent2); }
+
+    /* HERO PHOTO */
+    .hero-photo {
+      position: relative;
+    }
+
+    .hero-photo img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      border-radius: 4px;
+      display: block;
+      filter: grayscale(15%);
+    }
+
+    /* placeholder shown when no real photo yet */
+    .photo-placeholder {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: var(--bg2);
+      border-radius: 4px;
+      border: 1px dashed var(--border2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      color: var(--ink3);
+      font-size: 0.85rem;
+    }
+
+    .photo-placeholder svg {
+      opacity: 0.4;
+    }
+
+    /* STAFF RULE */
+    .staff-rule {
+      width: 100%;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+
+    .staff-rule svg { display: block; width: 100%; }
+
+    /* SECTION */
+    .section {
+      padding: 4rem 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.3s;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink3);
+      margin-bottom: 2rem;
+    }
+
+    /* CARD GRID */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1px;
+      border: 0.5px solid var(--border2);
+      border-radius: 6px;
+      overflow: hidden;
+      background: var(--border);
+    }
+
+    .card {
+      background: var(--bg);
+      padding: 2rem 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      transition: background 0.15s;
+      cursor: pointer;
+    }
+
+    .card:hover { background: var(--bg2); }
+
+    .card-tag {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .card h2 {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--ink);
+    }
+
+    .card p {
+      font-size: 0.88rem;
+      color: var(--ink2);
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    .card-link {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+      margin-top: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .card-link::after { content: '→'; }
+
+    /* ABOUT STRIP */
+    .about-strip {
+      padding: 4rem 2.5rem;
+      border-top: 0.5px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 3rem;
+      align-items: start;
+      background: var(--bg2);
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.5s;
+    }
+
+    .about-strip h3 {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 400;
+      line-height: 1.3;
+      color: var(--ink);
+    }
+
+    .about-strip p {
+      font-size: 0.95rem;
+      color: var(--ink2);
+      line-height: 1.8;
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 2rem 2.5rem;
+      border-top: 0.5px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: var(--ink3);
+    }
+
+    footer a:hover { color: var(--accent); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero, .section, .about-strip { animation: none; opacity: 1; }
+    }
+
+    /* MOBILE */
+    @media (max-width: 700px) {
+      nav { padding: 1rem 1.25rem; }
+      .nav-links { gap: 1.25rem; }
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 3rem 1.25rem 2rem;
+      }
+      .hero-photo { order: -1; max-width: 220px; }
+      .section, .about-strip, footer { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .about-strip { grid-template-columns: 1fr; gap: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-name">Stuart Zobel</a>
+    <ul class="nav-links">
+      <li><a href="app.html">App</a></li>
+      <li><a href="lessons.html">Lessons</a></li>
+      <li><a href="performances.html">Performances</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-text">
+      <p class="hero-eyebrow">Musician · Developer · Seattle</p>
+      <h1>Music,<br><em>made playable.</em></h1>
+      <p class="hero-tagline">Stuart Zobel is a Seattle-based musician, educator, and iOS developer. He builds tools and makes music that cross borders — cultural, instrumental, and technical.</p>
+      <a href="app.html" class="hero-cta">Lead Sheets XML →</a>
+    </div>
+
+    <div class="hero-photo">
+      <!--
+        Replace the placeholder below with a real photo:
+        <img src="images/stuart.jpg" alt="Stuart Zobel" />
+      -->
+      <div class="photo-placeholder">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2A6496" stroke-width="1.2">
+          <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+        </svg>
+        <span>photo goes here</span>
+        <span style="font-size:0.75rem; color: var(--ink3);">replace src in index.html</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="staff-rule">
+    <svg viewBox="0 0 1200 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <line x1="0" y1="6"  x2="1200" y2="6"  stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+      <line x1="0" y1="14" x2="1200" y2="14" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+      <line x1="0" y1="22" x2="1200" y2="22" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+      <line x1="0" y1="30" x2="1200" y2="30" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+      <line x1="0" y1="36" x2="1200" y2="36" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+    </svg>
+  </div>
+
+  <div class="section">
+    <p class="section-label">Projects &amp; work</p>
+    <div class="card-grid">
+
+      <div class="card" onclick="window.location='app.html'">
+        <span class="card-tag">iOS App</span>
+        <h2>Lead Sheets XML</h2>
+        <p>Real-time MusicXML transposition and clef changes — on the bandstand, in the classroom, no desktop editor required.</p>
+        <span class="card-link">View app</span>
+      </div>
+
+      <div class="card" onclick="window.location='lessons.html'">
+        <span class="card-tag">Teaching</span>
+        <h2>Music Lessons</h2>
+        <p>Private instruction for guitarists and musicians of all levels. Repertoire spans jazz, folk, classical, and world music traditions.</p>
+        <span class="card-link">Learn more</span>
+      </div>
+
+      <div class="card" onclick="window.location='cafecito.html'">
+        <span class="card-tag">Ensemble</span>
+        <h2>Cafecito</h2>
+        <p>A Seattle-based ensemble drawing from Latin American musical traditions. Warm, intimate, and rooted in community.</p>
+        <span class="card-link">Explore</span>
+      </div>
+
+      <div class="card" onclick="window.location='parrills-project.html'">
+        <span class="card-tag">Community</span>
+        <h2>The International Parrills Project</h2>
+        <p>A multicultural music initiative connecting musicians and repertoire across traditions and borders.</p>
+        <span class="card-link">Explore</span>
+      </div>
+
+      <div class="card" onclick="window.location='performances.html'">
+        <span class="card-tag">Calendar</span>
+        <h2>Performances</h2>
+        <p>Upcoming shows, sessions, and events in Seattle and beyond.</p>
+        <span class="card-link">See dates</span>
+      </div>
+
+      <div class="card" onclick="window.location='resources.html'">
+        <span class="card-tag">Open library</span>
+        <h2>MusicXML Resources</h2>
+        <p>A curated collection of public domain MusicXML files spanning folk, jazz, and classical traditions. Free to use.</p>
+        <span class="card-link">Browse files</span>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="about-strip">
+    <h3>Rooted in music.<br>Built for musicians.</h3>
+    <p>Stuart Zobel has spent his career at the intersection of music-making and the tools that support it. Whether teaching a student to read a lead sheet, performing with Cafecito, or writing the code that lets a saxophonist transpose on the fly, his work shares a common thread: making music more accessible, more portable, and more alive.</p>
+  </div>
+
+  <footer>
+    <span>© 2026 Stuart Zobel</span>
+    <span><a href="contact.html">Contact</a></span>
+  </footer>
+
+</body>
+</html>
