@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calendar — Stuart Zobel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .page-hero {
+      padding: 4rem 2.5rem 2rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.1s;
+    }
+
+    .page-hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+
+    .page-hero p {
+      font-size: 0.95rem;
+      color: var(--ink2);
+    }
+
+    .events-section {
+      padding: 2rem 2.5rem 5rem;
+      max-width: 860px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.3s;
+    }
+
+    .events-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      border: 0.5px solid var(--border2);
+      border-radius: 6px;
+      overflow: hidden;
+      background: var(--border);
+    }
+
+    .event-row {
+      display: grid;
+      grid-template-columns: 120px 1fr auto;
+      gap: 1.5rem;
+      align-items: start;
+      background: var(--bg);
+      padding: 1.5rem 1.75rem;
+      transition: background 0.15s;
+    }
+
+    .event-row:hover { background: var(--bg2); }
+
+    .event-date {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .event-day {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      font-weight: 400;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .event-month {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink3);
+    }
+
+    .event-time {
+      font-size: 0.78rem;
+      color: var(--ink3);
+      margin-top: 4px;
+    }
+
+    .event-details {}
+
+    .event-name {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 0.25rem;
+    }
+
+    .event-venue {
+      font-size: 0.85rem;
+      color: var(--ink2);
+      margin-bottom: 0.4rem;
+    }
+
+    .event-description {
+      font-size: 0.83rem;
+      color: var(--ink3);
+      line-height: 1.6;
+    }
+
+    .event-link a {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .event-link a:hover { color: var(--accent2); }
+    .event-link a::after { content: ' →'; }
+
+    .no-events {
+      padding: 3rem;
+      text-align: center;
+      color: var(--ink3);
+      font-size: 0.9rem;
+      background: var(--bg);
+    }
+
+    .loading {
+      padding: 3rem;
+      text-align: center;
+      color: var(--ink3);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 640px) {
+      .page-hero, .events-section { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .event-row { grid-template-columns: 80px 1fr; }
+      .event-link { grid-column: 2; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-name">Stuart Zobel</a>
+    <ul class="nav-links">
+      <li><a href="app.html">App</a></li>
+      <li><a href="lessons.html">Lessons</a></li>
+      <li><a href="calendar.html">Calendar</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-hero">
+    <p class="hero-eyebrow">Performances · Workshops · Events</p>
+    <h1>Calendar</h1>
+    <p>Upcoming performances, workshops, and events.</p>
+  </div>
+
+  <div class="staff-rule">
+    <svg viewBox="0 0 1200 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <line x1="0" y1="6"  x2="1200" y2="6"  stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+      <line x1="0" y1="14" x2="1200" y2="14" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+      <line x1="0" y1="22" x2="1200" y2="22" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+      <line x1="0" y1="30" x2="1200" y2="30" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+      <line x1="0" y1="36" x2="1200" y2="36" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+    </svg>
+  </div>
+
+  <div class="events-section">
+    <div class="events-list" id="events-list">
+      <div class="loading">Loading events…</div>
+    </div>
+  </div>
+
+  <footer>
+    <span>© 2026 Stuart Zobel</span>
+    <span><a href="contact.html">Contact</a></span>
+  </footer>
+
+  <script>
+    const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQy2I_be2THZom_w3vKWTPvtfr_Kf-XXY0Ww7Cnu6qZGrxSj9d0OKoTkZ7MpzvDig0572dhglh87nHb/pub?output=csv';
+
+    function parseCSV(text) {
+      const lines = text.trim().split('\n');
+      const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+      return lines.slice(1).map(line => {
+        const cols = [];
+        let current = '';
+        let inQuotes = false;
+        for (let i = 0; i < line.length; i++) {
+          const ch = line[i];
+          if (ch === '"') { inQuotes = !inQuotes; }
+          else if (ch === ',' && !inQuotes) { cols.push(current.trim()); current = ''; }
+          else { current += ch; }
+        }
+        cols.push(current.trim());
+        const obj = {};
+        headers.forEach((h, i) => obj[h] = (cols[i] || '').replace(/^"|"$/g, ''));
+        return obj;
+      });
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return { day: '—', month: '' };
+      const d = new Date(dateStr);
+      if (isNaN(d)) return { day: dateStr, month: '' };
+      return {
+        day: d.getDate(),
+        month: d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+      };
+    }
+
+    function renderEvents(events) {
+      const list = document.getElementById('events-list');
+      const today = new Date();
+      today.setHours(0,0,0,0);
+
+      const upcoming = events.filter(e => {
+        if (!e.Date) return false;
+        const d = new Date(e.Date);
+        return !isNaN(d) && d >= today;
+      });
+
+      if (upcoming.length === 0) {
+        list.innerHTML = '<div class="no-events">No upcoming events scheduled. Check back soon.</div>';
+        return;
+      }
+
+      upcoming.sort((a, b) => new Date(a.Date) - new Date(b.Date));
+
+      list.innerHTML = upcoming.map(e => {
+        const { day, month } = formatDate(e.Date);
+        const linkHTML = e.Link
+          ? `<div class="event-link"><a href="${e.Link}" target="_blank" rel="noopener">Details</a></div>`
+          : '';
+        return `
+          <div class="event-row">
+            <div class="event-date">
+              <span class="event-day">${day}</span>
+              <span class="event-month">${month}</span>
+              ${e.Time ? `<span class="event-time">${e.Time}</span>` : ''}
+            </div>
+            <div class="event-details">
+              <div class="event-name">${e.Event || 'Event'}</div>
+              ${e.Venue ? `<div class="event-venue">${e.Venue}</div>` : ''}
+              ${e.Description ? `<div class="event-description">${e.Description}</div>` : ''}
+            </div>
+            ${linkHTML}
+          </div>`;
+      }).join('');
+    }
+
+    fetch(SHEET_CSV)
+      .then(r => r.text())
+      .then(text => renderEvents(parseCSV(text)))
+      .catch(() => {
+        document.getElementById('events-list').innerHTML =
+          '<div class="no-events">Could not load events. Please try again later.</div>';
+      });
+  </script>
+
+</body>
+</html>
