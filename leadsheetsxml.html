@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lead Sheets XML — Stuart Zobel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .app-hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      padding: 5rem 2.5rem 3.5rem;
+      max-width: 1100px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.1s;
+    }
+
+    .app-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--accent);
+      border-radius: 18px;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .app-icon svg { opacity: 0.9; }
+
+    .app-hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 400;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 1rem;
+    }
+
+    .app-hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .app-tagline {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: var(--ink2);
+      line-height: 1.75;
+      margin-bottom: 0.5rem;
+    }
+
+    .app-sub {
+      font-size: 0.85rem;
+      color: var(--ink3);
+      margin-bottom: 2rem;
+    }
+
+    .app-store-btn {
+      display: inline-block;
+    }
+
+    .app-store-btn img {
+      height: 44px;
+      display: block;
+    }
+
+    /* SLIDESHOW */
+    .slideshow-wrap {
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      background: var(--bg2);
+      aspect-ratio: 3/4;
+    }
+
+    .slideshow {
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
+
+    .slideshow input[type=radio] { display: none; }
+
+    .slides {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* auto-advance via animation */
+    .slide:nth-child(1) { animation: cycle 21s 0s infinite; }
+    .slide:nth-child(2) { animation: cycle 21s 3s infinite; }
+    .slide:nth-child(3) { animation: cycle 21s 6s infinite; }
+    .slide:nth-child(4) { animation: cycle 21s 9s infinite; }
+    .slide:nth-child(5) { animation: cycle 21s 12s infinite; }
+    .slide:nth-child(6) { animation: cycle 21s 15s infinite; }
+    .slide:nth-child(7) { animation: cycle 21s 18s infinite; }
+
+    @keyframes cycle {
+      0%   { opacity: 1; }
+      14%  { opacity: 1; }
+      19%  { opacity: 0; }
+      95%  { opacity: 0; }
+      100% { opacity: 0; }
+    }
+
+    /* FEATURES */
+    .features {
+      padding: 4rem 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.3s;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .feature {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .feature-icon {
+      font-size: 1.4rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .feature h3 {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--ink);
+    }
+
+    .feature p {
+      font-size: 0.88rem;
+      color: var(--ink2);
+      line-height: 1.65;
+    }
+
+    /* CALLOUT STRIP */
+    .callout {
+      background: var(--bg2);
+      border-top: 0.5px solid var(--border);
+      border-bottom: 0.5px solid var(--border);
+      padding: 3rem 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.4s;
+    }
+
+    .callout-text h2 {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+
+    .callout-text p {
+      font-size: 0.92rem;
+      color: var(--ink2);
+      line-height: 1.7;
+      max-width: 560px;
+    }
+
+    .price-badge {
+      flex-shrink: 0;
+      text-align: center;
+      background: var(--accent);
+      color: var(--accent-fg);
+      border-radius: 6px;
+      padding: 1rem 1.5rem;
+    }
+
+    .price-amount {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 400;
+      display: block;
+      line-height: 1;
+    }
+
+    .price-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.85;
+      margin-top: 4px;
+      display: block;
+    }
+
+    /* SUB-PAGE LINKS */
+    .sub-links {
+      padding: 3rem 2.5rem;
+      display: flex;
+      gap: 1px;
+      border-top: 0.5px solid var(--border);
+      background: var(--border);
+      border-radius: 0;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.5s;
+    }
+
+    .sub-link {
+      flex: 1;
+      background: var(--bg);
+      padding: 1.5rem 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      transition: background 0.15s;
+      cursor: pointer;
+    }
+
+    .sub-link:hover { background: var(--bg2); }
+
+    .sub-link-tag {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .sub-link h3 {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--ink);
+    }
+
+    .sub-link span {
+      font-size: 0.78rem;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .sub-link span::after { content: ' →'; }
+
+    @media (max-width: 700px) {
+      .app-hero {
+        grid-template-columns: 1fr;
+        padding: 3rem 1.25rem 2rem;
+      }
+      .features, .callout, .sub-links { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .callout { flex-direction: column; gap: 1.5rem; }
+      .sub-links { flex-direction: column; padding: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-name">Stuart Zobel</a>
+    <ul class="nav-links">
+      <li><a href="app.html">App</a></li>
+      <li><a href="lessons.html">Lessons</a></li>
+      <li><a href="calendar.html">Calendar</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="app-hero">
+    <div>
+      <div class="app-icon" aria-hidden="true">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.2">
+          <path d="M9 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9l-6-6z"/>
+          <path d="M9 3v6h6"/>
+          <line x1="7" y1="13" x2="17" y2="13"/>
+          <line x1="7" y1="17" x2="17" y2="17"/>
+        </svg>
+      </div>
+      <p class="hero-eyebrow">iOS · iPhone &amp; iPad</p>
+      <h1>Lead Sheets<br><em>XML</em></h1>
+      <p class="app-tagline">Real-time MusicXML transposition and clef changes — on the bandstand, in the classroom, without a desktop editor, subscription, or closed ecosystem.</p>
+      <p class="app-sub">No subscription. One-time purchase.</p>
+      <a class="app-store-btn" href="https://apps.apple.com" target="_blank" rel="noopener">
+        <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" />
+      </a>
+    </div>
+
+    <div class="slideshow-wrap">
+      <div class="slides">
+        <div class="slide"><img src="images/ipad1.png" alt="Lead Sheets XML screenshot" /></div>
+        <div class="slide"><img src="images/ipadKeyMenu.png" alt="Key menu" /></div>
+        <div class="slide"><img src="images/ipadNewKey.png" alt="New key" /></div>
+        <div class="slide"><img src="images/ipadClefMenu.png" alt="Clef menu" /></div>
+        <div class="slide"><img src="images/ipadNewClef.png" alt="New clef" /></div>
+        <div class="slide"><img src="images/ipadNewOctave.png" alt="Octave change" /></div>
+        <div class="slide"><img src="images/ipadShare.png" alt="Share" /></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="staff-rule">
+    <svg viewBox="0 0 1200 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <line x1="0" y1="6"  x2="1200" y2="6"  stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+      <line x1="0" y1="14" x2="1200" y2="14" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+      <line x1="0" y1="22" x2="1200" y2="22" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+      <line x1="0" y1="30" x2="1200" y2="30" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+      <line x1="0" y1="36" x2="1200" y2="36" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+    </svg>
+  </div>
+
+  <div class="features">
+    <p class="section-label">What it does</p>
+    <div class="features-grid">
+
+      <div class="feature">
+        <div class="feature-icon" aria-hidden="true">𝄞</div>
+        <h3>Transpose in real time</h3>
+        <p>Change the key of any MusicXML file instantly. Singers, Bb and Eb instrument players, and accompanists can all get what they need on the spot.</p>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon" aria-hidden="true">𝄡</div>
+        <h3>Switch clefs instantly</h3>
+        <p>Viola, cello, and other alternate-clef players can change clef with one tap — no desktop score editor required.</p>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon" aria-hidden="true">↕</div>
+        <h3>Shift octaves</h3>
+        <p>Move music up or down an octave to fit any voice or instrument range.</p>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon" aria-hidden="true">⇪</div>
+        <h3>Export &amp; share</h3>
+        <p>Export your transposed lead sheet as a PDF and share it directly with your accompanist or bandmates.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-text">
+      <h2>No subscription.<br>No closed ecosystem.</h2>
+      <p>Lead Sheets XML renders your own MusicXML files — files you own, from any source. Pair it with our growing public domain repository or bring your own library. One purchase, yours to keep.</p>
+    </div>
+    <div class="price-badge">
+      <span class="price-amount">$9.99</span>
+      <span class="price-label">one-time</span>
+    </div>
+  </div>
+
+  <div class="sub-links">
+    <div class="sub-link" onclick="window.location='resources.html'">
+      <span class="sub-link-tag">Open library</span>
+      <h3>MusicXML Repository</h3>
+      <span>Browse files</span>
+    </div>
+    <div class="sub-link" onclick="window.location='help.html'">
+      <span class="sub-link-tag">Documentation</span>
+      <h3>Help &amp; Tips</h3>
+      <span>Read guide</span>
+    </div>
+    <div class="sub-link" onclick="window.location='privacy.html'">
+      <span class="sub-link-tag">Legal</span>
+      <h3>Privacy Policy</h3>
+      <span>View policy</span>
+    </div>
+  </div>
+
+  <footer>
+    <span>© 2026 Stuart Zobel</span>
+    <span><a href="contact.html">Contact</a></span>
+  </footer>
+
+</body>
+</html>
