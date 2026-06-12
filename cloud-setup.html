@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cloud Setup — Lead Sheets XML</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .doc-wrap { max-width: 680px; margin: 4rem auto; padding: 0 1.5rem 4rem; }
+    .doc-wrap h1 { font-size: 2rem; margin-bottom: 0.25rem; }
+    .doc-wrap .subtitle { color: var(--ink2); font-size: 1.05rem; margin-bottom: 2.5rem; line-height: 1.5; }
+    .doc-wrap p { color: var(--ink2); line-height: 1.7; margin: 0 0 1rem; }
+    .doc-wrap h2 { font-size: 1.2rem; margin: 2.5rem 0 0.75rem; color: var(--ink); }
+    .doc-wrap h3 { font-size: 1rem; font-weight: 600; margin: 1.5rem 0 0.5rem; color: var(--ink); }
+    .doc-wrap ol { color: var(--ink2); line-height: 1.7; padding-left: 1.4rem; margin: 0 0 1rem; }
+    .doc-wrap ol li { margin-bottom: 0.4rem; }
+    .doc-wrap code { background: var(--bg2); border: 1px solid var(--border); padding: 0.1em 0.4em; border-radius: 3px; font-size: 0.9em; }
+    .tip { background: var(--bg2); border-left: 3px solid var(--chrome); padding: 0.75rem 1rem; border-radius: 0 4px 4px 0; margin: 1rem 0; font-size: 0.92rem; color: var(--ink2); line-height: 1.6; }
+    .option-card { border: 1px solid var(--border); border-radius: 6px; padding: 1.5rem; margin: 2rem 0; }
+    .option-card h2 { margin-top: 0; }
+    .other-methods { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .method-card { background: var(--bg2); border-radius: 6px; padding: 1rem; }
+    .method-card h3 { margin-top: 0; font-size: 0.95rem; }
+    .method-card p { font-size: 0.9rem; margin: 0; }
+    .back-link { display: inline-block; margin-bottom: 2rem; font-size: 0.9rem; color: var(--chrome); text-decoration: none; }
+    .back-link:hover { text-decoration: underline; }
+    a { color: var(--chrome); }
+  </style>
+</head>
+<body>
+  <div id="nav-placeholder"></div>
+  <script>fetch("nav.html").then(r=>r.text()).then(h=>document.getElementById("nav-placeholder").innerHTML=h);</script>
+
+  <div class="doc-wrap">
+    <a class="back-link" href="leadsheetsxml.html">← Lead Sheets XML</a>
+    <h1>Loading MusicXML Files</h1>
+    <p class="subtitle">A guide to accessing your files from cloud storage, your computer, and other apps</p>
+
+    <p>This app opens MusicXML files (<code>.xml</code> or <code>.musicxml</code>) stored on your device or in cloud services like Google Drive, iCloud Drive, or Dropbox. Because iOS controls how apps access files, you may need to complete a one-time setup for each cloud service before your files appear.</p>
+
+    <div class="option-card">
+      <h2>Option 1: iCloud Drive <span style="font-size:0.85rem; font-weight:400; color:var(--chrome);">(Recommended)</span></h2>
+      <p>iCloud Drive is built into iOS and is the easiest option — no extra app setup required.</p>
+
+      <h3>First-time setup</h3>
+      <ol>
+        <li>Open the <strong>Settings</strong> app on your iPhone or iPad.</li>
+        <li>Tap your name at the top, then tap <strong>iCloud</strong>.</li>
+        <li>Make sure <strong>iCloud Drive</strong> is turned on.</li>
+        <li>Scroll down and confirm the <strong>Files</strong> app is enabled.</li>
+      </ol>
+
+      <h3>Uploading files from your computer</h3>
+      <ol>
+        <li>On a Mac, open Finder and click <strong>iCloud Drive</strong> in the sidebar.</li>
+        <li>Drag your <code>.xml</code> or <code>.musicxml</code> files into iCloud Drive (you can create a folder to organize them).</li>
+        <li>Wait for the files to sync — a cloud icon means they are still uploading.</li>
+        <li>Once synced, open the app, tap the folder icon, and navigate to iCloud Drive to find your files.</li>
+      </ol>
+
+      <div class="tip">On a Windows PC, install iCloud for Windows from the Microsoft Store, then drag files into the iCloud Drive folder.</div>
+    </div>
+
+    <div class="option-card">
+      <h2>Option 2: Google Drive</h2>
+      <p>Google Drive works through iOS's built-in Files app. You will need to connect it once before it appears in the file picker.</p>
+
+      <h3>First-time setup</h3>
+      <ol>
+        <li>Install the <strong>Google Drive</strong> app from the App Store if you don't already have it.</li>
+        <li>Open the Google Drive app and sign in to your Google account.</li>
+        <li>Open the iOS <strong>Files</strong> app.</li>
+        <li>Tap <strong>Browse</strong> at the bottom of the screen.</li>
+        <li>Tap <strong>Edit</strong> in the top-right corner.</li>
+        <li>Toggle on <strong>Google Drive</strong> and tap <strong>Done</strong>.</li>
+      </ol>
+
+      <h3>Uploading files from your computer</h3>
+      <ol>
+        <li>Go to <a href="https://drive.google.com" target="_blank">drive.google.com</a> in a web browser.</li>
+        <li>Click <strong>New → File Upload</strong> and select your <code>.xml</code> or <code>.musicxml</code> files.</li>
+        <li>Wait for the upload to complete.</li>
+        <li>On your iPhone, open the app and tap the folder icon. Navigate to Google Drive in the file picker.</li>
+      </ol>
+
+      <h3>Troubleshooting: files won't load</h3>
+      <p>If you can see your files in the picker but they won't open, the files may not be downloaded to your device yet.</p>
+      <ol>
+        <li>Open the <strong>Google Drive</strong> app.</li>
+        <li>Find the file you want to use.</li>
+        <li>Tap the three-dot menu (<strong>…</strong>) next to the file.</li>
+        <li>Tap <strong>Make available offline</strong>.</li>
+        <li>Wait for the download to finish, then try opening the file in the app again.</li>
+      </ol>
+
+      <div class="tip">If Google Drive does not appear in the file picker after setup, try closing and reopening the app.</div>
+    </div>
+
+    <div class="option-card">
+      <h2>Option 3: Dropbox</h2>
+      <p>Dropbox also integrates with the iOS Files app and follows the same setup process as Google Drive.</p>
+
+      <h3>First-time setup</h3>
+      <ol>
+        <li>Install the <strong>Dropbox</strong> app from the App Store.</li>
+        <li>Open Dropbox and sign in.</li>
+        <li>Open the iOS <strong>Files</strong> app, tap <strong>Browse</strong>, then tap <strong>Edit</strong>.</li>
+        <li>Toggle on <strong>Dropbox</strong> and tap <strong>Done</strong>.</li>
+        <li>Upload your <code>.xml</code> or <code>.musicxml</code> files to Dropbox from your computer, then access them through the app's file picker.</li>
+      </ol>
+    </div>
+
+    <h2>Other ways to get files onto your device</h2>
+    <div class="other-methods">
+      <div class="method-card">
+        <h3>Email attachment</h3>
+        <p>Email yourself a <code>.xml</code> or <code>.musicxml</code> file. On your iPhone, tap and hold the attachment, then tap <strong>Save to Files</strong>.</p>
+      </div>
+      <div class="method-card">
+        <h3>AirDrop from a Mac</h3>
+        <p>Right-click a file on your Mac and choose <strong>Share → AirDrop</strong>. Select your iPhone, then choose <strong>Save to Files</strong> when it arrives.</p>
+      </div>
+      <div class="method-card">
+        <h3>USB transfer (Mac)</h3>
+        <p>Connect your iPhone via USB. Open Finder, click your iPhone in the sidebar, select the <strong>Files</strong> tab, and drag files into the app's folder.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <p>© 2026 Stuart Zobel</p>
+  </footer>
+</body>
+</html>

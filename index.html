@@ -10,35 +10,22 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-
-  <nav>
-    <a href="/" class="nav-name">Stuart Zobel</a>
-    <ul class="nav-links">
-      <li><a href="leadsheetsxml.html">Lead Sheets XML</a></li>
-      <li><a href="lessons.html">Lessons</a></li>
-      <li><a href="calendar.html">Calendar</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </nav>
+  <div id="nav-placeholder"></div>
+  <script>fetch("nav.html").then(r=>r.text()).then(h=>document.getElementById("nav-placeholder").innerHTML=h);</script>
 
   <div class="hero">
     <div class="hero-text">
       <p class="hero-eyebrow">Musician · Developer · Seattle</p>
       <h1>Music,<br><em>made playable.</em></h1>
       <p class="hero-tagline">Stuart Zobel is a Seattle-based musician, educator, and iOS developer. He builds tools and makes music that cross borders — cultural, instrumental, and technical.</p>
-      <a href="app.html" class="hero-cta">Lead Sheets XML →</a>
+      <a href="leadsheetsxml.html" class="hero-cta">Lead Sheets XML →</a>
     </div>
-
     <div class="hero-photo">
-      <!--
-        When ready, replace placeholder with:
-        <img src="images/stuart.jpg" alt="Stuart Zobel" />
-      -->
       <div class="photo-placeholder">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2A6496" stroke-width="1.2">
           <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
         </svg>
-        <span><img src="/images/Stuart-camera.jpg"></span>
+        <span><img src="images/Stuart-camera.jpg" alt="Stuart Zobel"></span>
       </div>
     </div>
   </div>
@@ -56,49 +43,42 @@
   <div class="section">
     <p class="section-label">Projects &amp; work</p>
     <div class="card-grid">
-
       <div class="card" onclick="window.location='leadsheetsxml.html'">
         <span class="card-tag">iOS App</span>
         <h2>Lead Sheets XML</h2>
         <p>Real-time MusicXML transposition and clef changes — on the bandstand, in the classroom, no desktop editor required.</p>
         <span class="card-link">View app</span>
       </div>
-
       <div class="card" onclick="window.location='lessons.html'">
         <span class="card-tag">Teaching</span>
         <h2>Music Lessons</h2>
         <p>Private instruction for guitarists and musicians of all levels. Repertoire spans jazz, folk, classical, and world music traditions.</p>
         <span class="card-link">Learn more</span>
       </div>
-
       <div class="card" onclick="window.location='cafecito.html'">
         <span class="card-tag">Ensemble</span>
         <h2>Cafecito</h2>
         <p>A Seattle-based ensemble drawing from Latin American musical traditions. Warm, intimate, and rooted in community.</p>
         <span class="card-link">Explore</span>
       </div>
-
       <div class="card" onclick="window.location='parrills-project.html'">
         <span class="card-tag">Community</span>
         <h2>The International Parrills Project</h2>
         <p>A multicultural music initiative connecting musicians and repertoire across traditions and borders.</p>
         <span class="card-link">Explore</span>
       </div>
-
       <div class="card" onclick="window.location='calendar.html'">
         <span class="card-tag">Calendar</span>
         <h2>Calendar</h2>
         <p>Upcoming shows, sessions, and events in Seattle and beyond.</p>
         <span class="card-link">See dates</span>
       </div>
-
       <div class="card" onclick="window.location='resources.html'">
         <span class="card-tag">Open library</span>
         <h2>MusicXML Resources</h2>
         <p>A curated collection of public domain MusicXML files spanning folk, jazz, and classical traditions. Free to use.</p>
         <span class="card-link">Browse files</span>
       </div>
-
     </div>
   </div>
 
@@ -111,6 +91,5 @@
     <span>© 2026 Stuart Zobel</span>
     <span><a href="contact.html">Contact</a></span>
   </footer>
-
 </body>
 </html>
