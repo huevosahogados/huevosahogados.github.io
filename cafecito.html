@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cafecito — Stuart Zobel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .cafecito-hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      padding: 5rem 2.5rem 3.5rem;
+      max-width: 1100px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.1s;
+    }
+    .cafecito-hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      color: var(--ink);
+      margin-bottom: 1rem;
+    }
+    .cafecito-hero h1 em { font-style: italic; color: var(--accent); }
+    .cafecito-hero p {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: var(--ink2);
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+    .hero-tag {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+    }
+    .group-photo img {
+      width: 100%;
+      border-radius: 6px;
+      display: block;
+      object-fit: cover;
+    }
+    .book-btn {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--accent-fg);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.75rem 1.75rem;
+      border-radius: 3px;
+      transition: background 0.15s;
+    }
+    .book-btn:hover { background: var(--accent2); }
+
+    /* REPERTOIRE STRIP */
+    .repertoire {
+      background: var(--bg2);
+      border-top: 0.5px solid var(--border);
+      border-bottom: 0.5px solid var(--border);
+      padding: 3.5rem 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.3s;
+    }
+    .repertoire h2 {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 1rem;
+    }
+    .repertoire p {
+      font-size: 0.95rem;
+      color: var(--ink2);
+      line-height: 1.8;
+      max-width: 700px;
+    }
+    .style-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+    }
+    .style-tag {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--border2);
+      padding: 0.3rem 0.75rem;
+      border-radius: 2px;
+      background: var(--bg);
+    }
+
+    /* MEMBERS */
+    .members {
+      padding: 4rem 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.4s;
+    }
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+      margin-top: 2rem;
+    }
+    .member-card { display: flex; flex-direction: column; gap: 1rem; }
+    .member-card img {
+      width: 100%;
+      aspect-ratio: 2/3;
+      object-fit: cover;
+      object-position: top;
+      border-radius: 4px;
+      filter: grayscale(15%);
+    }
+    .member-name {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--ink);
+    }
+    .member-instrument {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-top: -0.5rem;
+    }
+
+    @media (max-width: 700px) {
+      .cafecito-hero { grid-template-columns: 1fr; padding: 3rem 1.25rem 2rem; }
+      .members { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .members-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .member-card img { aspect-ratio: 3/4; }
+      .repertoire { padding-left: 1.25rem; padding-right: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="nav-placeholder"></div>
+  <script>fetch("nav.html").then(r=>r.text()).then(h=>document.getElementById("nav-placeholder").innerHTML=h);</script>
+
+  <div class="cafecito-hero">
+    <div>
+      <p class="hero-tag">Trio · Seattle</p>
+      <h1><em>Cafecito</em></h1>
+      <p>Tango, South American folk, and something altogether their own. Cafecito brings together flute, bandoneón, and guitar in a sound rooted in Latin America and shaped by the musical backgrounds of three continents.</p>
+      <p>The group met through a shared love of tango and Brazilian music, and with connections spanning Venezuela, Colombia, and Mexico, their warm and expressive sound reflects that breadth — from traditional danceable tango to fresh arrangements of Stevie Wonder, Björk, and Heitor Villa-Lobos.</p>
+      <a href="contact.html" class="book-btn">Book Cafecito</a>
+    </div>
+    <div class="group-photo">
+      <img src="images/cafecito-group.jpeg" alt="Cafecito — Obi, Stuart, and Kristine" />
+    </div>
+  </div>
+
+  <div class="staff-rule">
+    <svg viewBox="0 0 1200 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <line x1="0" y1="6"  x2="1200" y2="6"  stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+      <line x1="0" y1="14" x2="1200" y2="14" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+      <line x1="0" y1="22" x2="1200" y2="22" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+      <line x1="0" y1="30" x2="1200" y2="30" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+      <line x1="0" y1="36" x2="1200" y2="36" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+    </svg>
+  </div>
+
+  <div class="repertoire">
+    <h2>What we play</h2>
+    <p>Cafecito draws from the full richness of Latin American music — the drama of classic tango, the lilt of South American folk traditions, and the warmth of Brazilian music. Alongside traditional repertoire, the group brings its own lens to unexpected sources, finding the common thread between a Piazzolla milonga and a Björk melody, or between Villa-Lobos and Stevie Wonder.</p>
+    <div class="style-tags">
+      <span class="style-tag">Tango</span>
+      <span class="style-tag">South American Folk</span>
+      <span class="style-tag">Brazilian Music</span>
+      <span class="style-tag">New Arrangements</span>
+      <span class="style-tag">Chamber Music</span>
+    </div>
+  </div>
+
+  <div class="members">
+    <p class="section-label">The trio</p>
+    <div class="members-grid">
+      <div class="member-card">
+        <img src="images/cafecito-obi.webp" alt="Obadiah Wrynla" />
+        <div class="member-name">Obadiah Wrynla</div>
+        <div class="member-instrument">Bandoneón</div>
+      </div>
+      <div class="member-card">
+        <img src="images/cafecito-stuart.webp" alt="Stuart Zobel" />
+        <div class="member-name">Stuart Zobel</div>
+        <div class="member-instrument">Guitar</div>
+      </div>
+      <div class="member-card">
+        <img src="images/cafecito-kristine.webp" alt="Kristine Rominski" />
+        <div class="member-name">Kristine Rominski</div>
+        <div class="member-instrument">Flute</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span>© 2026 Stuart Zobel</span>
+    <span><a href="contact.html">Contact</a></span>
+  </footer>
+</body>
+</html>
