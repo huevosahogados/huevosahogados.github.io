@@ -1,24 +1,25 @@
 /* ============================================================
-   Stuart Zobel — style.css
-   Mobile-first. WCAG AA contrast. No emoji. No italic titles.
+   Stuart Zobel — style.css  v3
+   Cobalt blue. Warm gold. Instrument Serif + DM Sans.
+   Mobile-first. WCAG AA throughout.
    ============================================================ */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:        #FFFFFF;
-  --bg2:       #F0F6FF;
-  --chrome:    #2A6496;
-  --ink:       #1A2B3C;
-  --ink2:      #3D5A70;
-  --ink3:      #5A7A8E;
-  --accent:    #2A6496;
-  --accent2:   #1A4F7A;
-  --accent-fg: #FFFFFF;
-  --border:    rgba(42,100,150,0.12);
-  --border2:   rgba(42,100,150,0.25);
-  --serif:     'Playfair Display', Georgia, serif;
-  --sans:      'Inter', system-ui, sans-serif;
+  --bg:        #1B3A6B;
+  --bg2:       #152E57;
+  --bg3:       #0F2140;
+  --ink:       #F2EDE4;
+  --ink2:      #C4BAA8;
+  --ink3:      #8FA3BE;
+  --accent:    #E8B84B;
+  --accent2:   #C99A30;
+  --accent-fg: #0F2140;
+  --border:    rgba(232,184,75,0.15);
+  --border2:   rgba(232,184,75,0.28);
+  --serif:     'Instrument Serif', Georgia, serif;
+  --sans:      'DM Sans', system-ui, sans-serif;
 }
 
 body {
@@ -46,7 +47,7 @@ a { color: inherit; text-decoration: none; }
   border-bottom: 0.5px solid var(--border);
   position: sticky;
   top: 0;
-  background: var(--bg);
+  background: var(--bg3);
   z-index: 100;
 }
 
@@ -55,7 +56,6 @@ a { color: inherit; text-decoration: none; }
   font-size: 1.1rem;
   letter-spacing: 0.01em;
   color: var(--ink);
-  z-index: 101;
 }
 
 .nav-toggle {
@@ -79,13 +79,13 @@ a { color: inherit; text-decoration: none; }
   display: none;
   position: fixed;
   top: 0; left: 0; right: 0;
-  background: var(--bg);
+  background: var(--bg3);
   padding: 5rem 1.25rem 2rem;
   list-style: none;
   flex-direction: column;
   gap: 0;
   border-bottom: 1px solid var(--border2);
-  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 32px rgba(0,0,0,0.4);
   z-index: 99;
 }
 
@@ -95,8 +95,8 @@ a { color: inherit; text-decoration: none; }
   display: block;
   padding: 1rem 0;
   font-size: 1.05rem;
-  font-weight: 400;
-  color: var(--ink);
+  color: var(--ink2);
+  transition: color 0.15s;
 }
 
 .nav-links a:hover { color: var(--accent); }
@@ -127,12 +127,13 @@ a { color: inherit; text-decoration: none; }
   .nav-links li { border: none; }
   .nav-links a {
     padding: 0;
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     font-weight: 500;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
-    color: var(--ink2);
+    color: var(--ink3);
   }
+  .nav-links a:hover { color: var(--accent); }
 }
 
 /* ============================================================
@@ -140,7 +141,7 @@ a { color: inherit; text-decoration: none; }
    ============================================================ */
 
 .hero {
-  padding: 3rem 1.25rem 2.5rem;
+  padding: 3.5rem 1.25rem 3rem;
   opacity: 0;
   animation: fadeUp 0.7s ease forwards 0.1s;
 }
@@ -148,7 +149,7 @@ a { color: inherit; text-decoration: none; }
 .hero-eyebrow {
   font-size: 0.72rem;
   font-weight: 500;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--accent);
   margin-bottom: 1rem;
@@ -156,9 +157,9 @@ a { color: inherit; text-decoration: none; }
 
 .hero h1 {
   font-family: var(--serif);
-  font-size: clamp(2.8rem, 10vw, 5rem);
+  font-size: clamp(3.5rem, 14vw, 7rem);
   font-weight: 400;
-  line-height: 1.05;
+  line-height: 0.95;
   letter-spacing: -0.02em;
   color: var(--ink);
   margin-bottom: 1.5rem;
@@ -166,46 +167,31 @@ a { color: inherit; text-decoration: none; }
 
 .hero-tagline {
   font-size: 1rem;
+  font-weight: 300;
   color: var(--ink2);
   line-height: 1.75;
   margin-bottom: 2rem;
-  max-width: 52ch;
+  max-width: 44ch;
 }
 
-.hero-cta {
-  display: inline-block;
-  background: var(--accent);
-  color: var(--accent-fg);
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 0.7rem 1.4rem;
-  border-radius: 2px;
-  transition: background 0.15s;
+.hero-photo {
+  margin-top: 2.5rem;
 }
-
-.hero-cta:hover { background: var(--accent2); }
-
-.hero-photo { margin-top: 2.5rem; }
 
 .hero-photo img,
 .photo-placeholder {
   width: 100%;
-  max-width: 320px;
+  max-width: 300px;
   aspect-ratio: 3/4;
-  border-radius: 3px;
+  border-radius: 2px;
   display: block;
 }
 
-.hero-photo img {
-  object-fit: cover;
-  filter: grayscale(15%);
-}
+.hero-photo img { object-fit: cover; }
 
 .photo-placeholder {
   background: var(--bg2);
-  border: 1px dashed var(--border2);
+  border: 1px solid var(--border2);
   overflow: hidden;
 }
 
@@ -215,26 +201,32 @@ a { color: inherit; text-decoration: none; }
   object-fit: cover;
   max-width: none;
   aspect-ratio: unset;
+  border-radius: 0;
 }
 
 @media (min-width: 768px) {
   .hero {
     display: grid;
-    grid-template-columns: 1fr 320px;
+    grid-template-columns: 1fr 300px;
     gap: 4rem;
     align-items: center;
-    padding: 5rem 2.5rem 3.5rem;
+    padding: 5rem 2.5rem 4rem;
     max-width: 1100px;
   }
   .hero-photo { margin-top: 0; }
 }
 
 /* ============================================================
-   STAFF RULE
+   PIANO KEY DIVIDER
    ============================================================ */
 
-.staff-rule { width: 100%; overflow: hidden; margin: 0.5rem 0; }
-.staff-rule svg { display: block; width: 100%; }
+.keys-rule {
+  width: 100%;
+  overflow: hidden;
+  height: 48px;
+}
+
+.keys-rule svg { display: block; width: 100%; height: 48px; }
 
 /* ============================================================
    EDITORIAL LIST
@@ -249,7 +241,7 @@ a { color: inherit; text-decoration: none; }
 .section-label {
   font-size: 0.68rem;
   font-weight: 500;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink3);
   margin-bottom: 1.75rem;
@@ -266,9 +258,11 @@ a { color: inherit; text-decoration: none; }
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.3rem;
+  transition: padding-left 0.2s;
 }
 
+.editorial-item:hover { padding-left: 0.5rem; }
 .editorial-item:hover .item-title { color: var(--accent); }
 
 .item-tag {
@@ -277,14 +271,15 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--accent);
+  opacity: 0.8;
 }
 
 .item-title {
   font-family: var(--serif);
-  font-size: clamp(1.3rem, 4vw, 1.65rem);
+  font-size: clamp(1.4rem, 4.5vw, 1.9rem);
   font-weight: 400;
   color: var(--ink);
-  line-height: 1.2;
+  line-height: 1.15;
   transition: color 0.15s;
 }
 
@@ -292,31 +287,41 @@ a { color: inherit; text-decoration: none; }
   font-size: 0.88rem;
   color: var(--ink2);
   line-height: 1.65;
-  max-width: 60ch;
+  max-width: 58ch;
 }
 
 .item-arrow {
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 500;
+  letter-spacing: 0.04em;
   color: var(--accent);
+  opacity: 0;
+  transition: opacity 0.2s;
   margin-top: 0.2rem;
 }
+
+.editorial-item:hover .item-arrow { opacity: 1; }
 
 @media (min-width: 768px) {
   .section { padding: 4rem 2.5rem 5rem; }
 
   .editorial-item {
     display: grid;
-    grid-template-columns: 150px 1fr 80px;
+    grid-template-columns: 140px 1fr 80px;
     align-items: baseline;
     column-gap: 2rem;
-    row-gap: 0.35rem;
+    row-gap: 0.3rem;
     padding: 1.75rem 0;
   }
 
-  .item-tag { padding-top: 0.3rem; }
+  .item-tag { padding-top: 0.35rem; }
   .item-desc { grid-column: 2; }
-  .item-arrow { grid-column: 3; justify-self: end; align-self: center; }
+  .item-arrow {
+    grid-column: 3;
+    justify-self: end;
+    align-self: center;
+    opacity: 0;
+  }
 }
 
 /* ============================================================
@@ -324,18 +329,18 @@ a { color: inherit; text-decoration: none; }
    ============================================================ */
 
 .about-strip {
-  padding: 3rem 1.25rem;
-  border-top: 0.5px solid var(--border);
   background: var(--bg2);
+  border-top: 0.5px solid var(--border2);
+  padding: 3rem 1.25rem;
   opacity: 0;
   animation: fadeUp 0.6s ease forwards 0.5s;
 }
 
 .about-strip h3 {
   font-family: var(--serif);
-  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
   font-weight: 400;
-  line-height: 1.3;
+  line-height: 1.2;
   color: var(--ink);
   margin-bottom: 1rem;
 }
@@ -344,7 +349,7 @@ a { color: inherit; text-decoration: none; }
   font-size: 0.95rem;
   color: var(--ink2);
   line-height: 1.8;
-  max-width: 65ch;
+  max-width: 60ch;
 }
 
 @media (min-width: 768px) {
@@ -362,6 +367,7 @@ a { color: inherit; text-decoration: none; }
    ============================================================ */
 
 .site-footer {
+  background: var(--bg3);
   padding: 1.5rem 1.25rem;
   border-top: 0.5px solid var(--border);
   display: flex;
@@ -378,6 +384,26 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* ============================================================
+   BUTTONS
+   ============================================================ */
+
+.btn-primary {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2px;
+  transition: background 0.15s;
+}
+
+.btn-primary:hover { background: var(--accent2); }
+
+/* ============================================================
    INNER PAGE SHARED
    ============================================================ */
 
@@ -388,12 +414,14 @@ a { color: inherit; text-decoration: none; }
 
 .page-header h1 {
   font-family: var(--serif);
-  font-size: clamp(2rem, 7vw, 3.5rem);
+  font-size: clamp(2.2rem, 7vw, 4rem);
   font-weight: 400;
   color: var(--ink);
   margin-bottom: 0.5rem;
-  line-height: 1.1;
+  line-height: 1.05;
 }
+
+.page-header .hero-eyebrow { margin-bottom: 0.75rem; }
 
 .page-header p { font-size: 0.95rem; color: var(--ink2); }
 
@@ -405,26 +433,11 @@ a { color: inherit; text-decoration: none; }
   display: inline-block;
   margin-bottom: 2rem;
   font-size: 0.82rem;
-  color: var(--accent);
   font-weight: 500;
+  color: var(--accent);
 }
 
 .back-link:hover { text-decoration: underline; }
-
-.btn-primary {
-  display: inline-block;
-  background: var(--accent);
-  color: var(--accent-fg);
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 0.7rem 1.4rem;
-  border-radius: 2px;
-  transition: background 0.15s;
-}
-
-.btn-primary:hover { background: var(--accent2); }
 
 /* ============================================================
    ANIMATIONS

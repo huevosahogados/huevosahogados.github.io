@@ -6,38 +6,96 @@
   <title>Stuart Zobel — Musician &amp; Developer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+
   <div id="nav-placeholder"></div>
   <script>fetch("nav.html").then(r=>r.text()).then(h=>document.getElementById("nav-placeholder").innerHTML=h);</script>
 
-  <div class="hero">
+  <!-- HERO -->
+  <header class="hero">
     <div class="hero-text">
       <p class="hero-eyebrow">Musician · Developer · Seattle</p>
-      <h1>Music,<br>made playable.</h1>
-      <p class="hero-tagline">Stuart Zobel is a Seattle-based musician, educator, and iOS developer. He builds tools and makes music that cross borders — cultural, instrumental, and technical.</p>
-      <a href="leadsheetsxml.html" class="hero-cta">Lead Sheets XML</a>
+      <h1>Stuart<br>Zobel</h1>
+      <p class="hero-tagline">Building tools and making music that cross borders — cultural, instrumental, and technical.</p>
+      <a href="leadsheetsxml.html" class="btn-primary">Lead Sheets XML</a>
     </div>
     <div class="hero-photo">
       <div class="photo-placeholder">
         <img src="images/Stuart-camera.jpg" alt="Stuart Zobel">
       </div>
     </div>
-  </div>
+  </header>
 
-  <div class="staff-rule" aria-hidden="true">
-    <svg viewBox="0 0 1200 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <line x1="0" y1="6"  x2="1200" y2="6"  stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
-      <line x1="0" y1="14" x2="1200" y2="14" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
-      <line x1="0" y1="22" x2="1200" y2="22" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
-      <line x1="0" y1="30" x2="1200" y2="30" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
-      <line x1="0" y1="36" x2="1200" y2="36" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+  <!-- PIANO KEY DIVIDER -->
+  <div class="keys-rule" aria-hidden="true">
+    <svg viewBox="0 0 1200 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- white keys -->
+      <rect x="0"   y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="36"  y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="72"  y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="108" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="144" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="180" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="216" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="252" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="288" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="324" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="360" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="396" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="432" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="468" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="504" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="540" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="576" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="612" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="648" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="684" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="720" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="756" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="792" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="828" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="864" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="900" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="936" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="972" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="1008" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="1044" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="1080" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="1116" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <rect x="1152" y="0" width="34" height="48" fill="#F2EDE4" opacity="0.12"/>
+      <!-- black keys overlaid in groups of 2-3 per octave -->
+      <rect x="24"  y="0" width="22" height="30" fill="#0F2140" opacity="0.6"/>
+      <rect x="60"  y="0" width="22" height="30" fill="#0F2140" opacity="0.6"/>
+      <rect x="132" y="0" width="22" height="30" fill="#0F2140" opacity="0.6"/>
+      <rect x="168" y="0" width="22" height="30" fill="#0F2140" opacity="0.6"/>
+      <rect x="204" y="0" width="22" height="30" fill="#0F2140" opacity="0.6"/>
+      <rect x="276" y="0" width="22" height="30" fill="#0F2140" opacity="0.6"/>
+      <rect x="312" y="0" width="22" height="30" fill="#0F2140" opacity="0.6"/>
+      <rect x="384" y="0" width="22" height="30" fill="#0F2140" opacity="0.6"/>
+      <rect x="420" y="0" width="22" height="30" fill="#0F2140" opacity="0.6"/>
+      <rect x="456" y="0" width="22" height="30" fill="#0F2140" opacity="0.6"/>
+      <rect x="528" y="0" width="22" height="30" fill="#0F2140" opacity="0.6"/>
+      <rect x="564" y="0" width="22" height="30" fill="#0F2140" opacity="0.6"/>
+      <rect x="636" y="0" width="22" height="30" fill="#0F2140" opacity="0.6"/>
+      <rect x="672" y="0" width="22" height="30" fill="#0F2140" opacity="0.6"/>
+      <rect x="708" y="0" width="22" height="30" fill="#0F2140" opacity="0.6"/>
+      <rect x="780" y="0" width="22" height="30" fill="#0F2140" opacity="0.6"/>
+      <rect x="816" y="0" width="22" height="30" fill="#0F2140" opacity="0.6"/>
+      <rect x="888" y="0" width="22" height="30" fill="#0F2140" opacity="0.6"/>
+      <rect x="924" y="0" width="22" height="30" fill="#0F2140" opacity="0.6"/>
+      <rect x="960" y="0" width="22" height="30" fill="#0F2140" opacity="0.6"/>
+      <rect x="1032" y="0" width="22" height="30" fill="#0F2140" opacity="0.6"/>
+      <rect x="1068" y="0" width="22" height="30" fill="#0F2140" opacity="0.6"/>
+      <rect x="1140" y="0" width="22" height="30" fill="#0F2140" opacity="0.6"/>
+      <rect x="1176" y="0" width="22" height="30" fill="#0F2140" opacity="0.6"/>
     </svg>
   </div>
 
-  <div class="section">
+  <!-- PROJECT LIST -->
+  <main class="section">
     <p class="section-label">Projects &amp; work</p>
     <ul class="editorial-list">
       <li class="editorial-item" onclick="window.location='leadsheetsxml.html'">
@@ -49,13 +107,13 @@
       <li class="editorial-item" onclick="window.location='https://huevosahogados.github.io/interleave.html'">
         <span class="item-tag">Web App</span>
         <span class="item-title">Interleave</span>
-        <span class="item-desc">A web app to facilitate interleaved learning for musicians — building retention and fluency across repertoire.</span>
+        <span class="item-desc">Interleaved practice for musicians — building retention and fluency across repertoire.</span>
         <span class="item-arrow">Open app</span>
       </li>
       <li class="editorial-item" onclick="window.location='lessons.html'">
         <span class="item-tag">Teaching</span>
         <span class="item-title">Music Lessons</span>
-        <span class="item-desc">Private instruction for guitarists and musicians of all levels. Repertoire spans jazz, folk, classical, and world music traditions.</span>
+        <span class="item-desc">Private instruction for guitarists and musicians of all levels. Jazz, folk, classical, and world music traditions.</span>
         <span class="item-arrow">Learn more</span>
       </li>
       <li class="editorial-item" onclick="window.location='workout.html'">
@@ -67,7 +125,7 @@
       <li class="editorial-item" onclick="window.location='cafecito.html'">
         <span class="item-tag">Ensemble</span>
         <span class="item-title">Cafecito</span>
-        <span class="item-desc">A Seattle trio drawing from tango, South American folk, and Brazilian music — flute, bandoneón, and guitar.</span>
+        <span class="item-desc">A Seattle trio — flute, bandoneón, guitar — rooted in tango, South American folk, and Brazilian music.</span>
         <span class="item-arrow">Explore</span>
       </li>
       <li class="editorial-item" onclick="window.location='parrills-project.html'">
@@ -85,18 +143,20 @@
       <li class="editorial-item" onclick="window.location='resources.html'">
         <span class="item-tag">Open Library</span>
         <span class="item-title">MusicXML Resources</span>
-        <span class="item-desc">A curated collection of public domain MusicXML files spanning folk, jazz, and classical traditions. Free to use.</span>
-        <span class="item-arrow">Browse files</span>
+        <span class="item-desc">A curated collection of public domain MusicXML files — folk, jazz, and classical. Free to use.</span>
+        <span class="item-arrow">Browse</span>
       </li>
     </ul>
-  </div>
+  </main>
 
+  <!-- ABOUT -->
   <div class="about-strip">
     <h3>Rooted in music.<br>Built for musicians.</h3>
-    <p>Stuart Zobel has spent his career at the intersection of music-making and the tools that support it. Whether teaching a student to read a lead sheet, performing with Cafecito, or writing the code that lets a saxophonist transpose on the fly, his work shares a common thread: making music more accessible, more portable, and more alive.</p>
+    <p>Stuart Zobel has spent his career at the intersection of music-making and the tools that support it. Whether teaching a student to read a lead sheet, performing with Cafecito, or writing the code that lets a saxophonist transpose on the fly — his work shares a common thread: making music more accessible, more portable, and more alive.</p>
   </div>
 
   <div id="footer-placeholder"></div>
   <script>fetch("footer.html").then(r=>r.text()).then(h=>document.getElementById("footer-placeholder").innerHTML=h);</script>
+
 </body>
 </html>
