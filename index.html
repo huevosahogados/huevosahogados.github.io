@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Stuart Zobel — Musician & Developer</title>
+  <title>Stuart Zobel — Musician &amp; Developer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -16,22 +16,19 @@
   <div class="hero">
     <div class="hero-text">
       <p class="hero-eyebrow">Musician · Developer · Seattle</p>
-      <h1>Music,<br><em>made playable.</em></h1>
+      <h1>Music,<br>made playable.</h1>
       <p class="hero-tagline">Stuart Zobel is a Seattle-based musician, educator, and iOS developer. He builds tools and makes music that cross borders — cultural, instrumental, and technical.</p>
-      <a href="leadsheetsxml.html" class="hero-cta">Lead Sheets XML →</a>
+      <a href="leadsheetsxml.html" class="hero-cta">Lead Sheets XML</a>
     </div>
     <div class="hero-photo">
       <div class="photo-placeholder">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2A6496" stroke-width="1.2">
-          <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
-        </svg>
-        <span><img src="images/Stuart-camera.jpg" alt="Stuart Zobel"></span>
+        <img src="images/Stuart-camera.jpg" alt="Stuart Zobel">
       </div>
     </div>
   </div>
 
-  <div class="staff-rule">
-    <svg viewBox="0 0 1200 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <div class="staff-rule" aria-hidden="true">
+    <svg viewBox="0 0 1200 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <line x1="0" y1="6"  x2="1200" y2="6"  stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
       <line x1="0" y1="14" x2="1200" y2="14" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
       <line x1="0" y1="22" x2="1200" y2="22" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
@@ -42,56 +39,56 @@
 
   <div class="section">
     <p class="section-label">Projects &amp; work</p>
-    <div class="card-grid">
-      <div class="card" onclick="window.location='leadsheetsxml.html'">
-        <span class="card-tag">iOS App</span>
-        <h2>Lead Sheets XML</h2>
-        <p>Real-time MusicXML transposition and clef changes — on the bandstand, in the classroom, no desktop editor required.</p>
-        <span class="card-link">View app</span>
-      </div>
-      <div class="card" onclick="window.location='https://huevosahogados.github.io/interleave.html'">
-        <span class="card-tag">Web App</span>
-        <h2>Interleave</h2>
-        <p>A web app to facilitate interleaved learning for musicians — building retention and fluency across repertoire.</p>
-        <span class="card-link">Open app</span>
-      </div>
-      <div class="card" onclick="window.location='lessons.html'">
-        <span class="card-tag">Teaching</span>
-        <h2>Music Lessons</h2>
-        <p>Private instruction for guitarists and musicians of all levels. Repertoire spans jazz, folk, classical, and world music traditions.</p>
-        <span class="card-link">Learn more</span>
-      </div>
-      <div class="card" onclick="window.location='workout.html'">
-        <span class="card-tag">Weekly · Zoom</span>
-        <h2>Wednesday Morning Workout</h2>
-        <p>A weekly online session for fundamentals — tone, ear training, scales, and exercises. Every Wednesday at 8AM Pacific.</p>
-        <span class="card-link">Join us</span>
-      </div>
-      <div class="card" onclick="window.location='cafecito.html'">
-        <span class="card-tag">Ensemble</span>
-        <h2>Cafecito</h2>
-        <p>A Seattle-based ensemble drawing from Latin American musical traditions. Warm, intimate, and rooted in community.</p>
-        <span class="card-link">Explore</span>
-      </div>
-      <div class="card" onclick="window.location='parrills-project.html'">
-        <span class="card-tag">Community</span>
-        <h2>The International Parrills Project</h2>
-        <p>A multicultural music initiative connecting musicians and repertoire across traditions and borders.</p>
-        <span class="card-link">Explore</span>
-      </div>
-      <div class="card" onclick="window.location='calendar.html'">
-        <span class="card-tag">Calendar</span>
-        <h2>Calendar</h2>
-        <p>Upcoming shows, sessions, and events in Seattle and beyond.</p>
-        <span class="card-link">See dates</span>
-      </div>
-      <div class="card" onclick="window.location='resources.html'">
-        <span class="card-tag">Open library</span>
-        <h2>MusicXML Resources</h2>
-        <p>A curated collection of public domain MusicXML files spanning folk, jazz, and classical traditions. Free to use.</p>
-        <span class="card-link">Browse files</span>
-      </div>
-    </div>
+    <ul class="editorial-list">
+      <li class="editorial-item" onclick="window.location='leadsheetsxml.html'">
+        <span class="item-tag">iOS App</span>
+        <span class="item-title">Lead Sheets XML</span>
+        <span class="item-desc">Real-time MusicXML transposition and clef changes — on the bandstand, in the classroom, no desktop editor required.</span>
+        <span class="item-arrow">View app</span>
+      </li>
+      <li class="editorial-item" onclick="window.location='https://huevosahogados.github.io/interleave.html'">
+        <span class="item-tag">Web App</span>
+        <span class="item-title">Interleave</span>
+        <span class="item-desc">A web app to facilitate interleaved learning for musicians — building retention and fluency across repertoire.</span>
+        <span class="item-arrow">Open app</span>
+      </li>
+      <li class="editorial-item" onclick="window.location='lessons.html'">
+        <span class="item-tag">Teaching</span>
+        <span class="item-title">Music Lessons</span>
+        <span class="item-desc">Private instruction for guitarists and musicians of all levels. Repertoire spans jazz, folk, classical, and world music traditions.</span>
+        <span class="item-arrow">Learn more</span>
+      </li>
+      <li class="editorial-item" onclick="window.location='workout.html'">
+        <span class="item-tag">Weekly · Zoom</span>
+        <span class="item-title">Wednesday Morning Workout</span>
+        <span class="item-desc">A weekly online session for fundamentals — tone, ear training, scales, and exercises. Every Wednesday at 8AM Pacific.</span>
+        <span class="item-arrow">Join us</span>
+      </li>
+      <li class="editorial-item" onclick="window.location='cafecito.html'">
+        <span class="item-tag">Ensemble</span>
+        <span class="item-title">Cafecito</span>
+        <span class="item-desc">A Seattle trio drawing from tango, South American folk, and Brazilian music — flute, bandoneón, and guitar.</span>
+        <span class="item-arrow">Explore</span>
+      </li>
+      <li class="editorial-item" onclick="window.location='parrills-project.html'">
+        <span class="item-tag">Community</span>
+        <span class="item-title">The International Parrills Project</span>
+        <span class="item-desc">A multicultural music initiative connecting musicians and repertoire across traditions and borders.</span>
+        <span class="item-arrow">Explore</span>
+      </li>
+      <li class="editorial-item" onclick="window.location='calendar.html'">
+        <span class="item-tag">Calendar</span>
+        <span class="item-title">Upcoming Events</span>
+        <span class="item-desc">Performances, workshops, and sessions in Seattle and beyond.</span>
+        <span class="item-arrow">See dates</span>
+      </li>
+      <li class="editorial-item" onclick="window.location='resources.html'">
+        <span class="item-tag">Open Library</span>
+        <span class="item-title">MusicXML Resources</span>
+        <span class="item-desc">A curated collection of public domain MusicXML files spanning folk, jazz, and classical traditions. Free to use.</span>
+        <span class="item-arrow">Browse files</span>
+      </li>
+    </ul>
   </div>
 
   <div class="about-strip">
@@ -99,9 +96,7 @@
     <p>Stuart Zobel has spent his career at the intersection of music-making and the tools that support it. Whether teaching a student to read a lead sheet, performing with Cafecito, or writing the code that lets a saxophonist transpose on the fly, his work shares a common thread: making music more accessible, more portable, and more alive.</p>
   </div>
 
-  <footer>
-    <span>© 2026 Stuart Zobel</span>
-    <span><a href="contact.html">Contact</a></span>
-  </footer>
+  <div id="footer-placeholder"></div>
+  <script>fetch("footer.html").then(r=>r.text()).then(h=>document.getElementById("footer-placeholder").innerHTML=h);</script>
 </body>
 </html>
