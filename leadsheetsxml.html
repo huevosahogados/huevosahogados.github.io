@@ -19,95 +19,28 @@
       opacity: 0;
       animation: fadeUp 0.7s ease forwards 0.1s;
     }
-
     .app-icon {
-      width: 80px;
-      height: 80px;
+      width: 80px; height: 80px;
       background: var(--accent);
       border-radius: 18px;
       margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
     }
-
     .app-icon svg { opacity: 0.9; }
-
     .app-hero h1 {
       font-family: var(--serif);
       font-size: clamp(2.2rem, 5vw, 3.8rem);
-      font-weight: 400;
-      line-height: 1.1;
-      color: var(--ink);
-      margin-bottom: 1rem;
+      font-weight: 400; line-height: 1.1;
+      color: var(--ink); margin-bottom: 1rem;
     }
-
-    .app-hero h1 em {
-      font-style: italic;
-      color: var(--accent);
-    }
-
-    .app-tagline {
-      font-size: 1.05rem;
-      font-weight: 300;
-      color: var(--ink2);
-      line-height: 1.75;
-      margin-bottom: 0.5rem;
-    }
-
-    .app-sub {
-      font-size: 0.85rem;
-      color: var(--ink3);
-      margin-bottom: 2rem;
-    }
-
-    .app-store-btn {
-      display: inline-block;
-    }
-
-    .app-store-btn img {
-      height: 44px;
-      display: block;
-    }
-
-    /* SLIDESHOW */
-    .slideshow-wrap {
-      position: relative;
-      overflow: hidden;
-      border-radius: 12px;
-      background: var(--bg2);
-      aspect-ratio: 3/4;
-    }
-
-    .slideshow {
-      display: flex;
-      width: 100%;
-      height: 100%;
-    }
-
-    .slideshow input[type=radio] { display: none; }
-
-    .slides {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
-
-    .slide {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      transition: opacity 0.8s ease;
-    }
-
-    .slide img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-    }
-
-    /* auto-advance via animation */
+    .app-hero h1 em { font-style: italic; color: var(--accent); }
+    .app-tagline { font-size: 1.05rem; font-weight: 300; color: var(--ink2); line-height: 1.75; margin-bottom: 0.5rem; }
+    .app-sub { font-size: 0.85rem; color: var(--ink3); margin-bottom: 2rem; }
+    .app-store-btn img { height: 44px; display: block; }
+    .slideshow-wrap { position: relative; overflow: hidden; border-radius: 12px; background: var(--bg2); aspect-ratio: 3/4; }
+    .slides { position: relative; width: 100%; height: 100%; }
+    .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.8s ease; }
+    .slide img { width: 100%; height: 100%; object-fit: contain; display: block; }
     .slide:nth-child(1) { animation: cycle 21s 0s infinite; }
     .slide:nth-child(2) { animation: cycle 21s 3s infinite; }
     .slide:nth-child(3) { animation: cycle 21s 6s infinite; }
@@ -115,161 +48,39 @@
     .slide:nth-child(5) { animation: cycle 21s 12s infinite; }
     .slide:nth-child(6) { animation: cycle 21s 15s infinite; }
     .slide:nth-child(7) { animation: cycle 21s 18s infinite; }
-
     @keyframes cycle {
-      0%   { opacity: 1; }
-      14%  { opacity: 1; }
-      19%  { opacity: 0; }
-      95%  { opacity: 0; }
-      100% { opacity: 0; }
+      0%   { opacity: 1; } 14% { opacity: 1; }
+      19%  { opacity: 0; } 95% { opacity: 0; } 100% { opacity: 0; }
     }
-
-    /* FEATURES */
-    .features {
-      padding: 4rem 2.5rem;
-      opacity: 0;
-      animation: fadeUp 0.6s ease forwards 0.3s;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-
-    .feature {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .feature-icon {
-      font-size: 1.4rem;
-      margin-bottom: 0.25rem;
-    }
-
-    .feature h3 {
-      font-family: var(--serif);
-      font-size: 1.1rem;
-      font-weight: 400;
-      color: var(--ink);
-    }
-
-    .feature p {
-      font-size: 0.88rem;
-      color: var(--ink2);
-      line-height: 1.65;
-    }
-
-    /* CALLOUT STRIP */
+    .features { padding: 4rem 2.5rem; opacity: 0; animation: fadeUp 0.6s ease forwards 0.3s; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; margin-top: 2rem; }
+    .feature { display: flex; flex-direction: column; gap: 0.5rem; }
+    .feature-icon { font-size: 1.4rem; margin-bottom: 0.25rem; }
+    .feature h3 { font-family: var(--serif); font-size: 1.1rem; font-weight: 400; color: var(--ink); }
+    .feature p { font-size: 0.88rem; color: var(--ink2); line-height: 1.65; }
     .callout {
-      background: var(--bg2);
-      border-top: 0.5px solid var(--border);
-      border-bottom: 0.5px solid var(--border);
-      padding: 3rem 2.5rem;
-      display: flex;
-      align-items: center;
-      gap: 3rem;
-      opacity: 0;
-      animation: fadeUp 0.6s ease forwards 0.4s;
+      background: var(--bg2); border-top: 0.5px solid var(--border); border-bottom: 0.5px solid var(--border);
+      padding: 3rem 2.5rem; display: flex; align-items: center; gap: 3rem;
+      opacity: 0; animation: fadeUp 0.6s ease forwards 0.4s;
     }
-
-    .callout-text h2 {
-      font-family: var(--serif);
-      font-size: 1.6rem;
-      font-weight: 400;
-      color: var(--ink);
-      margin-bottom: 0.5rem;
-    }
-
-    .callout-text p {
-      font-size: 0.92rem;
-      color: var(--ink2);
-      line-height: 1.7;
-      max-width: 560px;
-    }
-
-    .price-badge {
-      flex-shrink: 0;
-      text-align: center;
-      background: var(--accent);
-      color: var(--accent-fg);
-      border-radius: 6px;
-      padding: 1rem 1.5rem;
-    }
-
-    .price-amount {
-      font-family: var(--serif);
-      font-size: 2rem;
-      font-weight: 400;
-      display: block;
-      line-height: 1;
-    }
-
-    .price-label {
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      opacity: 0.85;
-      margin-top: 4px;
-      display: block;
-    }
-
-    /* SUB-PAGE LINKS */
+    .callout-text h2 { font-family: var(--serif); font-size: 1.6rem; font-weight: 400; color: var(--ink); margin-bottom: 0.5rem; }
+    .callout-text p { font-size: 0.92rem; color: var(--ink2); line-height: 1.7; max-width: 560px; }
+    .price-badge { flex-shrink: 0; text-align: center; background: var(--accent); color: var(--accent-fg); border-radius: 6px; padding: 1rem 1.5rem; }
+    .price-amount { font-family: var(--serif); font-size: 2rem; font-weight: 400; display: block; line-height: 1; }
+    .price-label { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.85; margin-top: 4px; display: block; }
     .sub-links {
-      padding: 3rem 2.5rem;
-      display: flex;
-      gap: 1px;
-      border-top: 0.5px solid var(--border);
-      background: var(--border);
-      border-radius: 0;
-      opacity: 0;
-      animation: fadeUp 0.6s ease forwards 0.5s;
+      padding: 3rem 2.5rem; display: flex; gap: 1px;
+      border-top: 0.5px solid var(--border); background: var(--border);
+      opacity: 0; animation: fadeUp 0.6s ease forwards 0.5s;
     }
-
-    .sub-link {
-      flex: 1;
-      background: var(--bg);
-      padding: 1.5rem 1.75rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      transition: background 0.15s;
-      cursor: pointer;
-    }
-
+    .sub-link { flex: 1; background: var(--bg); padding: 1.5rem 1.75rem; display: flex; flex-direction: column; gap: 0.4rem; transition: background 0.15s; cursor: pointer; }
     .sub-link:hover { background: var(--bg2); }
-
-    .sub-link-tag {
-      font-size: 0.68rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--accent);
-    }
-
-    .sub-link h3 {
-      font-family: var(--serif);
-      font-size: 1.1rem;
-      font-weight: 400;
-      color: var(--ink);
-    }
-
-    .sub-link span {
-      font-size: 0.78rem;
-      color: var(--accent);
-      font-weight: 500;
-    }
-
+    .sub-link-tag { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+    .sub-link h3 { font-family: var(--serif); font-size: 1.1rem; font-weight: 400; color: var(--ink); }
+    .sub-link span { font-size: 0.78rem; color: var(--accent); font-weight: 500; }
     .sub-link span::after { content: ' →'; }
-
     @media (max-width: 700px) {
-      .app-hero {
-        grid-template-columns: 1fr;
-        padding: 3rem 1.25rem 2rem;
-      }
+      .app-hero { grid-template-columns: 1fr; padding: 3rem 1.25rem 2rem; }
       .features, .callout, .sub-links { padding-left: 1.25rem; padding-right: 1.25rem; }
       .callout { flex-direction: column; gap: 1.5rem; }
       .sub-links { flex-direction: column; padding: 0; }
@@ -277,16 +88,8 @@
   </style>
 </head>
 <body>
-
-  <nav>
-    <a href="/" class="nav-name">Stuart Zobel</a>
-    <ul class="nav-links">
-      <li><a href="app.html">App</a></li>
-      <li><a href="lessons.html">Lessons</a></li>
-      <li><a href="calendar.html">Calendar</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </nav>
+  <div id="nav-placeholder"></div>
+  <script>fetch("nav.html").then(r=>r.text()).then(h=>document.getElementById("nav-placeholder").innerHTML=h);</script>
 
   <div class="app-hero">
     <div>
@@ -306,7 +109,6 @@
         <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" />
       </a>
     </div>
-
     <div class="slideshow-wrap">
       <div class="slides">
         <div class="slide"><img src="images/ipad1.png" alt="Lead Sheets XML screenshot" /></div>
@@ -333,31 +135,26 @@
   <div class="features">
     <p class="section-label">What it does</p>
     <div class="features-grid">
-
       <div class="feature">
         <div class="feature-icon" aria-hidden="true">𝄞</div>
         <h3>Transpose in real time</h3>
         <p>Change the key of any MusicXML file instantly. Singers, Bb and Eb instrument players, and accompanists can all get what they need on the spot.</p>
       </div>
-
       <div class="feature">
         <div class="feature-icon" aria-hidden="true">𝄡</div>
         <h3>Switch clefs instantly</h3>
         <p>Viola, cello, and other alternate-clef players can change clef with one tap — no desktop score editor required.</p>
       </div>
-
       <div class="feature">
         <div class="feature-icon" aria-hidden="true">↕</div>
         <h3>Shift octaves</h3>
         <p>Move music up or down an octave to fit any voice or instrument range.</p>
       </div>
-
       <div class="feature">
         <div class="feature-icon" aria-hidden="true">⇪</div>
         <h3>Export &amp; share</h3>
         <p>Export your transposed lead sheet as a PDF and share it directly with your accompanist or bandmates.</p>
       </div>
-
     </div>
   </div>
 
@@ -394,6 +191,5 @@
     <span>© 2026 Stuart Zobel</span>
     <span><a href="contact.html">Contact</a></span>
   </footer>
-
 </body>
 </html>
