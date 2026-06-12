@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wednesday Morning Workout — Stuart Zobel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .workout-hero {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 4rem;
+      align-items: center;
+      padding: 5rem 2.5rem 3.5rem;
+      max-width: 1100px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.1s;
+    }
+    .workout-hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 400;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 1rem;
+    }
+    .workout-hero h1 em { font-style: italic; color: var(--accent); }
+    .workout-when {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+    }
+    .workout-hero p {
+      font-size: 1.02rem;
+      font-weight: 300;
+      color: var(--ink2);
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+    .workout-photo img {
+      width: 100%;
+      border-radius: 6px;
+      display: block;
+      object-fit: cover;
+      filter: grayscale(10%);
+    }
+    .pricing-strip {
+      background: var(--bg2);
+      border-top: 0.5px solid var(--border);
+      border-bottom: 0.5px solid var(--border);
+      padding: 3rem 2.5rem;
+      display: flex;
+      gap: 1px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.3s;
+    }
+    .price-card {
+      flex: 1;
+      background: var(--bg);
+      padding: 2rem 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .price-card:first-child { border-radius: 6px 0 0 6px; }
+    .price-card:last-child { border-radius: 0 6px 6px 0; }
+    .price-tag {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .price-amount {
+      font-family: var(--serif);
+      font-size: 2.2rem;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .price-desc {
+      font-size: 0.88rem;
+      color: var(--ink2);
+      line-height: 1.6;
+      margin-top: 0.25rem;
+    }
+    .register-section {
+      padding: 4rem 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.4s;
+    }
+    .register-section h2 {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 0.75rem;
+    }
+    .register-section p {
+      font-size: 0.95rem;
+      color: var(--ink2);
+      line-height: 1.7;
+      max-width: 560px;
+      margin-bottom: 1.5rem;
+    }
+    .register-btn {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--accent-fg);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.75rem 1.75rem;
+      border-radius: 3px;
+      transition: background 0.15s;
+    }
+    .register-btn:hover { background: var(--accent2); }
+    @media (max-width: 700px) {
+      .workout-hero { grid-template-columns: 1fr; padding: 3rem 1.25rem 2rem; }
+      .workout-photo { order: -1; }
+      .pricing-strip { flex-direction: column; padding: 0; gap: 1px; }
+      .price-card { border-radius: 0 !important; }
+      .register-section { padding-left: 1.25rem; padding-right: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="nav-placeholder"></div>
+  <script>fetch("nav.html").then(r=>r.text()).then(h=>document.getElementById("nav-placeholder").innerHTML=h);</script>
+
+  <div class="workout-hero">
+    <div>
+      <p class="workout-when">Every Wednesday · 8AM Pacific · Zoom</p>
+      <h1>Wednesday Morning<br><em>Workout</em></h1>
+      <p>Every Wednesday morning we meet online to spend an hour working on fundamentals — tone production, ear training, scales, and exercises of all kinds. Work the kinks out of your hands, do some deep listening, and start your day right. Your day will be the better for it.</p>
+      <a class="register-btn" href="https://app.ubindi.com/Stuart.Zobel" target="_blank" rel="noopener">Register to Join</a>
+    </div>
+    <div class="workout-photo">
+      <img src="images/Wednesday-morning-warmup-700x633.jpg" alt="Records, guitar, and dumbbells — the Wednesday Morning Workout" />
+    </div>
+  </div>
+
+  <div class="staff-rule">
+    <svg viewBox="0 0 1200 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <line x1="0" y1="6"  x2="1200" y2="6"  stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+      <line x1="0" y1="14" x2="1200" y2="14" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+      <line x1="0" y1="22" x2="1200" y2="22" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+      <line x1="0" y1="30" x2="1200" y2="30" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+      <line x1="0" y1="36" x2="1200" y2="36" stroke="#2A6496" stroke-width="0.7" opacity="0.2"/>
+    </svg>
+  </div>
+
+  <div class="pricing-strip">
+    <div class="price-card">
+      <span class="price-tag">Current students</span>
+      <span class="price-amount">Free</span>
+      <p class="price-desc">All current students are welcome at no charge. Just register and show up.</p>
+    </div>
+    <div class="price-card">
+      <span class="price-tag">Drop-in</span>
+      <span class="price-amount">$10</span>
+      <p class="price-desc">Join any single session. No commitment required.</p>
+    </div>
+    <div class="price-card">
+      <span class="price-tag">Monthly</span>
+      <span class="price-amount">$30</span>
+      <p class="price-desc">Unlimited Wednesday sessions for the month. Best value for regulars.</p>
+    </div>
+  </div>
+
+  <div class="register-section">
+    <h2>Ready to join?</h2>
+    <p>Register through Ubindi to get the Zoom link and manage your membership. Current students — just register and your free access will be confirmed.</p>
+    <a class="register-btn" href="https://app.ubindi.com/Stuart.Zobel" target="_blank" rel="noopener">Register on Ubindi</a>
+  </div>
+
+  <footer>
+    <span>© 2026 Stuart Zobel</span>
+    <span><a href="contact.html">Contact</a></span>
+  </footer>
+</body>
+</html>
