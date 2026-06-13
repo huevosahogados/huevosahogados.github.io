@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Parrilla Project — Stuart Zobel</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Hero ── */
+    .project-hero {
+      padding: 4rem 1.5rem 3rem;
+      max-width: 720px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .project-hero .eyebrow {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .project-hero h1 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(2.2rem, 6vw, 3.5rem);
+      font-weight: 400;
+      font-style: normal;
+      color: var(--ink);
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+    }
+
+    .project-hero .lead {
+      font-size: 1.05rem;
+      color: var(--ink2);
+      line-height: 1.8;
+      max-width: 54ch;
+      margin-bottom: 2rem;
+    }
+
+    /* ── Body ── */
+    .project-body {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 1.5rem 5rem;
+    }
+
+    .project-section {
+      padding: 2.75rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .project-section:last-child {
+      border-bottom: none;
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink3);
+      margin-bottom: 1.25rem;
+    }
+
+    .project-section h2 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      font-style: normal;
+      color: var(--ink);
+      margin-bottom: 0.75rem;
+    }
+
+    .project-section p {
+      font-size: 0.95rem;
+      color: var(--ink2);
+      line-height: 1.8;
+      margin-bottom: 0.75rem;
+      max-width: 58ch;
+    }
+
+    /* ── Example leadsheet ── */
+    .leadsheet-example {
+      margin-top: 1.75rem;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .leadsheet-preview {
+      width: 100%;
+      display: block;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .leadsheet-caption {
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      background: var(--bg2);
+    }
+
+    .leadsheet-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .leadsheet-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.05rem;
+      color: var(--ink);
+    }
+
+    .leadsheet-sub {
+      font-size: 0.8rem;
+      color: var(--ink3);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--accent-fg);
+      border: none;
+      border-radius: 3px;
+      padding: 0.6rem 1.2rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.15s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover { background: var(--accent2); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--ink);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.75rem 1.5rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: border-color 0.15s, color 0.15s;
+      display: inline-block;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ── What we do grid ── */
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 1.5rem;
+    }
+
+    .pillar {
+      background: var(--bg);
+      padding: 1.25rem;
+    }
+
+    .pillar-title {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+      margin-bottom: 0.35rem;
+    }
+
+    .pillar p {
+      font-size: 0.82rem;
+      color: var(--ink2);
+      line-height: 1.6;
+      margin: 0;
+      max-width: none;
+    }
+
+    /* ── Join CTA ── */
+    .join-block {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .join-block p {
+      margin-bottom: 1.25rem;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    @media (min-width: 640px) {
+      .project-hero { padding: 5rem 2.5rem 3.5rem; }
+      .project-body { padding: 0 2.5rem 5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="nav-placeholder"></div>
+
+  <main>
+    <div class="project-hero">
+      <p class="eyebrow">Community Project</p>
+      <h1>The Parrilla Project</h1>
+      <p class="lead">An online gathering of musicians creating enhanced leadsheets for classic tangos — building a free, open body of work, and a community that can play together when the world allows.</p>
+      <a href="contact.html" class="btn-primary">Get involved</a>
+    </div>
+
+    <div class="project-body">
+
+      <!-- What it is -->
+      <div class="project-section">
+        <p class="section-label">The work</p>
+        <h2>More than a leadsheet.</h2>
+        <p>Classic tango repertoire is rich with detail — rhythmic nuance, orchestral color, the particular logic of each orchestra's style. Standard leadsheets flatten all of that. Our enhanced format preserves the structure that makes tango tango, while leaving room for the improvisation that keeps it alive.</p>
+        <p>Each chart is a collaborative transcription, built through deep listening and close attention to the source recordings.</p>
+
+        <div class="pillars">
+          <div class="pillar">
+            <p class="pillar-title">Deep listening</p>
+            <p>We train our ears to hear what's really happening in classic recordings — detail by detail.</p>
+          </div>
+          <div class="pillar">
+            <p class="pillar-title">Transcription</p>
+            <p>Building chops in notation and transcription through real, meaningful repertoire.</p>
+          </div>
+          <div class="pillar">
+            <p class="pillar-title">Orchestra study</p>
+            <p>Each chart deepens familiarity with a specific orchestra and what makes their sound unique.</p>
+          </div>
+          <div class="pillar">
+            <p class="pillar-title">Community</p>
+            <p>Players from around the world, working toward a shared repertoire they can play together.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Example -->
+      <div class="project-section">
+        <p class="section-label">Example</p>
+        <h2>What a chart looks like.</h2>
+        <p>Here's a completed chart from the collection — an arrangement by Aníbal Troilo's orchestra.</p>
+
+        <div class="leadsheet-example">
+          <img
+            src="images/en-esta-tarde-gris.png"
+            alt="Enhanced leadsheet for En Esta Tarde Gris — Aníbal Troilo orchestra"
+            class="leadsheet-preview"
+          />
+          <div class="leadsheet-caption">
+            <div class="leadsheet-meta">
+              <span class="leadsheet-title">En Esta Tarde Gris</span>
+              <span class="leadsheet-sub">Mores / Contursi — Aníbal Troilo orchestra</span>
+            </div>
+            <a href="images/en-esta-tarde-gris.pdf" download class="btn-primary">Download PDF</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Join -->
+      <div class="project-section">
+        <p class="section-label">Get involved</p>
+        <h2>Join the project.</h2>
+        <p>The Parrilla Project meets online. There's a lot to talk about — the best way in is to reach out directly and we'll find a time to connect.</p>
+        <p>All skill levels welcome. If you love tango and want to go deeper, you belong here.</p>
+
+        <div class="join-block">
+          <p>The collection is free and always will be. The community is the point.</p>
+          <div class="cta-row">
+            <a href="contact.html" class="btn-primary">Get in touch</a>
+            <a href="resources.html" class="btn-secondary">Browse the MusicXML library</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    fetch('nav.html').then(r => r.text()).then(h => document.getElementById('nav-placeholder').innerHTML = h);
+    fetch('footer.html').then(r => r.text()).then(h => document.getElementById('footer-placeholder').innerHTML = h);
+  </script>
+</body>
+</html>
