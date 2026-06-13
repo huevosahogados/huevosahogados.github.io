@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — Stuart Zobel</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    .contact-wrap {
+      max-width: 620px;
+      margin: 4rem auto;
+      padding: 0 1.5rem 4rem;
+    }
+
+    .contact-wrap h1 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 2.2rem;
+      color: var(--ink);
+      margin-bottom: 0.35rem;
+      font-style: normal;
+    }
+
+    .contact-wrap .subtitle {
+      color: var(--ink2);
+      font-size: 0.95rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--ink2);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.75rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      color: var(--ink);
+      width: 100%;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 140px;
+    }
+
+    .form-submit {
+      margin-top: 0.5rem;
+    }
+
+    .form-submit button {
+      background: var(--gold);
+      color: var(--bg3);
+      border: none;
+      border-radius: 4px;
+      padding: 0.8rem 2rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .form-submit button:hover {
+      background: var(--gold-hover);
+    }
+
+    .form-success {
+      display: none;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.5rem;
+      color: var(--ink);
+      margin-top: 1rem;
+    }
+
+    .form-success.visible {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div id="nav-placeholder"></div>
+
+  <main>
+    <div class="contact-wrap">
+      <h1>Get in touch</h1>
+      <p class="subtitle">Questions about lessons, performances, or anything else — I'd love to hear from you.</p>
+
+      <form class="contact-form" id="contact-form">
+        <input type="hidden" name="access_key" value="26aba79a-7349-4b36-8840-c1951a66e841" />
+        <input type="hidden" name="subject" value="New message from stuartzobel.com" />
+        <input type="checkbox" name="botcheck" style="display:none;" />
+
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required autocomplete="name" />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required autocomplete="email" />
+        </div>
+
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" required></textarea>
+        </div>
+
+        <div class="form-submit">
+          <button type="submit">Send message</button>
+        </div>
+      </form>
+
+      <div class="form-success" id="form-success">
+        Message sent — I'll get back to you soon.
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    // Nav/footer fetch
+    fetch('nav.html').then(r => r.text()).then(h => document.getElementById('nav-placeholder').innerHTML = h);
+    fetch('footer.html').then(r => r.text()).then(h => document.getElementById('footer-placeholder').innerHTML = h);
+
+    // Form submission
+    const form = document.getElementById('contact-form');
+    const success = document.getElementById('form-success');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: data
+      });
+      if (res.ok) {
+        form.style.display = 'none';
+        success.classList.add('visible');
+      } else {
+        alert('Something went wrong — please try emailing stuartzobel@stuartzobel.com directly.');
+      }
+    });
+  </script>
+</body>
+</html>
