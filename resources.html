@@ -204,14 +204,26 @@
     const BASE_URL  = 'https://huevosahogados.github.io/musicxml/';
 
     function parseCSV(text) {
+      function splitLine(line) {
+        const cols = [];
+        let cur = '', inQ = false;
+        for (let i = 0; i < line.length; i++) {
+          const ch = line[i];
+          if (ch === '"') { inQ = !inQ; }
+          else if (ch === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+          else { cur += ch; }
+        }
+        cols.push(cur.trim());
+        return cols;
+      }
       const lines = text.trim().split('\n');
-      const headers = lines[0].split('\t').map(h => h.trim().replace(/^"|"$/g, ''));
+      const headers = splitLine(lines[0]).map(h => h.replace(/^"|"$/g, '').trim());
       return lines.slice(1).map(line => {
-        const cols = line.split('\t');
+        const cols = splitLine(line);
         const obj = {};
-        headers.forEach((h, i) => obj[h] = (cols[i] || '').trim().replace(/^"|"$/g, ''));
+        headers.forEach((h, i) => obj[h] = (cols[i] || '').replace(/^"|"$/g, '').trim());
         return obj;
-      }).filter(r => r.Filename);
+      }).filter(r => r.Filename && r.Filename.length > 0);
     }
 
     function render(files) {
