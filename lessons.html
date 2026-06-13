@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lessons — Stuart Zobel</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Hero ── */
+    .lessons-hero {
+      padding: 4rem 1.5rem 3rem;
+      max-width: 720px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .lessons-hero .eyebrow {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .lessons-hero h1 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(2.2rem, 6vw, 3.5rem);
+      font-weight: 400;
+      font-style: normal;
+      color: var(--ink);
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+    }
+
+    .lessons-hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .lessons-hero .lead {
+      font-size: 1.05rem;
+      color: var(--ink2);
+      line-height: 1.75;
+      max-width: 52ch;
+    }
+
+    /* ── CTA buttons ── */
+    .cta-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--accent-fg);
+      border: none;
+      border-radius: 3px;
+      padding: 0.75rem 1.5rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.15s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover { background: var(--accent2); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--ink);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.75rem 1.5rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+      display: inline-block;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ── Body sections ── */
+    .lessons-body {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 1.5rem 5rem;
+    }
+
+    .lessons-section {
+      padding: 2.75rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .lessons-section:last-child {
+      border-bottom: none;
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink3);
+      margin-bottom: 1.25rem;
+    }
+
+    .lessons-section h2 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      font-style: normal;
+      color: var(--ink);
+      margin-bottom: 0.75rem;
+    }
+
+    .lessons-section p {
+      font-size: 0.95rem;
+      color: var(--ink2);
+      line-height: 1.8;
+      margin-bottom: 0.75rem;
+      max-width: 58ch;
+    }
+
+    /* ── What we work on ── */
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 1.5rem;
+    }
+
+    .pillar {
+      background: var(--bg);
+      padding: 1.25rem;
+    }
+
+    .pillar-title {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+      margin-bottom: 0.35rem;
+    }
+
+    .pillar p {
+      font-size: 0.82rem;
+      color: var(--ink2);
+      line-height: 1.6;
+      margin: 0;
+      max-width: none;
+    }
+
+    /* ── Rate ── */
+    .rate-block {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.4rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .rate-block .amount {
+      font-family: 'Instrument Serif', serif;
+      font-size: 2.8rem;
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    .rate-block .per {
+      font-size: 0.85rem;
+      color: var(--ink2);
+    }
+
+    .rate-note {
+      font-size: 0.85rem;
+      color: var(--ink3);
+      font-style: italic;
+    }
+
+    @media (min-width: 640px) {
+      .lessons-hero { padding: 5rem 2.5rem 3.5rem; }
+      .lessons-body { padding: 0 2.5rem 5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="nav-placeholder"></div>
+
+  <main>
+    <div class="lessons-hero">
+      <p class="eyebrow">Guitar &amp; Music Lessons</p>
+      <h1>Small and steady steps<br>add up to <em>great leaps.</em></h1>
+      <p class="lead">Lessons built around you — your music, your goals, your pace. Whether you're drawn to Latin American traditions, jazz, pop, or folk, we'll find the thread and follow it.</p>
+      <div class="cta-row">
+        <a href="https://calendly.com/stuartzobel/30min" target="_blank" rel="noopener" class="btn-primary">Book a free intro call</a>
+        <a href="contact.html" class="btn-secondary">Get in touch</a>
+      </div>
+    </div>
+
+    <div class="lessons-body">
+
+      <!-- Approach -->
+      <div class="lessons-section">
+        <p class="section-label">The approach</p>
+        <h2>Theory. Technique. Musicality.</h2>
+        <p>Every student brings something different, and every lesson reflects that. I don't teach from a method book — I draw from a wide range of pedagogical sources, create my own materials, and adapt in real time to what you need.</p>
+        <p>I place particular emphasis on practice techniques that build solid foundations and accelerate learning. Understanding why something works matters as much as being able to do it.</p>
+
+        <div class="pillars">
+          <div class="pillar">
+            <p class="pillar-title">Music theory</p>
+            <p>Applied to real music, not just exercises. We demystify harmony, rhythm, and form in the context of what you're playing.</p>
+          </div>
+          <div class="pillar">
+            <p class="pillar-title">Technique</p>
+            <p>Addressing the root of technical issues — not just the symptom — so progress sticks.</p>
+          </div>
+          <div class="pillar">
+            <p class="pillar-title">Musicality</p>
+            <p>Phrasing, dynamics, feel. The difference between playing notes and making music.</p>
+          </div>
+          <div class="pillar">
+            <p class="pillar-title">Practice methods</p>
+            <p>How to practice is as important as how much. We work on strategies that compound over time.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Specialties -->
+      <div class="lessons-section">
+        <p class="section-label">Specialties</p>
+        <h2>Rooted in Latin America, open to everything.</h2>
+        <p>My deepest background is in Latin American popular and folk music — choro, samba, tango, and related traditions. I bring that harmonic and rhythmic richness into lessons across all genres.</p>
+        <p>Most of my students are working in jazz, pop, rock, folk, or classical repertoire. Whatever you're into, we'll find a way in.</p>
+      </div>
+
+      <!-- Rate -->
+      <div class="lessons-section">
+        <p class="section-label">Rate</p>
+        <h2>Straightforward pricing.</h2>
+        <div class="rate-block">
+          <span class="amount">$75</span>
+          <span class="per">/ hour</span>
+        </div>
+        <p>Lessons are one hour. Packages and scheduling are flexible — reach out and we'll find what works.</p>
+        <p class="rate-note">Sliding scale available in some cases. Just ask.</p>
+        <div class="cta-row" style="margin-top:1.5rem;">
+          <a href="https://calendly.com/stuartzobel/30min" target="_blank" rel="noopener" class="btn-primary">Book a free intro call</a>
+          <a href="contact.html" class="btn-secondary">Get in touch</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    fetch('nav.html').then(r => r.text()).then(h => document.getElementById('nav-placeholder').innerHTML = h);
+    fetch('footer.html').then(r => r.text()).then(h => document.getElementById('footer-placeholder').innerHTML = h);
+  </script>
+</body>
+</html>

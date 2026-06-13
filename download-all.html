@@ -143,7 +143,10 @@
       <p class="option-tag">Stay in the loop</p>
       <h2>Join the mailing list</h2>
       <p>Get notified when new files are added, and hear about upcoming performances, workshops, and releases.</p>
-      <form class="option-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" onsubmit="handleSignup(event)">
+      <form class="option-form" id="signup-form">
+        <input type="hidden" name="access_key" value="26aba79a-7349-4b36-8840-c1951a66e841" />
+        <input type="hidden" name="subject" value="New mailing list signup from stuartzobel.com" />
+        <input type="checkbox" name="botcheck" style="display:none;" />
         <input type="email" name="email" placeholder="your@email.com" required />
         <button type="submit">Sign up &amp; download</button>
       </form>
@@ -154,7 +157,7 @@
       <p class="option-tag">Support the project</p>
       <h2>Make a donation</h2>
       <p>Curating and transcribing these files takes time. If they're useful to you, a small contribution helps keep the collection growing.</p>
-      <a href="https://ko-fi.com" target="_blank" rel="noopener" class="btn-primary">Donate via Ko-fi</a>
+      <a href="https://ko-fi.com/stuartzobel" target="_blank" rel="noopener" class="btn-primary">Donate via Ko-fi</a>
     </div>
 
     <!-- OPTION 3: Just the files -->
@@ -174,23 +177,20 @@
   <script>fetch("footer.html").then(r=>r.text()).then(h=>document.getElementById("footer-placeholder").innerHTML=h);</script>
 
   <script>
-    function handleSignup(e) {
+    document.getElementById('signup-form').addEventListener('submit', async function(e) {
       e.preventDefault();
-      const form = e.target;
-      fetch(form.action, {
+      const data = new FormData(this);
+      const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        body: new FormData(form),
-        headers: { 'Accept': 'application/json' }
-      }).then(r => {
-        if (r.ok) {
-          // trigger download then redirect back
-          window.location.href = 'musicxml/musicxml-collection.zip';
-        }
-      }).catch(() => {
-        // fallback — just download anyway
-        window.location.href = 'musicxml/musicxml-collection.zip';
+        body: data
       });
-    }
+      if (res.ok) {
+        window.location.href = 'musicxml/musicxml-collection.zip';
+      } else {
+        // fallback — download anyway
+        window.location.href = 'musicxml/musicxml-collection.zip';
+      }
+    });
   </script>
 
 </body>
