@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Download All — MusicXML Resources</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .interstitial {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3rem 1.25rem;
+      max-width: 640px;
+    }
+
+    .interstitial h1 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .interstitial .lead {
+      font-size: 1rem;
+      color: var(--ink2);
+      line-height: 1.75;
+      margin-bottom: 3rem;
+      max-width: 48ch;
+    }
+
+    .option {
+      border: 0.5px solid var(--border2);
+      border-radius: 3px;
+      padding: 1.5rem;
+      margin-bottom: 1px;
+      transition: background 0.15s;
+    }
+
+    .option:first-of-type { border-radius: 3px 3px 0 0; }
+    .option:last-of-type  { border-radius: 0 0 3px 3px; margin-bottom: 0; }
+    .option:hover { background: var(--bg2); }
+
+    .option-tag {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+
+    .option h2 {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 0.4rem;
+    }
+
+    .option p {
+      font-size: 0.88rem;
+      color: var(--ink2);
+      line-height: 1.65;
+      margin-bottom: 1rem;
+    }
+
+    .option-form {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .option-form input[type="email"] {
+      flex: 1;
+      min-width: 200px;
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      border-radius: 2px;
+      padding: 0.6rem 0.9rem;
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      color: var(--ink);
+      outline: none;
+    }
+
+    .option-form input[type="email"]::placeholder { color: var(--ink3); }
+    .option-form input[type="email"]:focus { border-color: var(--accent); }
+
+    .option-form button {
+      background: var(--accent);
+      color: var(--accent-fg);
+      border: none;
+      border-radius: 2px;
+      padding: 0.6rem 1.2rem;
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .option-form button:hover { background: var(--accent2); }
+
+    .skip-link {
+      display: inline-block;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--accent);
+    }
+
+    .skip-link:hover { text-decoration: underline; }
+
+    .back-wrap {
+      margin-top: 2.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .interstitial { padding: 5rem 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="nav-placeholder"></div>
+  <script>fetch("nav.html").then(r=>r.text()).then(h=>document.getElementById("nav-placeholder").innerHTML=h);</script>
+
+  <div class="interstitial">
+    <p class="hero-eyebrow">MusicXML Collection</p>
+    <h1>These files are free.<br>Here's how to stay connected.</h1>
+    <p class="lead">Before you download, consider joining the community — or just grab the files. Either way, enjoy the music.</p>
+
+    <!-- OPTION 1: Mailing list -->
+    <div class="option">
+      <p class="option-tag">Stay in the loop</p>
+      <h2>Join the mailing list</h2>
+      <p>Get notified when new files are added, and hear about upcoming performances, workshops, and releases.</p>
+      <form class="option-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" onsubmit="handleSignup(event)">
+        <input type="email" name="email" placeholder="your@email.com" required />
+        <button type="submit">Sign up &amp; download</button>
+      </form>
+    </div>
+
+    <!-- OPTION 2: Donation -->
+    <div class="option">
+      <p class="option-tag">Support the project</p>
+      <h2>Make a donation</h2>
+      <p>Curating and transcribing these files takes time. If they're useful to you, a small contribution helps keep the collection growing.</p>
+      <a href="https://ko-fi.com" target="_blank" rel="noopener" class="btn-primary">Donate via Ko-fi</a>
+    </div>
+
+    <!-- OPTION 3: Just the files -->
+    <div class="option">
+      <p class="option-tag">No thanks</p>
+      <h2>Just the files, please</h2>
+      <p>No problem — the collection is free and always will be.</p>
+      <a href="musicxml/musicxml-collection.zip" download class="skip-link">Download all files →</a>
+    </div>
+
+    <div class="back-wrap">
+      <a href="resources.html" class="back-link">← Back to library</a>
+    </div>
+  </div>
+
+  <div id="footer-placeholder"></div>
+  <script>fetch("footer.html").then(r=>r.text()).then(h=>document.getElementById("footer-placeholder").innerHTML=h);</script>
+
+  <script>
+    function handleSignup(e) {
+      e.preventDefault();
+      const form = e.target;
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      }).then(r => {
+        if (r.ok) {
+          // trigger download then redirect back
+          window.location.href = 'musicxml/musicxml-collection.zip';
+        }
+      }).catch(() => {
+        // fallback — just download anyway
+        window.location.href = 'musicxml/musicxml-collection.zip';
+      });
+    }
+  </script>
+
+</body>
+</html>

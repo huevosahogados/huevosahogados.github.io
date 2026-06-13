@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MusicXML Resources — Stuart Zobel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .resources-header {
+      padding: 3.5rem 1.25rem 2.5rem;
+      border-bottom: 0.5px solid var(--border2);
+    }
+
+    .resources-header h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 7vw, 4rem);
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.05;
+      margin-bottom: 0.75rem;
+    }
+
+    .resources-header p {
+      font-size: 0.95rem;
+      color: var(--ink2);
+      max-width: 52ch;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .download-all-btn {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--accent-fg);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 0.75rem 1.5rem;
+      border-radius: 2px;
+      transition: background 0.15s;
+    }
+
+    .download-all-btn:hover { background: var(--accent2); }
+
+    @media (min-width: 768px) {
+      .resources-header { padding: 4rem 2.5rem 3rem; }
+    }
+
+    /* FILE LIST */
+    .file-list {
+      padding: 2rem 1.25rem 5rem;
+    }
+
+    .file-count {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink3);
+      margin-bottom: 1.75rem;
+    }
+
+    .files {
+      list-style: none;
+      border-top: 0.5px solid var(--border2);
+    }
+
+    .file-item {
+      padding: 1.5rem 0;
+      border-bottom: 0.5px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .file-meta {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .file-genre {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      opacity: 0.85;
+    }
+
+    .file-year {
+      font-size: 0.65rem;
+      color: var(--ink3);
+      letter-spacing: 0.05em;
+    }
+
+    .file-title {
+      font-family: var(--serif);
+      font-size: clamp(1.4rem, 4.5vw, 1.9rem);
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.15;
+    }
+
+    .file-composers {
+      font-size: 0.88rem;
+      color: var(--ink2);
+    }
+
+    .file-composers span {
+      color: var(--ink3);
+      font-size: 0.78rem;
+    }
+
+    .file-description {
+      font-size: 0.88rem;
+      color: var(--ink2);
+      line-height: 1.65;
+      max-width: 58ch;
+    }
+
+    .file-download {
+      margin-top: 0.5rem;
+    }
+
+    .file-download a {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--border2);
+      padding: 0.4rem 0.9rem;
+      border-radius: 2px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .file-download a:hover {
+      background: var(--accent);
+      color: var(--accent-fg);
+    }
+
+    @media (min-width: 768px) {
+      .file-list { padding: 2.5rem 2.5rem 5rem; }
+
+      .file-item {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto;
+        column-gap: 2rem;
+        align-items: start;
+      }
+
+      .file-meta    { grid-column: 1; }
+      .file-title   { grid-column: 1; }
+      .file-composers { grid-column: 1; }
+      .file-description { grid-column: 1; }
+      .file-download {
+        grid-column: 2;
+        grid-row: 1 / 5;
+        align-self: center;
+        margin-top: 0;
+      }
+    }
+
+    /* LOADING / EMPTY STATES */
+    .loading-state {
+      padding: 3rem 0;
+      color: var(--ink3);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="nav-placeholder"></div>
+  <script>fetch("nav.html").then(r=>r.text()).then(h=>document.getElementById("nav-placeholder").innerHTML=h);</script>
+
+  <div class="resources-header">
+    <p class="hero-eyebrow">Open Library</p>
+    <h1>MusicXML Resources</h1>
+    <p>A growing collection of public domain MusicXML files — tango, folk, and beyond. Free to download and use with <a href="leadsheetsxml.html" style="color:var(--accent)">Lead Sheets XML</a> or any MusicXML-compatible app.</p>
+    <a href="download-all.html" class="download-all-btn">Download all files</a>
+  </div>
+
+  <div class="file-list">
+    <p class="file-count" id="file-count">Loading…</p>
+    <ul class="files" id="file-list">
+      <li class="loading-state">Loading files…</li>
+    </ul>
+  </div>
+
+  <div id="footer-placeholder"></div>
+  <script>fetch("footer.html").then(r=>r.text()).then(h=>document.getElementById("footer-placeholder").innerHTML=h);</script>
+
+  <script>
+    const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTg7U1F00znCqvL5MCIznNiiZivclAbM_qdnC-eOSPRF7F7VPvdNoQvjiyGp76NSwKjXVXGP8RQqMMx/pub?output=csv';
+    const BASE_URL  = 'https://huevosahogados.github.io/musicxml/';
+
+    function parseCSV(text) {
+      const lines = text.trim().split('\n');
+      const headers = lines[0].split('\t').map(h => h.trim().replace(/^"|"$/g, ''));
+      return lines.slice(1).map(line => {
+        const cols = line.split('\t');
+        const obj = {};
+        headers.forEach((h, i) => obj[h] = (cols[i] || '').trim().replace(/^"|"$/g, ''));
+        return obj;
+      }).filter(r => r.Filename);
+    }
+
+    function render(files) {
+      const list = document.getElementById('file-list');
+      const count = document.getElementById('file-count');
+
+      count.textContent = `${files.length} piece${files.length !== 1 ? 's' : ''}`;
+
+      if (!files.length) {
+        list.innerHTML = '<li class="loading-state">No files yet — check back soon.</li>';
+        return;
+      }
+
+      list.innerHTML = files.map(f => {
+        const lyricist = f.Lyricist && f.Lyricist !== f.Composer
+          ? `<span> · Lyrics: ${f.Lyricist}</span>`
+          : '';
+        const year = f.Year && f.Year !== 'unknown'
+          ? `<span class="file-year">${f.Year}</span>`
+          : '';
+        const desc = f.Description
+          ? `<p class="file-description">${f.Description}</p>`
+          : '';
+
+        return `
+          <li class="file-item">
+            <div class="file-meta">
+              <span class="file-genre">${f.Genre || ''}</span>
+              ${year}
+            </div>
+            <div class="file-title">${f.Title}</div>
+            <div class="file-composers">${f.Composer}${lyricist}</div>
+            ${desc}
+            <div class="file-download">
+              <a href="${BASE_URL}${f.Filename}" download>Download .xml</a>
+            </div>
+          </li>`;
+      }).join('');
+    }
+
+    fetch(SHEET_CSV)
+      .then(r => r.text())
+      .then(text => render(parseCSV(text)))
+      .catch(() => {
+        document.getElementById('file-list').innerHTML =
+          '<li class="loading-state">Could not load files. Please try again later.</li>';
+      });
+  </script>
+
+</body>
+</html>
