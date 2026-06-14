@@ -157,13 +157,12 @@
       </div>
     </div>
 
-    <!-- FEATURED: swap this block whenever the spotlight changes -->
+    <!-- FEATURED: pulled from Featured sheet — shows the last populated row -->
     <div class="highlight-card">
       <p class="highlight-label">Featured</p>
-      <p class="highlight-tag">iOS App</p>
-      <h3 class="highlight-title">Lead Sheets XML</h3>
-      <p class="highlight-desc">Real-time MusicXML transposition and clef changes — on the bandstand, in the classroom, no desktop editor required.</p>
-      <a href="leadsheetsxml.html" class="highlight-link">View app</a>
+      <div id="featured-content">
+        <p class="highlight-loading">Loading…</p>
+      </div>
     </div>
     <!-- END FEATURED -->
   </section>
@@ -236,6 +235,9 @@
     // Next up: pull the soonest event from the calendar sheet
     const CALENDAR_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQy2I_be2THZom_w3vKWTPvtfr_Kf-XXY0Ww7Cnu6qZGrxSj9d0OKoTkZ7MpzvDig0572dhglh87nHb/pub?output=csv';
 
+    // Featured: pull the last populated row from the Featured sheet
+    const FEATURED_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSxEbpj1nb9ygBEToWgL2Wg49tQo36OPOLVVCGjYDT3HvEGMmYRS6H2od_mXAmyMghfMCIRH9keodM8/pub?output=csv';
+
     function parseCSV(text) {
       const lines = text.trim().split('\n');
       const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
@@ -306,6 +308,31 @@
           <p class="highlight-desc">Could not load events.</p>
           <a href="calendar.html" class="highlight-link">View calendar</a>
         `;
+      });
+
+    function renderFeatured(rows) {
+      const container = document.getElementById('featured-content');
+      const populated = rows.filter(r => Object.values(r).some(v => v && v.trim()));
+
+      if (populated.length === 0) {
+        container.innerHTML = '<p class="highlight-desc">Nothing featured right now.</p>';
+        return;
+      }
+
+      const f = populated[populated.length - 1];
+      container.innerHTML = `
+        ${f.Tag ? `<p class="highlight-tag">${f.Tag}</p>` : ''}
+        <h3 class="highlight-title">${f.Title || ''}</h3>
+        ${f.Description ? `<p class="highlight-desc">${f.Description}</p>` : ''}
+        ${f.Link ? `<a href="${f.Link}" class="highlight-link">${f.LinkText || 'Learn more'}</a>` : ''}
+      `;
+    }
+
+    fetch(FEATURED_CSV)
+      .then(r => r.text())
+      .then(text => renderFeatured(parseCSV(text)))
+      .catch(() => {
+        document.getElementById('featured-content').innerHTML = '<p class="highlight-desc">Could not load featured item.</p>';
       });
   </script>
 
