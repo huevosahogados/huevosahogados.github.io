@@ -8,6 +8,126 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .hero-statement {
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: var(--ink2);
+      margin-bottom: 1rem;
+      max-width: 32ch;
+    }
+
+    .highlights {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      max-width: 1100px;
+      margin: 0 auto 3rem;
+    }
+
+    .highlight-card {
+      background: var(--bg);
+      padding: 1.75rem 2rem;
+    }
+
+    .highlight-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+    }
+
+    .highlight-tag {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink3);
+      margin-bottom: 0.4rem;
+    }
+
+    .highlight-title {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+
+    .highlight-desc {
+      font-size: 0.88rem;
+      color: var(--ink2);
+      line-height: 1.65;
+      margin-bottom: 1.1rem;
+      max-width: 40ch;
+    }
+
+    .highlight-link {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--accent);
+    }
+
+    .highlight-link:hover { color: var(--accent2); }
+    .highlight-link::after { content: ' →'; }
+
+    .next-up-body {
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+
+    .next-up-date {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 56px;
+    }
+
+    .next-up-day {
+      font-family: var(--serif);
+      font-size: 2.1rem;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .next-up-month {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink3);
+      margin-top: 2px;
+      text-align: center;
+    }
+
+    .next-up-name {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 0.25rem;
+    }
+
+    .next-up-venue {
+      font-size: 0.85rem;
+      color: var(--ink2);
+      margin-bottom: 0.85rem;
+    }
+
+    .highlight-loading {
+      font-size: 0.88rem;
+      color: var(--ink3);
+    }
+
+    @media (max-width: 768px) {
+      .highlights { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
 
@@ -17,10 +137,9 @@
   <!-- HERO -->
   <header class="hero">
     <div class="hero-text">
-      <p class="hero-eyebrow">Musician · Developer · Seattle</p>
+      <p class="hero-statement">Playing. Teaching. Learning. Building.</p>
       <h1>Stuart<br>Zobel</h1>
       <p class="hero-tagline">Building tools and making music that cross borders — cultural, instrumental, and technical.</p>
-      <a href="leadsheetsxml.html" class="btn-primary">Lead Sheets XML</a>
     </div>
     <div class="hero-photo">
       <div class="photo-placeholder">
@@ -28,6 +147,26 @@
       </div>
     </div>
   </header>
+
+  <!-- NEXT UP + FEATURED -->
+  <section class="highlights">
+    <div class="highlight-card">
+      <p class="highlight-label">Next up</p>
+      <div id="next-up-content">
+        <p class="highlight-loading">Loading…</p>
+      </div>
+    </div>
+
+    <!-- FEATURED: swap this block whenever the spotlight changes -->
+    <div class="highlight-card">
+      <p class="highlight-label">Featured</p>
+      <p class="highlight-tag">iOS App</p>
+      <h3 class="highlight-title">Lead Sheets XML</h3>
+      <p class="highlight-desc">Real-time MusicXML transposition and clef changes — on the bandstand, in the classroom, no desktop editor required.</p>
+      <a href="leadsheetsxml.html" class="highlight-link">View app</a>
+    </div>
+    <!-- END FEATURED -->
+  </section>
 
   <!-- PROJECT LIST -->
   <main class="section">
@@ -92,6 +231,83 @@
 
   <div id="footer-placeholder"></div>
   <script>fetch("footer.html").then(r=>r.text()).then(h=>document.getElementById("footer-placeholder").innerHTML=h);</script>
+
+  <script>
+    // Next up: pull the soonest event from the calendar sheet
+    const CALENDAR_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQy2I_be2THZom_w3vKWTPvtfr_Kf-XXY0Ww7Cnu6qZGrxSj9d0OKoTkZ7MpzvDig0572dhglh87nHb/pub?output=csv';
+
+    function parseCSV(text) {
+      const lines = text.trim().split('\n');
+      const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+      return lines.slice(1).map(line => {
+        const cols = [];
+        let current = '', inQuotes = false;
+        for (let i = 0; i < line.length; i++) {
+          const ch = line[i];
+          if (ch === '"') { inQuotes = !inQuotes; }
+          else if (ch === ',' && !inQuotes) { cols.push(current.trim()); current = ''; }
+          else { current += ch; }
+        }
+        cols.push(current.trim());
+        const obj = {};
+        headers.forEach((h, i) => obj[h] = (cols[i] || '').replace(/^"|"$/g, ''));
+        return obj;
+      });
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return { day: '—', month: '' };
+      const d = new Date(dateStr);
+      if (isNaN(d)) return { day: dateStr, month: '' };
+      return { day: d.getDate(), month: d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) };
+    }
+
+    function renderNextUp(events) {
+      const container = document.getElementById('next-up-content');
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      const upcoming = events.filter(e => {
+        if (!e.Date) return false;
+        const d = new Date(e.Date);
+        return !isNaN(d) && d >= today;
+      });
+
+      if (upcoming.length === 0) {
+        container.innerHTML = `
+          <p class="highlight-desc">Nothing on the books right now — check back soon.</p>
+          <a href="calendar.html" class="highlight-link">View calendar</a>
+        `;
+        return;
+      }
+
+      upcoming.sort((a, b) => new Date(a.Date) - new Date(b.Date));
+      const e = upcoming[0];
+      const { day, month } = formatDate(e.Date);
+
+      container.innerHTML = `
+        <div class="next-up-body">
+          <div class="next-up-date">
+            <span class="next-up-day">${day}</span>
+            <span class="next-up-month">${month}</span>
+          </div>
+          <div>
+            <h3 class="next-up-name">${e.Event || 'Event'}</h3>
+            ${e.Venue ? `<p class="next-up-venue">${e.Venue}</p>` : ''}
+            <a href="calendar.html" class="highlight-link">All events</a>
+          </div>
+        </div>
+      `;
+    }
+
+    fetch(CALENDAR_CSV)
+      .then(r => r.text())
+      .then(text => renderNextUp(parseCSV(text)))
+      .catch(() => {
+        document.getElementById('next-up-content').innerHTML = `
+          <p class="highlight-desc">Could not load events.</p>
+          <a href="calendar.html" class="highlight-link">View calendar</a>
+        `;
+      });
+  </script>
 
 </body>
 </html>
