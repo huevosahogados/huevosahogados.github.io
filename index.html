@@ -53,6 +53,16 @@
       opacity: 0.55;
     }
 
+    .next-up-header {
+      background: var(--bg2, #152E57);
+      margin: -1.75rem -2rem 1.25rem -2rem;
+      padding: 0.65rem 2rem;
+    }
+
+    .next-up-header .highlight-label {
+      margin-bottom: 0;
+    }
+
     .highlight-label {
       font-size: 0.7rem;
       font-weight: 500;
@@ -184,7 +194,9 @@
     <!-- END FEATURED -->
 
     <div class="highlight-card">
-      <p class="highlight-label">Next up</p>
+      <div class="next-up-header">
+        <p class="highlight-label">Next up</p>
+      </div>
       <div id="next-up-content">
         <p class="highlight-loading">Loading…</p>
       </div>
