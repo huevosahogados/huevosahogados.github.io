@@ -32,6 +32,27 @@
       padding: 1.75rem 2rem;
     }
 
+    .featured-header {
+      background: var(--accent, #E8B84B);
+      margin: -1.75rem -2rem 1.25rem -2rem;
+      padding: 0.65rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .featured-header .highlight-label,
+    .featured-header .highlight-tag {
+      color: var(--bg3, #0F2140);
+      margin-bottom: 0;
+    }
+
+    .featured-header .highlight-tag:not(:empty)::before {
+      content: '·';
+      margin-right: 0.75rem;
+      opacity: 0.55;
+    }
+
     .highlight-label {
       font-size: 0.7rem;
       font-weight: 500;
@@ -148,23 +169,26 @@
     </div>
   </header>
 
-  <!-- NEXT UP + FEATURED -->
+  <!-- FEATURED + NEXT UP -->
   <section class="highlights">
+    <!-- FEATURED: pulled from Featured sheet — shows the last populated row -->
+    <div class="highlight-card">
+      <div class="featured-header">
+        <p class="highlight-label">Featured</p>
+        <p class="highlight-tag" id="featured-tag"></p>
+      </div>
+      <div id="featured-content">
+        <p class="highlight-loading">Loading…</p>
+      </div>
+    </div>
+    <!-- END FEATURED -->
+
     <div class="highlight-card">
       <p class="highlight-label">Next up</p>
       <div id="next-up-content">
         <p class="highlight-loading">Loading…</p>
       </div>
     </div>
-
-    <!-- FEATURED: pulled from Featured sheet — shows the last populated row -->
-    <div class="highlight-card">
-      <p class="highlight-label">Featured</p>
-      <div id="featured-content">
-        <p class="highlight-loading">Loading…</p>
-      </div>
-    </div>
-    <!-- END FEATURED -->
   </section>
 
   <!-- PROJECT LIST -->
@@ -311,17 +335,19 @@
       });
 
     function renderFeatured(rows) {
+      const tagEl = document.getElementById('featured-tag');
       const container = document.getElementById('featured-content');
       const populated = rows.filter(r => Object.values(r).some(v => v && v.trim()));
 
       if (populated.length === 0) {
+        tagEl.textContent = '';
         container.innerHTML = '<p class="highlight-desc">Nothing featured right now.</p>';
         return;
       }
 
       const f = populated[populated.length - 1];
+      tagEl.textContent = f.Tag || '';
       container.innerHTML = `
-        ${f.Tag ? `<p class="highlight-tag">${f.Tag}</p>` : ''}
         <h3 class="highlight-title">${f.Title || ''}</h3>
         ${f.Description ? `<p class="highlight-desc">${f.Description}</p>` : ''}
         ${f.Link ? `<a href="${f.Link}" class="highlight-link">${f.LinkText || 'Learn more'}</a>` : ''}
