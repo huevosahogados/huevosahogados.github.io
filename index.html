@@ -301,19 +301,19 @@
       const e = upcoming[0];
       const { day, month } = formatDate(e.Date);
 
-      container.innerHTML = `
+        container.innerHTML = `
         <div class="next-up-body">
-          <div class="next-up-date">
-            <span class="next-up-day">${day}</span>
-            <span class="next-up-month">${month}</span>
-          </div>
-          <div>
-            <h3 class="next-up-name">${e.Event || 'Event'}</h3>
-            ${e.Venue ? `<p class="next-up-venue">${e.Venue}</p>` : ''}
-           `<a href="${event.Link}" target="_blank">More info</a>`
-          </div>
+        <div class="next-up-date">
+        <span class="next-up-day">${day}</span>
+        <span class="next-up-month">${month}</span>
         </div>
-      `;
+        <div>
+        <h3 class="next-up-name">${e.Event || 'Event'}</h3>
+        ${e.Venue ? `<p class="next-up-venue">${e.Venue}</p>` : ''}
+        ${e.Link ? `<a href="${e.Link}" class="highlight-link" target="_blank">More info</a>` : `<a href="calendar.html" class="highlight-link">View calendar</a>`}
+         </div>
+        </div>
+    `;
     }
 
     fetch(CALENDAR_CSV)
