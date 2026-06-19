@@ -6,7 +6,8 @@
   </work>
   <movement-title>Flow 1</movement-title>
   <identification>
-    <creator type="composer">Julio De Caro/Dante Linyera</creator>
+    <creator type="composer">Julio De Caro</creator>
+    <creator type="lyricist">Dante Linyera</creator>
     <encoding>
       <software>Dorico 6.2.20.6183</software>
       <encoding-date>2026-06-18</encoding-date>
@@ -68,11 +69,11 @@
     <credit-words font-family="Academico" font-size="20" justify="center" valign="middle" default-x="611.875" default-y="1464.38" xml:space="preserve">Boedo</credit-words>
   </credit>
   <credit page="1">
-    <credit-words font-family="Academico" font-size="10" justify="left" valign="middle" default-x="83.75" default-y="1403.75" color="#C0C0C0" xml:space="preserve">Project Lyricist</credit-words>
+    <credit-words font-family="Academico" font-size="10" justify="left" valign="middle" default-x="83.75" default-y="1403.75" xml:space="preserve">Dante Linyera</credit-words>
   </credit>
   <credit page="1">
     <credit-type>composer</credit-type>
-    <credit-words font-family="Academico" font-size="10" justify="right" valign="middle" default-x="1140" default-y="1403.75" xml:space="preserve">Julio De Caro/Dante Linyera</credit-words>
+    <credit-words font-family="Academico" font-size="10" justify="right" valign="middle" default-x="1140" default-y="1403.75" xml:space="preserve">Julio De Caro</credit-words>
   </credit>
   <credit page="1">
     <credit-type>rights</credit-type>
