@@ -1418,8 +1418,8 @@ async function confirmSavePassage(){
   await dbPut(S_SCORES,score);
   closeSavePassagePanel();renderSidebar();
   toast('Passage saved: '+name);
-  // Select the new passage
-  selectPassage(passage.id);
+  // Stay on the score so the user can keep circling more passages
+  selectScore(score.id,spPages[0].pageIdx);
 }
 
 // ── Remove ────────────────────────────────────────────────────────────────────
