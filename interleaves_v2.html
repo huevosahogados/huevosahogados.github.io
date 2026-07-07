@@ -453,7 +453,6 @@ html.eink #import-btn-files,html.eink #import-btn-camera{border-color:#000;color
     <button class="t-btn active" onclick="commitCleanup()">commit</button>
     <button class="t-btn" onclick="revertCleanup()">revert</button>
   </div>
-  <button class="t-btn" onclick="duplicateActive()">duplicate</button>
   <button class="t-btn" onclick="toggleMetronomePanel()">BPM</button>
   <button class="t-btn" id="continue-practice-btn" onclick="continuePracticing()" style="display:none;background:var(--accent);border-color:var(--accent);">▶ Continue practicing</button>
   <button class="t-btn" onclick="toggleSettings()">⚙</button>
@@ -1352,7 +1351,6 @@ function openSavePassagePanel(){
   document.getElementById('sp-page-list').style.display='none';
   document.getElementById('sp-page-list').innerHTML='';
   document.getElementById('save-passage-modal').style.display='flex';
-  setTimeout(()=>{const inp=document.getElementById('sp-name-input');inp.select();},60);
 }
 
 function closeSavePassagePanel(){
@@ -1442,15 +1440,6 @@ function removePassage(id){
   // If score has no more passages, mark hasPassages=false
   const p=passages.find(x=>x.id===id);// already removed, check via sourceId
   renderSidebar();
-}
-function duplicateActive(){
-  if(activeType==='passage'){
-    const p=getPassage(activeId);if(!p)return;
-    saveCurrentAnnotation();
-    const copy={...JSON.parse(JSON.stringify(p)),id:uid(),name:p.name+' (2)',sessions:0,order:passages.length,createdAt:Date.now()};
-    copy.pages=copy.pages.map(pg=>({...pg,practiceAnnotation:null}));
-    passages.push(copy);dbPut(S_PASSAGES,copy);selectPassage(copy.id);renderSidebar();toast('Duplicated — practice marks cleared');
-  }
 }
 
 // ── Rename ────────────────────────────────────────────────────────────────────
@@ -1560,7 +1549,11 @@ function exitCleanupMode(){document.getElementById('cleanup-normal').style.displ
 
 // ── VH / resize ───────────────────────────────────────────────────────────────
 function setVH(){const vh=window.innerHeight;document.getElementById('app').style.height=vh+'px';const sb=document.getElementById('sidebar');if(sb)sb.style.height=vh+'px';}
-setVH();window.addEventListener('resize',()=>{setVH();if(activeId)fitImage();});
+function anyModalOpen(){
+  const ids=['save-passage-modal','name-prompt-modal','rename-modal','import-modal'];
+  return ids.some(id=>{const el=document.getElementById(id);return el&&getComputedStyle(el).display!=='none';});
+}
+setVH();window.addEventListener('resize',()=>{setVH();if(activeId&&!anyModalOpen())fitImage();});
 
 // ── Theme ─────────────────────────────────────────────────────────────────────
 function setTheme(t){const html=document.documentElement;html.classList.remove('eink','warm','clean-white','pure-white');if(t==='eink')html.classList.add('eink');if(t==='warm')html.classList.add('warm');if(t==='white')html.classList.add('clean-white');if(t==='purewhite')html.classList.add('pure-white');localStorage.setItem('theme',t);const pick=document.getElementById('theme-pick');if(pick)pick.value=t;}
