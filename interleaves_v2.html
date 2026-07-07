@@ -1416,10 +1416,11 @@ async function confirmSavePassage(){
   score.hasPassages=true;
   if(isFirstPassage)score.inPool=false; // auto-exclude on first passage; user can toggle back
   await dbPut(S_SCORES,score);
+  const returnPageIdx=spPages[0].pageIdx;
   closeSavePassagePanel();renderSidebar();
   toast('Passage saved: '+name);
   // Stay on the score so the user can keep circling more passages
-  selectScore(score.id,spPages[0].pageIdx);
+  selectScore(score.id,returnPageIdx);
 }
 
 // ── Remove ────────────────────────────────────────────────────────────────────
