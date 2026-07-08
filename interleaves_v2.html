@@ -38,6 +38,8 @@ html.eink .t-sep{background:#999;}html.eink #topbar{background:#fff;border-botto
 html.pure-white .t-btn{border:1.5px solid #000;color:#000;background:#fff;}
 html.pure-white #topbar{background:#fff;border-bottom:2px solid #000;}
 #tool-pick{font-family:var(--font-mono);font-size:13px;color:rgba(255,255,255,0.9);background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.3);border-radius:var(--radius);padding:0 8px;height:var(--btn-h);cursor:pointer;}
+#se-tool-pick{font-family:var(--font-mono);font-size:13px;color:rgba(255,255,255,0.9);background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.3);border-radius:var(--radius);padding:0 8px;height:var(--btn-h);cursor:pointer;}
+#se-tool-pick option{background:#2c2c2c;color:#fff;}
 #tool-pick option{background:#2c2c2c;color:#fff;}
 html.eink #tool-pick{color:#000;background:#f0f0f0;border-color:#999;}
 html.eink #tool-pick option{background:#fff;color:#000;}
@@ -444,7 +446,7 @@ html.eink #import-btn-files,html.eink #import-btn-camera{border-color:#000;color
   <button class="t-btn" onclick="redoMain()" title="redo">↻</button>
   <button class="t-btn danger" onclick="clearCanvas()">clear</button>
   <div class="t-spacer"></div>
-  <button class="t-btn" onclick="openPrepModal()" title="Score prep: clarify, crop, and more" id="prep-btn" style="display:none;">🔧 Prep</button>
+  <button class="t-btn" onclick="openScoreEdit()" title="Edit permanent score notes (fingerings, corrections)" id="prep-btn" style="display:none;">✎ Score Edit</button>
   <button class="t-btn" onclick="toggleMetronomePanel()">BPM</button>
   <button class="t-btn" id="continue-practice-btn" onclick="continuePracticing()" style="display:none;background:var(--accent);border-color:var(--accent);">▶ Continue practicing</button>
   <button class="t-btn" onclick="toggleSettings()">⚙</button>
@@ -686,6 +688,7 @@ html.eink #import-btn-files,html.eink #import-btn-camera{border-color:#000;color
         </div>
       </div>
       <img id="sheet-img" alt="">
+      <canvas id="score-annot-canvas" style="position:absolute;pointer-events:none;"></canvas>
       <canvas id="draw-canvas"></canvas>
       <button id="save-passage-btn" onclick="openSavePassagePanel()" style="display:none;">Save passage</button>
       <button id="edit-tap-prev" onclick="editPrevPage()">‹</button>
@@ -734,6 +737,7 @@ html.eink #import-btn-files,html.eink #import-btn-camera{border-color:#000;color
   <div id="p-progress"><div id="p-progress-bar" style="width:100%"></div></div>
   <div id="p-img-wrap">
     <img id="p-img" src="" alt="">
+    <canvas id="p-score-annot" style="position:absolute;pointer-events:none;"></canvas>
     <canvas id="p-annotation"></canvas>
     <div id="p-pause-overlay"><span id="p-pause-label">paused</span></div>
     <div id="p-draw-toolbar">
@@ -793,44 +797,45 @@ html.eink #import-btn-files,html.eink #import-btn-camera{border-color:#000;color
   </div>
 </div>
 
-<!-- Score Prep modal -->
-<div id="prep-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:400;align-items:center;justify-content:center;">
-  <div style="background:var(--bg);border:1px solid var(--border2);border-radius:8px;padding:20px;width:min(360px,92vw);display:flex;flex-direction:column;gap:14px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;">
-      <span style="font-family:var(--font-serif);font-size:16px;color:var(--ink);">Score Prep</span>
-      <button onclick="closePrepModal()" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--ink3);padding:4px;line-height:1;">✕</button>
+<!-- Score Edit screen — permanent, cascading annotations (fingerings, corrections, crop/clarify) -->
+<div id="score-edit-screen" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:150;flex-direction:column;">
+  <div style="height:var(--toolbar-h);padding:0 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;background:var(--chrome);flex-shrink:0;overflow-x:auto;">
+    <span style="font-family:var(--font-serif);font-size:15px;color:rgba(255,255,255,0.9);white-space:nowrap;">Score Edit</span>
+    <div class="t-sep"></div>
+    <select id="se-tool-pick" onchange="setSeTool(this.value)" title="drawing tool">
+      <option value="pen">pen</option><option value="eraser">eraser</option>
+      <option value="box">box</option><option value="text">text</option>
+    </select>
+    <div class="t-sep"></div>
+    <button class="t-btn" onclick="toggleSeBrushPopover()" title="brush size & color">
+      <span id="se-brush-preview">●</span><span id="se-brush-size-label"> 3</span>
+    </button>
+    <div class="t-sep"></div>
+    <button class="t-btn" onclick="seUndo()" title="undo">↺</button>
+    <button class="t-btn" onclick="seRedo()" title="redo">↻</button>
+    <button class="t-btn danger" onclick="seClearCanvas()">clear</button>
+    <div class="t-spacer"></div>
+    <div id="se-clarify-normal">
+      <button class="t-btn" onclick="previewCleanup()" title="Clarify: binarize for e-ink / contrast">Clarify</button>
     </div>
-
-    <!-- Clarify section -->
-    <div style="display:flex;flex-direction:column;gap:8px;padding-top:4px;border-top:1px solid var(--border);">
-      <div style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);">Clarify</div>
-      <div id="prep-clarify-normal">
-        <button class="settings-nav-btn" onclick="previewCleanup()">Clarify (binarize for e-ink / contrast) →</button>
-      </div>
-      <div id="prep-clarify-active" style="display:none;flex-direction:column;gap:8px;">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <span style="font-size:12px;color:var(--ink2);">threshold</span>
-          <input type="range" id="threshold-slider" min="60" max="220" value="128" step="1" oninput="updateThreshold(+this.value)" style="flex:1;">
-          <span id="threshold-val" style="font-size:11px;color:var(--ink3);min-width:24px;">128</span>
-        </div>
-        <div style="display:flex;gap:8px;">
-          <button class="modal-btn ok" onclick="commitCleanup()" style="flex:1;">Commit</button>
-          <button class="modal-btn" onclick="revertCleanup()" style="flex:1;">Revert</button>
-        </div>
-      </div>
+    <div id="se-clarify-active" style="display:none;align-items:center;gap:6px;">
+      <span style="font-size:12px;color:rgba(255,255,255,0.6);">threshold</span>
+      <input type="range" id="threshold-slider" min="60" max="220" value="128" step="1" oninput="updateThreshold(+this.value)">
+      <span id="threshold-val" style="font-size:10px;color:rgba(255,255,255,0.5);min-width:24px;">128</span>
+      <button class="t-btn active" onclick="commitCleanup()">commit</button>
+      <button class="t-btn" onclick="revertCleanup()">revert</button>
     </div>
-
-    <!-- Crop section (placeholder) -->
-    <div style="display:flex;flex-direction:column;gap:8px;padding-top:8px;border-top:1px solid var(--border);">
-      <div style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);">Crop &amp; Rotate</div>
-      <button class="settings-nav-btn" disabled style="opacity:.4;cursor:not-allowed;">Coming soon</button>
-    </div>
-
-    <!-- Join / remove section -->
-    <div style="display:flex;flex-direction:column;gap:8px;padding-top:8px;border-top:1px solid var(--border);">
-      <div style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);">Made a mistake joining pages?</div>
-      <div style="font-size:12px;color:var(--ink2);line-height:1.4;">Remove this score and re-import it — faster and safer than splitting.</div>
-    </div>
+    <div class="t-sep"></div>
+    <button class="t-btn" onclick="closeScoreEdit(false)">Cancel</button>
+    <button class="t-btn" id="se-save-btn" onclick="saveScoreEdit()" style="background:var(--accent);border-color:var(--accent);">Save</button>
+  </div>
+  <div id="se-canvas-area" style="flex:1;position:relative;overflow:hidden;background:var(--canvas-bg);">
+    <img id="se-sheet-img" alt="" style="position:absolute;display:none;">
+    <canvas id="se-draw-canvas" style="position:absolute;touch-action:none;"></canvas>
+  </div>
+  <div style="padding:6px 12px;font-size:11px;color:var(--ink3);border-top:1px solid var(--border);background:var(--bg2);line-height:1.5;">
+    Permanent marks — automatically shown in every passage derived from this page.<br>
+    Crop &amp; Rotate: coming soon. Joined the wrong pages? Remove this score and re-import — safer than splitting.
   </div>
 </div>
 
@@ -1186,8 +1191,9 @@ function selectScore(scoreId,pageIdx){
   const score=getScore(scoreId); if(!score)return;
   const page=score.pages[activePageIdx]; if(!page)return;
   loadPage(page.src,()=>{
-    // Score pages start blank — marks here are transient, used only to circle a passage
+    // Score pages: reference layer shows existing permanent notes; drawCanvas is transient (used only to circle a passage)
     dctx.clearRect(0,0,drawCanvas.width,drawCanvas.height);
+    drawScoreAnnotRef(page.annotation);
   });
   // Show/hide page nav
   document.getElementById('edit-tap-prev').classList.toggle('active',activePageIdx>0);
@@ -1241,7 +1247,8 @@ function loadPassagePage(){
   const scorePage=score.pages.find(x=>x.pageId===pp.pageId);if(!scorePage)return;
   loadPage(scorePage.src,()=>{
     dctx.clearRect(0,0,drawCanvas.width,drawCanvas.height);
-    if(pp.practiceAnnotation){const img=new Image();img.onload=()=>dctx.drawImage(img,0,0,drawCanvas.width,drawCanvas.height);img.src=pp.practiceAnnotation;}
+    drawScoreAnnotRef(scorePage.annotation);
+    if(pp.practiceAnnotation){const pi=new Image();pi.onload=()=>dctx.drawImage(pi,0,0,drawCanvas.width,drawCanvas.height);pi.src=pp.practiceAnnotation;}
   });
   document.getElementById('edit-tap-prev').classList.toggle('active',activePageIdx>0);
   document.getElementById('edit-tap-next').classList.toggle('active',activePageIdx<p.pages.length-1);
@@ -1276,6 +1283,19 @@ function fitImage(){
   sheetImg.style.cssText=`display:block;width:${w}px;height:${h}px;left:${left}px;top:${top}px;position:absolute;`;
   drawCanvas.width=w;drawCanvas.height=h;
   drawCanvas.style.cssText=`left:${left}px;top:${top}px;position:absolute;`;
+  const sac=document.getElementById('score-annot-canvas');
+  sac.width=w;sac.height=h;
+  sac.style.cssText=`left:${left}px;top:${top}px;position:absolute;pointer-events:none;`;
+}
+function clearScoreAnnotCanvas(){
+  const sac=document.getElementById('score-annot-canvas');
+  sac.getContext('2d').clearRect(0,0,sac.width,sac.height);
+}
+function drawScoreAnnotRef(annotSrc){
+  const sac=document.getElementById('score-annot-canvas');
+  const ctx=sac.getContext('2d');ctx.clearRect(0,0,sac.width,sac.height);
+  if(!annotSrc)return;
+  const img=new Image();img.onload=()=>ctx.drawImage(img,0,0,sac.width,sac.height);img.src=annotSrc;
 }
 
 function clearCanvas(){
@@ -1369,7 +1389,13 @@ document.addEventListener('click',e=>{
   const wrap=document.getElementById('brush-wrap'),pBtn=document.getElementById('pdt-brush'),pop=document.getElementById('brush-popover');
   if(!pop)return;if((wrap&&wrap.contains(e.target))||(pBtn&&pBtn.contains(e.target))||pop.contains(e.target))return;
   pop.classList.remove('show');
+  resetBrushPopoverBindings();
 });
+function resetBrushPopoverBindings(){
+  const sizeSlider=document.getElementById('size-slider'),colorPick=document.getElementById('color-pick');
+  sizeSlider.oninput=()=>{brushSize=+sizeSlider.value;updateBrushPreview();};
+  colorPick.oninput=()=>{brushColor=colorPick.value;updateBrushPreview();};
+}
 
 function updateStatus(){
   let name='—',sessions='—',layerInfo='';
@@ -1569,14 +1595,6 @@ function initDropZone(){
 let cleanupOriginalSrc=null,cleanupPreviewSrc=null;
 function otsuThreshold(data){const hist=new Array(256).fill(0);for(let i=0;i<data.length;i+=4)hist[Math.round(0.299*data[i]+0.587*data[i+1]+0.114*data[i+2])]++;const total=data.length/4;let sum=0;for(let i=0;i<256;i++)sum+=i*hist[i];let sumB=0,wB=0,max=0,t=128;for(let i=0;i<256;i++){wB+=hist[i];if(!wB)continue;const wF=total-wB;if(!wF)break;sumB+=i*hist[i];const b=wB*wF*((sumB/wB)-(sum-sumB)/wF)**2;if(b>max){max=b;t=i;}}return t;}
 function binarizeImage(src,threshold){return new Promise(res=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=img.width;c.height=img.height;const ctx=c.getContext('2d');ctx.drawImage(img,0,0);const d=ctx.getImageData(0,0,c.width,c.height);for(let i=0;i<d.data.length;i+=4){const g=Math.round(0.299*d.data[i]+0.587*d.data[i+1]+0.114*d.data[i+2]);const v=g<threshold?0:255;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255;}ctx.putImageData(d,0,0);res(c.toDataURL('image/jpeg',0.92));};img.src=src;});}
-function openPrepModal(){
-  if(activeType!=='score')return;
-  document.getElementById('prep-modal').style.display='flex';
-}
-function closePrepModal(){
-  document.getElementById('prep-modal').style.display='none';
-  if(cleanupOriginalSrc)revertCleanup(); // discard any un-committed clarify preview on close
-}
 
 async function previewCleanup(){
   if(activeType!=='score')return;
@@ -1587,26 +1605,28 @@ async function previewCleanup(){
   const c=document.createElement('canvas');c.width=img.width;c.height=img.height;const ctx=c.getContext('2d');ctx.drawImage(img,0,0);
   const t=otsuThreshold(ctx.getImageData(0,0,c.width,c.height).data);
   document.getElementById('threshold-slider').value=t;document.getElementById('threshold-val').textContent=t;
-  document.getElementById('prep-clarify-normal').style.display='none';document.getElementById('prep-clarify-active').style.display='flex';
+  document.getElementById('se-clarify-normal').style.display='none';document.getElementById('se-clarify-active').style.display='flex';
   await applyPreview(t);
 }
-async function applyPreview(t){if(!cleanupOriginalSrc)return;showLoading('Processing…');await yieldFrame();cleanupPreviewSrc=await binarizeImage(cleanupOriginalSrc,t);sheetImg.src=cleanupPreviewSrc;hideLoading();}
+async function applyPreview(t){if(!cleanupOriginalSrc)return;showLoading('Processing…');await yieldFrame();cleanupPreviewSrc=await binarizeImage(cleanupOriginalSrc,t);document.getElementById('se-sheet-img').src=cleanupPreviewSrc;hideLoading();}
 async function updateThreshold(t){document.getElementById('threshold-val').textContent=t;await applyPreview(t);}
 async function commitCleanup(){
   if(activeType!=='score')return;const score=getScore(activeId);if(!score||!cleanupPreviewSrc)return;
   score.pages[activePageIdx].src=cleanupPreviewSrc;await dbPut(S_SCORES,score);
   cleanupOriginalSrc=null;cleanupPreviewSrc=null;exitCleanupMode();toast('Image saved');
 }
-function revertCleanup(){if(cleanupOriginalSrc)sheetImg.src=cleanupOriginalSrc;cleanupOriginalSrc=null;cleanupPreviewSrc=null;exitCleanupMode();}
-function exitCleanupMode(){document.getElementById('prep-clarify-normal').style.display='';document.getElementById('prep-clarify-active').style.display='none';}
+function revertCleanup(){if(cleanupOriginalSrc)document.getElementById('se-sheet-img').src=cleanupOriginalSrc;cleanupOriginalSrc=null;cleanupPreviewSrc=null;exitCleanupMode();}
+function exitCleanupMode(){document.getElementById('se-clarify-normal').style.display='';document.getElementById('se-clarify-active').style.display='none';}
+
 
 // ── VH / resize ───────────────────────────────────────────────────────────────
 function setVH(){const vh=window.innerHeight;document.getElementById('app').style.height=vh+'px';const sb=document.getElementById('sidebar');if(sb)sb.style.height=vh+'px';}
 function anyModalOpen(){
-  const ids=['save-passage-modal','name-prompt-modal','rename-modal','import-modal','prep-modal'];
-  return ids.some(id=>{const el=document.getElementById(id);return el&&getComputedStyle(el).display!=='none';});
+  const ids=['save-passage-modal','name-prompt-modal','rename-modal','import-modal'];
+  if(ids.some(id=>{const el=document.getElementById(id);return el&&getComputedStyle(el).display!=='none';}))return true;
+  return document.getElementById('score-edit-screen').style.display!=='none';
 }
-setVH();window.addEventListener('resize',()=>{setVH();if(activeId&&!anyModalOpen())fitImage();});
+setVH();window.addEventListener('resize',()=>{setVH();if(activeId&&!anyModalOpen())fitImage();if(seActive)fitSeImage();});
 
 // ── Theme ─────────────────────────────────────────────────────────────────────
 function setTheme(t){const html=document.documentElement;html.classList.remove('eink','warm','clean-white','pure-white');if(t==='eink')html.classList.add('eink');if(t==='warm')html.classList.add('warm');if(t==='white')html.classList.add('clean-white');if(t==='purewhite')html.classList.add('pure-white');localStorage.setItem('theme',t);const pick=document.getElementById('theme-pick');if(pick)pick.value=t;}
@@ -1693,20 +1713,21 @@ function showPracticeItem(){
 
 function renderPracticeImage(){
   const entry=queue[qIdx];if(!entry)return;
-  const img=document.getElementById('p-img'),ac=document.getElementById('p-annotation');
+  const img=document.getElementById('p-img'),ac=document.getElementById('p-annotation'),sac=document.getElementById('p-score-annot');
   ac.getContext('2d').clearRect(0,0,ac.width,ac.height);
-  let src=null,practiceAnnot=null;
+  sac.getContext('2d').clearRect(0,0,sac.width,sac.height);
+  let src=null,practiceAnnot=null,scoreAnnot=null;
 
   if(entry._isScorePage){
     const score=getScore(entry._scoreId);if(!score)return;
     const page=score.pages[entry._pageIdx];if(!page)return;
-    src=page.src;
+    src=page.src;scoreAnnot=page.annotation;
   } else {
     const p=getPassage(entry.id);if(!p)return;
     const pp=p.pages[practicePageIdx];if(!pp)return;
     const score=getScore(p.sourceId);if(!score)return;
     const scorePage=score.pages.find(x=>x.pageId===pp.pageId);if(!scorePage)return;
-    src=scorePage.src;practiceAnnot=pp.practiceAnnotation;
+    src=scorePage.src;practiceAnnot=pp.practiceAnnotation;scoreAnnot=scorePage.annotation;
     // Enable page nav for multi-page passages
     document.getElementById('tap-prev').classList.toggle('active',practicePageIdx>0);
     document.getElementById('tap-next').classList.toggle('active',practicePageIdx<p.pages.length-1);
@@ -1716,6 +1737,8 @@ function renderPracticeImage(){
   img.onload=()=>{
     const w=img.offsetWidth,h=img.offsetHeight;
     ac.width=w;ac.height=h;ac.style.left=img.offsetLeft+'px';ac.style.top=img.offsetTop+'px';
+    sac.width=w;sac.height=h;sac.style.left=img.offsetLeft+'px';sac.style.top=img.offsetTop+'px';
+    if(scoreAnnot){const sctx=sac.getContext('2d');const si=new Image();si.onload=()=>sctx.drawImage(si,0,0,w,h);si.src=scoreAnnot;}
     if(practiceAnnot){const ctx=ac.getContext('2d');const i=new Image();i.onload=()=>ctx.drawImage(i,0,0,w,h);i.src=practiceAnnot;}
   };
   img.src=src;
@@ -2093,9 +2116,142 @@ document.addEventListener('keydown',e=>{
   if(e.key.toLowerCase()!=='z')return;
   const inPractice=document.getElementById('practice-screen').classList.contains('show');
   e.preventDefault();
+  if(seActive){if(e.shiftKey)seRedo();else seUndo();return;}
   if(e.shiftKey){if(inPractice&&isPaused)redoPractice();else if(!inPractice)redoMain();}
   else{if(inPractice&&isPaused)undoPractice();else if(!inPractice)undoMain();}
 });
+
+// ── Score Edit screen ─────────────────────────────────────────────────────────
+// Full-screen, deliberate editing surface for PERMANENT score annotations.
+// Staged: changes only commit to the DB (and cascade to all derived Passages) on Save.
+let seActive=false,seScoreId=null,sePageIdx=0;
+let seTool='pen',seBrushSize=3,seBrushColor='#1a1814';
+let seIsDrawing=false,seLastX=0,seLastY=0,seBoxStart=null,seBoxSnapshot=null;
+let seUndoStack=[],seRedoStack=[];
+let seOriginalAnnotation=null; // snapshot to restore on Cancel
+
+const seSheetImg=document.getElementById('se-sheet-img');
+const seDrawCanvas=document.getElementById('se-draw-canvas');
+const sectx=seDrawCanvas.getContext('2d');
+const seCanvasArea=document.getElementById('se-canvas-area');
+
+function openScoreEdit(){
+  if(activeType!=='score')return;
+  const score=getScore(activeId);if(!score)return;
+  const passCount=passages.filter(p=>p.sourceId===activeId).length;
+  if(passCount>0){
+    if(!confirm(`This score has ${passCount} passage${passCount!==1?'s':''}. Changes here will show in all of them. Continue?`))return;
+  }
+  seScoreId=activeId;sePageIdx=activePageIdx;seActive=true;
+  const page=score.pages[sePageIdx];
+  seOriginalAnnotation=page.annotation||null;
+  document.getElementById('score-edit-screen').style.display='flex';
+  seSheetImg.src='';
+  seSheetImg.onload=()=>{fitSeImage();loadSeAnnotation();};
+  seSheetImg.src=page.src;
+  seUndoStack=[];seRedoStack=[];
+  setSeTool('pen');
+}
+
+function closeScoreEdit(saved){
+  if(!saved&&cleanupOriginalSrc)revertCleanup(); // discard uncommitted clarify preview
+  document.getElementById('score-edit-screen').style.display='none';
+  document.getElementById('brush-popover').classList.remove('show');
+  resetBrushPopoverBindings();
+  seActive=false;seScoreId=null;seOriginalAnnotation=null;
+  seUndoStack=[];seRedoStack=[];
+}
+
+async function saveScoreEdit(){
+  const score=getScore(seScoreId);if(!score)return;
+  const page=score.pages[sePageIdx];if(!page)return;
+  page.annotation=seDrawCanvas.toDataURL();
+  await dbPut(S_SCORES,score);
+  toast('Score notes saved');
+  closeScoreEdit(true);
+  // Refresh whatever's currently shown so the cascade is visible immediately
+  if(activeType==='score')selectScore(activeId,activePageIdx);
+  else if(activeType==='passage')loadPassagePage();
+}
+
+function fitSeImage(){
+  const area=seCanvasArea.getBoundingClientRect();
+  const iw=seSheetImg.naturalWidth,ih=seSheetImg.naturalHeight;
+  const scale=Math.min(area.width/iw,area.height/ih,1);
+  const w=Math.round(iw*scale),h=Math.round(ih*scale);
+  const left=Math.round((area.width-w)/2),top=Math.round((area.height-h)/2);
+  seSheetImg.style.cssText=`display:block;width:${w}px;height:${h}px;left:${left}px;top:${top}px;position:absolute;`;
+  seDrawCanvas.width=w;seDrawCanvas.height=h;
+  seDrawCanvas.style.cssText=`left:${left}px;top:${top}px;position:absolute;`;
+}
+
+function loadSeAnnotation(){
+  sectx.clearRect(0,0,seDrawCanvas.width,seDrawCanvas.height);
+  if(seOriginalAnnotation){const img=new Image();img.onload=()=>sectx.drawImage(img,0,0,seDrawCanvas.width,seDrawCanvas.height);img.src=seOriginalAnnotation;}
+}
+
+function setSeTool(t){seTool=t;const pick=document.getElementById('se-tool-pick');if(pick)pick.value=t;seDrawCanvas.style.cursor=t==='eraser'?'cell':t==='text'?'text':'crosshair';}
+
+function seGetPos(e){const rect=seDrawCanvas.getBoundingClientRect();const src=e.touches?e.touches[0]:e;return{x:src.clientX-rect.left,y:src.clientY-rect.top};}
+
+seDrawCanvas.addEventListener('mousedown',seStartDraw);
+seDrawCanvas.addEventListener('mousemove',seDoDraw);
+seDrawCanvas.addEventListener('mouseup',seEndDraw);
+seDrawCanvas.addEventListener('mouseleave',seEndDraw);
+seDrawCanvas.addEventListener('touchstart',seStartDraw,{passive:false});
+seDrawCanvas.addEventListener('touchmove',seDoDraw,{passive:false});
+seDrawCanvas.addEventListener('touchend',seEndDraw);
+
+function seStartDraw(e){
+  if(!seActive)return;e.preventDefault();
+  if(seTool==='text'){const src=e.touches?e.touches[0]:e;showTextOverlay(src.clientX,src.clientY,sectx,seDrawCanvas);return;}
+  pushUndo(sectx,seDrawCanvas,seUndoStack,seRedoStack);
+  seIsDrawing=true;const p=seGetPos(e);seLastX=p.x;seLastY=p.y;
+  if(seTool==='box'){seBoxStart=p;seBoxSnapshot=sectx.getImageData(0,0,seDrawCanvas.width,seDrawCanvas.height);return;}
+  sectx.beginPath();sectx.moveTo(p.x,p.y);
+}
+function seDoDraw(e){
+  if(!seIsDrawing)return;e.preventDefault();
+  const p=seGetPos(e);
+  if(seTool==='eraser'){const sz=seBrushSize*5;sectx.clearRect(p.x-sz/2,p.y-sz/2,sz,sz);}
+  else if(seTool==='pen'){sectx.globalAlpha=1;sectx.strokeStyle=seBrushColor;sectx.lineWidth=seBrushSize*0.65;sectx.lineCap='butt';sectx.lineJoin='miter';sectx.setLineDash([]);sectx.beginPath();sectx.moveTo(seLastX,seLastY);sectx.lineTo(p.x,p.y);sectx.stroke();}
+  else if(seTool==='box'){if(seBoxSnapshot)sectx.putImageData(seBoxSnapshot,0,0);sectx.strokeStyle=seBrushColor;sectx.lineWidth=Math.max(1.5,seBrushSize*0.5);sectx.strokeRect(seBoxStart.x,seBoxStart.y,p.x-seBoxStart.x,p.y-seBoxStart.y);}
+  seLastX=p.x;seLastY=p.y;
+}
+function seEndDraw(e){
+  if(!seIsDrawing)return;seIsDrawing=false;
+  if(seTool==='box'&&seBoxStart){const p=seGetPos(e);if(seBoxSnapshot)sectx.putImageData(seBoxSnapshot,0,0);sectx.strokeStyle=seBrushColor;sectx.lineWidth=Math.max(1.5,seBrushSize*0.5);sectx.strokeRect(seBoxStart.x,seBoxStart.y,p.x-seBoxStart.x,p.y-seBoxStart.y);seBoxStart=null;seBoxSnapshot=null;}
+}
+
+function seUndo(){doUndo(sectx,seDrawCanvas,seUndoStack,seRedoStack);}
+function seRedo(){doRedo(sectx,seDrawCanvas,seUndoStack,seRedoStack);}
+function seClearCanvas(){
+  if(!confirm('Clear all permanent marks on this page? (not saved until you hit Save)'))return;
+  pushUndo(sectx,seDrawCanvas,seUndoStack,seRedoStack);
+  sectx.clearRect(0,0,seDrawCanvas.width,seDrawCanvas.height);
+}
+
+function toggleSeBrushPopover(){
+  const pop=document.getElementById('brush-popover');
+  const btn=document.querySelector('#score-edit-screen [onclick="toggleSeBrushPopover()"]');
+  const rect=btn.getBoundingClientRect();
+  const showing=pop.classList.contains('show');
+  pop.classList.toggle('show');
+  if(!showing){
+    pop.style.top=(rect.bottom+8)+'px';pop.style.left=(rect.left+rect.width/2-24)+'px';
+    // Repoint the shared brush popover's live-update targets at Score Edit state while open
+    const sizeSlider=document.getElementById('size-slider'),colorPick=document.getElementById('color-pick');
+    sizeSlider.value=seBrushSize;colorPick.value=seBrushColor;
+    sizeSlider.oninput=()=>{seBrushSize=+sizeSlider.value;updateSeBrushPreview();};
+    colorPick.oninput=()=>{seBrushColor=colorPick.value;updateSeBrushPreview();};
+  }
+}
+function updateSeBrushPreview(){
+  const px=Math.max(6,Math.min(20,seBrushSize*1.2));
+  const prev=document.getElementById('se-brush-preview');
+  prev.style.fontSize=px+'px';prev.style.color=seBrushColor;
+  document.getElementById('se-brush-size-label').textContent=' '+seBrushSize;
+}
 
 openDB().then(async()=>{
   initTheme();initDragContainer();initDropZone();
