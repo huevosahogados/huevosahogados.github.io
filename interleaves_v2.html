@@ -443,16 +443,7 @@ html.eink #import-btn-files,html.eink #import-btn-camera{border-color:#000;color
   <button class="t-btn" onclick="redoMain()" title="redo">↻</button>
   <button class="t-btn danger" onclick="clearCanvas()">clear</button>
   <div class="t-spacer"></div>
-  <div id="cleanup-normal">
-    <button class="t-btn" onclick="previewCleanup()">clarify</button>
-  </div>
-  <div id="cleanup-preview" style="display:none;align-items:center;gap:6px;">
-    <span style="font-size:13px;color:rgba(255,255,255,0.5);">threshold</span>
-    <input type="range" id="threshold-slider" min="60" max="220" value="128" step="1" oninput="updateThreshold(+this.value)">
-    <span id="threshold-val" style="font-size:10px;color:rgba(255,255,255,0.5);min-width:24px;">128</span>
-    <button class="t-btn active" onclick="commitCleanup()">commit</button>
-    <button class="t-btn" onclick="revertCleanup()">revert</button>
-  </div>
+  <button class="t-btn" onclick="openPrepModal()" title="Score prep: clarify, crop, and more" id="prep-btn" style="display:none;">🔧 Prep</button>
   <button class="t-btn" onclick="toggleMetronomePanel()">BPM</button>
   <button class="t-btn" id="continue-practice-btn" onclick="continuePracticing()" style="display:none;background:var(--accent);border-color:var(--accent);">▶ Continue practicing</button>
   <button class="t-btn" onclick="toggleSettings()">⚙</button>
@@ -791,6 +782,47 @@ html.eink #import-btn-files,html.eink #import-btn-camera{border-color:#000;color
     <div style="display:flex;gap:8px;justify-content:flex-end;">
       <button onclick="closeSavePassagePanel()" style="padding:6px 14px;border-radius:var(--radius);border:1px solid var(--border2);cursor:pointer;font-family:var(--font-mono);font-size:12px;background:none;color:var(--ink2);">cancel</button>
       <button onclick="confirmSavePassage()" style="padding:6px 14px;border-radius:var(--radius);border:none;cursor:pointer;font-family:var(--font-mono);font-size:12px;background:var(--accent);color:var(--accent-fg);">Save passage</button>
+    </div>
+  </div>
+</div>
+
+<!-- Score Prep modal -->
+<div id="prep-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:400;align-items:center;justify-content:center;">
+  <div style="background:var(--bg);border:1px solid var(--border2);border-radius:8px;padding:20px;width:min(360px,92vw);display:flex;flex-direction:column;gap:14px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <span style="font-family:var(--font-serif);font-size:16px;color:var(--ink);">Score Prep</span>
+      <button onclick="closePrepModal()" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--ink3);padding:4px;line-height:1;">✕</button>
+    </div>
+
+    <!-- Clarify section -->
+    <div style="display:flex;flex-direction:column;gap:8px;padding-top:4px;border-top:1px solid var(--border);">
+      <div style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);">Clarify</div>
+      <div id="prep-clarify-normal">
+        <button class="settings-nav-btn" onclick="previewCleanup()">Clarify (binarize for e-ink / contrast) →</button>
+      </div>
+      <div id="prep-clarify-active" style="display:none;flex-direction:column;gap:8px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:12px;color:var(--ink2);">threshold</span>
+          <input type="range" id="threshold-slider" min="60" max="220" value="128" step="1" oninput="updateThreshold(+this.value)" style="flex:1;">
+          <span id="threshold-val" style="font-size:11px;color:var(--ink3);min-width:24px;">128</span>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="modal-btn ok" onclick="commitCleanup()" style="flex:1;">Commit</button>
+          <button class="modal-btn" onclick="revertCleanup()" style="flex:1;">Revert</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Crop section (placeholder) -->
+    <div style="display:flex;flex-direction:column;gap:8px;padding-top:8px;border-top:1px solid var(--border);">
+      <div style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);">Crop &amp; Rotate</div>
+      <button class="settings-nav-btn" disabled style="opacity:.4;cursor:not-allowed;">Coming soon</button>
+    </div>
+
+    <!-- Join / remove section -->
+    <div style="display:flex;flex-direction:column;gap:8px;padding-top:8px;border-top:1px solid var(--border);">
+      <div style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);">Made a mistake joining pages?</div>
+      <div style="font-size:12px;color:var(--ink2);line-height:1.4;">Remove this score and re-import it — faster and safer than splitting.</div>
     </div>
   </div>
 </div>
@@ -1155,6 +1187,7 @@ function selectScore(scoreId,pageIdx){
   document.getElementById('edit-tap-next').classList.toggle('active',activePageIdx<score.pages.length-1);
   // Show Save passage button
   document.getElementById('save-passage-btn').style.display='block';
+  document.getElementById('prep-btn').style.display='flex';
   updateStatus(); renderSidebar();
 }
 
@@ -1184,6 +1217,7 @@ function selectPassage(id){
   canvasArea.classList.add('mode-passage');canvasArea.classList.remove('mode-score');
   activeType='passage'; activeId=id; activePageIdx=0;
   document.getElementById('save-passage-btn').style.display='none';
+  document.getElementById('prep-btn').style.display='none';
   loadPassagePage();
   document.getElementById('edit-tap-prev').classList.remove('active');
   const p=getPassage(id);
@@ -1526,6 +1560,15 @@ function initDropZone(){
 let cleanupOriginalSrc=null,cleanupPreviewSrc=null;
 function otsuThreshold(data){const hist=new Array(256).fill(0);for(let i=0;i<data.length;i+=4)hist[Math.round(0.299*data[i]+0.587*data[i+1]+0.114*data[i+2])]++;const total=data.length/4;let sum=0;for(let i=0;i<256;i++)sum+=i*hist[i];let sumB=0,wB=0,max=0,t=128;for(let i=0;i<256;i++){wB+=hist[i];if(!wB)continue;const wF=total-wB;if(!wF)break;sumB+=i*hist[i];const b=wB*wF*((sumB/wB)-(sum-sumB)/wF)**2;if(b>max){max=b;t=i;}}return t;}
 function binarizeImage(src,threshold){return new Promise(res=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=img.width;c.height=img.height;const ctx=c.getContext('2d');ctx.drawImage(img,0,0);const d=ctx.getImageData(0,0,c.width,c.height);for(let i=0;i<d.data.length;i+=4){const g=Math.round(0.299*d.data[i]+0.587*d.data[i+1]+0.114*d.data[i+2]);const v=g<threshold?0:255;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255;}ctx.putImageData(d,0,0);res(c.toDataURL('image/jpeg',0.92));};img.src=src;});}
+function openPrepModal(){
+  if(activeType!=='score')return;
+  document.getElementById('prep-modal').style.display='flex';
+}
+function closePrepModal(){
+  document.getElementById('prep-modal').style.display='none';
+  if(cleanupOriginalSrc)revertCleanup(); // discard any un-committed clarify preview on close
+}
+
 async function previewCleanup(){
   if(activeType!=='score')return;
   const score=getScore(activeId);if(!score)return;
@@ -1535,7 +1578,7 @@ async function previewCleanup(){
   const c=document.createElement('canvas');c.width=img.width;c.height=img.height;const ctx=c.getContext('2d');ctx.drawImage(img,0,0);
   const t=otsuThreshold(ctx.getImageData(0,0,c.width,c.height).data);
   document.getElementById('threshold-slider').value=t;document.getElementById('threshold-val').textContent=t;
-  document.getElementById('cleanup-normal').style.display='none';document.getElementById('cleanup-preview').style.display='flex';
+  document.getElementById('prep-clarify-normal').style.display='none';document.getElementById('prep-clarify-active').style.display='flex';
   await applyPreview(t);
 }
 async function applyPreview(t){if(!cleanupOriginalSrc)return;showLoading('Processing…');await yieldFrame();cleanupPreviewSrc=await binarizeImage(cleanupOriginalSrc,t);sheetImg.src=cleanupPreviewSrc;hideLoading();}
@@ -1546,12 +1589,12 @@ async function commitCleanup(){
   cleanupOriginalSrc=null;cleanupPreviewSrc=null;exitCleanupMode();toast('Image saved');
 }
 function revertCleanup(){if(cleanupOriginalSrc)sheetImg.src=cleanupOriginalSrc;cleanupOriginalSrc=null;cleanupPreviewSrc=null;exitCleanupMode();}
-function exitCleanupMode(){document.getElementById('cleanup-normal').style.display='';document.getElementById('cleanup-preview').style.display='none';}
+function exitCleanupMode(){document.getElementById('prep-clarify-normal').style.display='';document.getElementById('prep-clarify-active').style.display='none';}
 
 // ── VH / resize ───────────────────────────────────────────────────────────────
 function setVH(){const vh=window.innerHeight;document.getElementById('app').style.height=vh+'px';const sb=document.getElementById('sidebar');if(sb)sb.style.height=vh+'px';}
 function anyModalOpen(){
-  const ids=['save-passage-modal','name-prompt-modal','rename-modal','import-modal'];
+  const ids=['save-passage-modal','name-prompt-modal','rename-modal','import-modal','prep-modal'];
   return ids.some(id=>{const el=document.getElementById(id);return el&&getComputedStyle(el).display!=='none';});
 }
 setVH();window.addEventListener('resize',()=>{setVH();if(activeId&&!anyModalOpen())fitImage();});
