@@ -31,8 +31,8 @@ html.eink #app-name{color:#aaa;}html.pure-white #app-name{color:#000;}
 .t-btn.active{background:rgba(255,255,255,0.2);color:#fff;border-color:rgba(255,255,255,0.6);}
 .t-btn.danger:hover{color:#ffaaaa;border-color:#ffaaaa;}
 .t-sep{width:1px;height:22px;background:rgba(255,255,255,0.2);flex-shrink:0;}
-#continue-practice-btn,#se-save-btn{background:var(--accent);border-color:var(--accent);color:var(--accent-fg);}
-#continue-practice-btn:hover,#se-save-btn:hover{background:var(--accent2);color:var(--accent-fg);}
+#se-save-btn{background:var(--accent);border-color:var(--accent);color:var(--accent-fg);}
+#se-save-btn:hover{background:var(--accent2);color:var(--accent-fg);}
 .t-spacer{flex:1;}
 html.eink .t-btn{border:1px solid #999;color:#000;background:#f0f0f0;}
 html.eink .t-btn:hover{background:#ddd;}html.eink .t-btn.active{background:#000;color:#fff;border-color:#000;}
@@ -96,8 +96,6 @@ html.eink .item{border:2px solid #000;}html.eink .item.active{border:3px solid #
 .score-page-btn.active{background:var(--bg3);border-color:var(--ink2);color:var(--ink);font-weight:500;}
 html.eink .score-item{border:2px solid #000;}
 html.eink .score-page-btn.active{background:#e0e0e0;border-color:#000;}
-.score-pool-toggle{display:flex;align-items:center;flex-shrink:0;cursor:pointer;}
-.score-pool-toggle input[type=checkbox]{width:18px;height:18px;cursor:pointer;accent-color:var(--accent);}
 #save-passage-btn{position:absolute;bottom:16px;right:16px;z-index:10;
   background:var(--accent);color:var(--accent-fg);border:none;border-radius:var(--radius);
   padding:10px 18px;cursor:pointer;font-family:var(--font-mono);font-size:14px;font-weight:600;
@@ -514,7 +512,6 @@ html.eink #se-tool-pick option{background:#fff;color:#000;}
   <div class="t-spacer"></div>
   <button class="t-btn" onclick="openScoreEdit()" title="Edit permanent score notes (fingerings, corrections)" id="prep-btn" style="display:none;">✎ Score Edit</button>
   <button class="t-btn" onclick="toggleMetronomePanel()">BPM</button>
-  <button class="t-btn" id="continue-practice-btn" onclick="continuePracticing()" style="display:none;">▶ Continue practicing</button>
   <button class="t-btn" onclick="toggleHelp()" title="Help">?</button>
   <button class="t-btn" onclick="toggleSettings()">⚙</button>
 </div>
@@ -614,7 +611,7 @@ html.eink #se-tool-pick option{background:#fff;color:#000;}
 
     <div>
       <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;">2 · Save a passage</div>
-      <p>Open a Score page from the sidebar, circle or box the tricky bit, then tap <strong style="color:var(--ink);">Save passage</strong>. Give it a name. Check "Continues on next page" if it spans two pages. Once a Score has at least one passage, it's automatically taken out of the shuffle — toggle the checkbox next to its name if you still want the whole piece in rotation too.</p>
+      <p>Open a Score page from the sidebar, circle or box the tricky bit, then tap <strong style="color:var(--ink);">Save passage</strong>. Give it a name. Check "Continues on next page" if it spans two pages. Once a Score has at least one passage, the shuffle serves its passages instead of the whole piece — delete all of a Score's passages and it returns to page-by-page rotation.</p>
     </div>
 
     <div>
@@ -624,7 +621,7 @@ html.eink #se-tool-pick option{background:#fff;color:#000;}
 
     <div>
       <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;">4 · Practice</div>
-      <p>Tap <strong style="color:var(--ink);">▶ practice</strong>. Passages (and any in-pool Scores) shuffle with a timer per page. Use <strong style="color:var(--ink);">− less / + more</strong> or the tier dot in the sidebar to change how often something comes up. Pause to draw practice marks on the current item, or tap <strong style="color:var(--ink);">Go to score</strong> to jump out and circle a brand-new passage — you can always tap <strong style="color:var(--ink);">▶ Continue practicing</strong> to pick back up right where you left off.</p>
+      <p>Tap <strong style="color:var(--ink);">▶ practice</strong>. Passages (and pages of Scores that don't have passages yet) shuffle with a timer per page. Use <strong style="color:var(--ink);">− less / + more</strong> or the tier dot in the sidebar to change how often something comes up. Pause to draw practice marks on the current item — they save automatically as you draw. Tap <strong style="color:var(--ink);">Go to score</strong> to jump out and circle a brand-new passage, then <strong style="color:var(--ink);">▶ Back to passage</strong> (bottom-left of the canvas) to pick up right where you left off.</p>
     </div>
 
     <div>
@@ -1226,13 +1223,9 @@ function renderScoresList(){
     div.dataset.id=score.id;
     const passCount=passages.filter(p=>p.sourceId===score.id).length;
     const head=document.createElement('div');head.className='score-item-head';
-    const inPool=score.inPool!==false;
     head.innerHTML=`<span class="score-chevron ${isActive?'open':''}">▶</span>
       <span class="score-name" title="${esc(score.name)}">${esc(score.name)}</span>
       <span class="score-meta">${score.pages.length}p${passCount?` · ${passCount} passages`:''}</span>
-      <label class="score-pool-toggle" title="Include in practice session" onclick="event.stopPropagation()">
-        <input type="checkbox" ${inPool?'checked':''} onchange="toggleScorePool('${score.id}')">
-      </label>
       <button class="item-btn del" onclick="event.stopPropagation();removeScore('${score.id}')" title="remove">✕</button>`;
     head.onclick=()=>toggleScoreExpand(score.id,div);
     div.appendChild(head);
@@ -1257,13 +1250,6 @@ function renderScoresList(){
     div.appendChild(pageList);
     list.appendChild(div);
   });
-}
-
-function toggleScorePool(id){
-  const score=getScore(id);if(!score)return;
-  score.inPool=score.inPool===false?true:false;
-  dbPut(S_SCORES,score);renderSidebar();
-  toast(score.name+(score.inPool?' added to':' removed from')+' shuffle');
 }
 
 function toggleScoreExpand(id,div){
@@ -1611,7 +1597,7 @@ async function confirmSavePassage(){
   // Mark score as having passages → exclude from shuffle
   const isFirstPassage=!score.hasPassages;
   score.hasPassages=true;
-  if(isFirstPassage)score.inPool=false; // auto-exclude on first passage; user can toggle back
+  if(isFirstPassage)score.inPool=false; // auto-exclude: score leaves rotation once it's being worked via passages
   await dbPut(S_SCORES,score);
   const returnPageIdx=spPages[0].pageIdx;
   closeSavePassagePanel();renderSidebar();
@@ -1636,10 +1622,10 @@ function removePassage(id){
   if(!confirm('Remove this passage?'))return;
   passages=passages.filter(p=>p.id!==id);dbDelete(S_PASSAGES,id);
   if(activeId===id){activeId=null;activeType=null;sheetImg.style.display='none';dropZone.style.display='flex';dctx.clearRect(0,0,drawCanvas.width,drawCanvas.height);}
-  // If the source score has no more passages, reset its informational flag
-  // (inPool is left as the user set it — deleting a passage shouldn't silently change the shuffle)
+  // No manual pool override anymore: pool membership is automatic.
+  // Deleting the last passage returns the score to page-by-page rotation.
   const src=getScore(removed.sourceId);
-  if(src&&!passages.some(p=>p.sourceId===src.id)){src.hasPassages=false;dbPut(S_SCORES,src);}
+  if(src&&!passages.some(p=>p.sourceId===src.id)){src.hasPassages=false;src.inPool=true;dbPut(S_SCORES,src);}
   renderSidebar();
 }
 
@@ -1812,6 +1798,7 @@ function buildPracticePool(){
 
 function startSession(){
   const pool=buildPracticePool();if(!pool.length)return;
+  document.getElementById('back-to-practice-btn').style.display='none'; // replaces any suspended session
   saveCurrentAnnotation();itemsSinceRest=0;currentLoop=0;
   timerTotal=parseInt(document.getElementById('timer-input').value)||120;
   maxLoops=parseInt(document.getElementById('loop-count').value)||3;
@@ -1938,16 +1925,27 @@ function goToScoreFromPractice(){
   // Practice state (queue, qIdx, timerLeft, isPaused) stays untouched in memory —
   // just hide the overlay and go edit the score.
   document.getElementById('practice-screen').classList.remove('show');
-  document.getElementById('continue-practice-btn').style.display='flex';
   document.getElementById('back-to-practice-btn').style.display='block';
   selectScore(score.id,pageIdx);
   toast('Editing source score — practice paused');
 }
 
 function continuePracticing(){
-  document.getElementById('continue-practice-btn').style.display='none';
   document.getElementById('back-to-practice-btn').style.display='none';
+  // Items may have been deleted while browsing — prune the suspended queue first
+  const valid=e=>e._isScorePage?!!getScore(e._scoreId):!!getPassage(e.id);
+  const cur=queue[qIdx],curValid=cur&&valid(cur);
+  const before=queue.slice(0,qIdx).filter(valid).length;
+  queue=queue.filter(valid);
+  if(!queue.length){toast('All practice items were removed — session ended');endSession();return;}
+  qIdx=Math.min(before,queue.length-1);
   document.getElementById('practice-screen').classList.add('show');
+  if(!curValid){
+    // The item we paused on is gone — move on to the next valid one (timer restarts, unpaused)
+    toast('That passage was removed — continuing with the next item');
+    showPracticeItem();
+    return;
+  }
   // Re-show paused state (timer/queue were never touched)
   document.getElementById('p-pause-overlay').classList.add('show');
   document.getElementById('p-draw-toolbar').classList.add('show');
@@ -1956,7 +1954,6 @@ function continuePracticing(){
 }
 
 function endSession(){
-  document.getElementById('continue-practice-btn').style.display='none';
   document.getElementById('back-to-practice-btn').style.display='none';
   clearInterval(timerTick);clearInterval(restTimerTick);clearInterval(breatheTick);isPaused=false;currentLoop=0;itemsSinceRest=0;if(metroRunning)stopMetronome();
   document.getElementById('rest-screen').classList.remove('show');document.getElementById('practice-screen').classList.remove('show');
