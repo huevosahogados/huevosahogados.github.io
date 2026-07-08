@@ -31,6 +31,8 @@ html.eink #app-name{color:#aaa;}html.pure-white #app-name{color:#000;}
 .t-btn.active{background:rgba(255,255,255,0.2);color:#fff;border-color:rgba(255,255,255,0.6);}
 .t-btn.danger:hover{color:#ffaaaa;border-color:#ffaaaa;}
 .t-sep{width:1px;height:22px;background:rgba(255,255,255,0.2);flex-shrink:0;}
+#continue-practice-btn{background:var(--accent);border-color:var(--accent);color:var(--accent-fg);}
+#continue-practice-btn:hover{background:var(--accent2);color:var(--accent-fg);}
 .t-spacer{flex:1;}
 html.eink .t-btn{border:1px solid #999;color:#000;background:#f0f0f0;}
 html.eink .t-btn:hover{background:#ddd;}html.eink .t-btn.active{background:#000;color:#fff;border-color:#000;}
@@ -102,6 +104,12 @@ html.eink .score-page-btn.active{background:#e0e0e0;border-color:#000;}
   box-shadow:0 2px 12px rgba(0,0,0,0.2);}
 #save-passage-btn:hover{background:var(--accent2);}
 html.eink #save-passage-btn{background:#000;color:#fff;}
+#back-to-practice-btn{position:absolute;bottom:16px;left:16px;z-index:10;
+  background:var(--accent);color:var(--accent-fg);border:none;border-radius:var(--radius);
+  padding:10px 18px;cursor:pointer;font-family:var(--font-mono);font-size:14px;font-weight:600;
+  box-shadow:0 2px 12px rgba(0,0,0,0.2);}
+#back-to-practice-btn:hover{background:var(--accent2);}
+html.eink #back-to-practice-btn,html.pure-white #back-to-practice-btn{background:#000;color:#fff;}
 .s-bottom{padding:10px 10px 24px 10px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:8px;background:var(--bg2);flex-shrink:0;overflow-y:auto;}
 .timer-row{display:flex;align-items:center;gap:6px;font-size:15px;color:var(--ink2);}
 .timer-row input[type=number]{width:58px;padding:0 6px;height:36px;border:1px solid var(--border2);border-radius:var(--radius);background:var(--bg);font-family:var(--font-mono);font-size:15px;color:var(--ink);text-align:center;}
@@ -425,6 +433,55 @@ body.select-mode .item.selected .item-check{border-color:var(--ink);background:v
 html.eink #import-window{border:2px solid #000;}
 html.eink #import-btn-commit{background:#000;color:#fff;}
 html.eink #import-btn-files,html.eink #import-btn-camera{border-color:#000;color:#000;background:#f0f0f0;}
+/* ── Clean White: chrome surfaces (only topbar was covered before; --chrome is #fff here) ── */
+html.pure-white #p-header{background:#fff;border-bottom:2px solid #000;}
+html.pure-white #p-title,html.pure-white #p-timer,html.pure-white #p-counter,html.pure-white #p-page-counter{color:#000;}
+html.pure-white #p-close{color:#333;}
+html.pure-white #p-header .p-btn{border:1.5px solid #000;color:#000;background:#fff;}
+html.pure-white #p-header .p-btn.primary{background:#000;color:#fff;border-color:#000;}
+html.pure-white #p-pause{border-color:#000;color:#000;}
+html.pure-white #p-pause.paused{background:#000;color:#fff;}
+html.pure-white .p-tier-btn{border:1.5px solid #000;color:#000;}
+html.pure-white .p-group+.p-group{border-color:#000;}
+html.pure-white #p-progress{background:#e0e0e0;}html.pure-white #p-progress-bar{background:#000;}
+html.pure-white #p-draw-toolbar{background:#fff;border:1.5px solid #000;}
+html.pure-white .p-draw-btn{color:#000;border:1.5px solid #000;background:#fff;}
+html.pure-white .p-draw-btn.active{background:#000;color:#fff;}
+html.pure-white #p-draw-handle{color:#666;}
+html.pure-white #metro-panel{background:#fff;border:1.5px solid #000;}
+html.pure-white #metro-title,html.pure-white #metro-bpm-unit{color:#555;}
+html.pure-white #metro-close{color:#555;}
+html.pure-white #metro-bpm{color:#000;border-bottom-color:#999;}
+html.pure-white .metro-count-btn{background:#fff;border:1.5px solid #000;color:#000;}
+html.pure-white .metro-count-btn.active{background:#000;color:#fff;}
+html.pure-white .metro-accent-btn{border-color:#000;background:#fff;color:#000;}
+html.pure-white .metro-accent-btn.accented,html.pure-white .metro-accent-btn.beat1{background:#000;color:#fff;border-color:#000;}
+html.pure-white #metro-tap,html.pure-white #metro-start{background:#fff;border:1.5px solid #000;color:#000;}
+html.pure-white #metro-start.running{background:#000;color:#fff;}
+html.pure-white #metro-save-passage-btn{background:#fff!important;border:1.5px solid #000!important;color:#000!important;}
+html.pure-white #metro-dial circle{stroke:#ccc;}html.pure-white #metro-dial-needle{stroke:#000;}
+html.pure-white #metro-dial text{fill:#000!important;}html.pure-white #metro-dial line{stroke:#000!important;}
+html.pure-white #rest-screen{background:#fff;}
+html.pure-white #rest-title{color:#555;}html.pure-white #rest-timer{color:#000;}
+html.pure-white #rest-skip{border-color:#000;color:#000;}
+html.pure-white #rest-activity-text{color:#000;}
+html.pure-white #rest-breathe-circle{border-color:#000;background:#f5f5f5;}
+html.pure-white #rest-breathe-circle.expand{background:#ddd;border-color:#000;}
+html.pure-white #rest-breathe-label{color:#444;}html.pure-white #rest-breathe-count{color:#000;}
+html.pure-white #settings-header,html.pure-white #cards-panel-header{background:#fff;border-bottom:2px solid #000;}
+html.pure-white #settings-title,html.pure-white #cards-panel-title{color:#000;}
+html.pure-white #settings-close,html.pure-white #cards-back-btn{border-color:#000;color:#000;}
+html.pure-white #brush-popover{background:#fff;border-color:#000;}
+html.pure-white input[type=range]{background:#999;}
+html.pure-white input[type=range]::-webkit-slider-thumb{background:#000;}
+html.pure-white #tool-pick,html.pure-white #se-tool-pick{color:#000;background:#fff;border:1.5px solid #000;}
+html.pure-white #tool-pick option,html.pure-white #se-tool-pick option{background:#fff;color:#000;}
+/* Score Edit + Help headers use inline chrome styles — needs !important; brush preview span excluded so its live color survives */
+html.pure-white #score-edit-screen>div:first-child{background:#fff!important;border-bottom:2px solid #000!important;}
+html.pure-white #score-edit-screen>div:first-child span:not(#se-brush-preview){color:#000!important;}
+html.pure-white #help-panel>div:first-child{background:#fff!important;border-bottom:2px solid #000;}
+html.pure-white #help-panel>div:first-child span{color:#000!important;}
+html.pure-white #help-panel>div:first-child button{color:#000!important;border-color:#000!important;}
 </style>
 </head>
 <body>
@@ -453,7 +510,7 @@ html.eink #import-btn-files,html.eink #import-btn-camera{border-color:#000;color
   <div class="t-spacer"></div>
   <button class="t-btn" onclick="openScoreEdit()" title="Edit permanent score notes (fingerings, corrections)" id="prep-btn" style="display:none;">✎ Score Edit</button>
   <button class="t-btn" onclick="toggleMetronomePanel()">BPM</button>
-  <button class="t-btn" id="continue-practice-btn" onclick="continuePracticing()" style="display:none;background:var(--accent);border-color:var(--accent);">▶ Continue practicing</button>
+  <button class="t-btn" id="continue-practice-btn" onclick="continuePracticing()" style="display:none;">▶ Continue practicing</button>
   <button class="t-btn" onclick="toggleHelp()" title="Help">?</button>
   <button class="t-btn" onclick="toggleSettings()">⚙</button>
 </div>
@@ -752,6 +809,7 @@ html.eink #import-btn-files,html.eink #import-btn-camera{border-color:#000;color
       <canvas id="score-annot-canvas" style="position:absolute;pointer-events:none;"></canvas>
       <canvas id="draw-canvas"></canvas>
       <button id="save-passage-btn" onclick="openSavePassagePanel()" style="display:none;">Save passage</button>
+      <button id="back-to-practice-btn" onclick="continuePracticing()" style="display:none;">▶ Back to passage</button>
       <button id="edit-tap-prev" onclick="editPrevPage()">‹</button>
       <button id="edit-tap-next" onclick="editNextPage()">›</button>
     </div>
@@ -800,7 +858,7 @@ html.eink #import-btn-files,html.eink #import-btn-camera{border-color:#000;color
     <img id="p-img" src="" alt="">
     <canvas id="p-score-annot" style="position:absolute;pointer-events:none;"></canvas>
     <canvas id="p-annotation"></canvas>
-    <div id="p-pause-overlay"><span id="p-pause-label">paused</span></div>
+    <div id="p-pause-overlay"><span id="p-pause-label">paused · marks auto-save</span></div>
     <div id="p-draw-toolbar">
       <span id="p-draw-handle" title="drag">⠿</span>
       <button class="p-draw-btn" onclick="setPTool('pen')" id="pdt-pen">pen</button>
@@ -1878,12 +1936,14 @@ function goToScoreFromPractice(){
   // just hide the overlay and go edit the score.
   document.getElementById('practice-screen').classList.remove('show');
   document.getElementById('continue-practice-btn').style.display='flex';
+  document.getElementById('back-to-practice-btn').style.display='block';
   selectScore(score.id,pageIdx);
   toast('Editing source score — practice paused');
 }
 
 function continuePracticing(){
   document.getElementById('continue-practice-btn').style.display='none';
+  document.getElementById('back-to-practice-btn').style.display='none';
   document.getElementById('practice-screen').classList.add('show');
   // Re-show paused state (timer/queue were never touched)
   document.getElementById('p-pause-overlay').classList.add('show');
@@ -1894,6 +1954,7 @@ function continuePracticing(){
 
 function endSession(){
   document.getElementById('continue-practice-btn').style.display='none';
+  document.getElementById('back-to-practice-btn').style.display='none';
   clearInterval(timerTick);clearInterval(restTimerTick);clearInterval(breatheTick);isPaused=false;currentLoop=0;itemsSinceRest=0;if(metroRunning)stopMetronome();
   document.getElementById('rest-screen').classList.remove('show');document.getElementById('practice-screen').classList.remove('show');
   const tb=document.getElementById('p-draw-toolbar');tb.classList.remove('show','dragging');tb.style.left='50%';tb.style.top='';tb.style.bottom='16px';
@@ -2187,6 +2248,29 @@ setTimeout(()=>{
 },100);
 
 // ── Boot ──────────────────────────────────────────────────────────────────────
+// ── Keyboard dismissal ────────────────────────────────────────────────────────
+// GO/Enter on the on-screen keyboard blurs number/text inputs (Compás BPM, timer, rest settings).
+// Inputs that already handle Enter (rename, name prompt) are skipped.
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Enter')return;
+  const t=e.target;
+  if(t.tagName!=='INPUT')return;
+  if(['rename-input','name-prompt-input'].includes(t.id))return;
+  t.blur();
+});
+// Tapping anywhere else dismisses the keyboard. Needed because the canvas drawing
+// handlers call preventDefault(), which blocks the browser's native blur-on-tap.
+function blurActiveInput(e){
+  const ae=document.activeElement;
+  if(!ae||(ae.tagName!=='INPUT'&&ae.tagName!=='TEXTAREA'))return;
+  if(e.target===ae||ae.contains(e.target))return;
+  const lbl=e.target.closest&&e.target.closest('label');
+  if(lbl&&lbl.contains(ae))return;
+  ae.blur();
+}
+document.addEventListener('touchstart',blurActiveInput,{passive:true,capture:true});
+document.addEventListener('mousedown',blurActiveInput,true);
+
 // ── Undo/redo keyboard shortcuts ────────────────────────────────────────────
 document.addEventListener('keydown',e=>{
   if(!(e.ctrlKey||e.metaKey))return;
