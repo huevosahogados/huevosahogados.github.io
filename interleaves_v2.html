@@ -807,7 +807,7 @@ html.eink #import-btn-files,html.eink #import-btn-camera{border-color:#000;color
       <option value="box">box</option><option value="text">text</option>
     </select>
     <div class="t-sep"></div>
-    <button class="t-btn" onclick="toggleSeBrushPopover()" title="brush size & color">
+    <button class="t-btn" id="se-brush-btn" onclick="toggleSeBrushPopover()" title="brush size & color">
       <span id="se-brush-preview">●</span><span id="se-brush-size-label"> 3</span>
     </button>
     <div class="t-sep"></div>
@@ -1386,8 +1386,8 @@ function updateBrushPreview(){
   if(pP){pP.style.fontSize=px+'px';pP.style.color=color;}if(pL)pL.textContent=' '+size;
 }
 document.addEventListener('click',e=>{
-  const wrap=document.getElementById('brush-wrap'),pBtn=document.getElementById('pdt-brush'),pop=document.getElementById('brush-popover');
-  if(!pop)return;if((wrap&&wrap.contains(e.target))||(pBtn&&pBtn.contains(e.target))||pop.contains(e.target))return;
+  const wrap=document.getElementById('brush-wrap'),pBtn=document.getElementById('pdt-brush'),seBtn=document.getElementById('se-brush-btn'),pop=document.getElementById('brush-popover');
+  if(!pop)return;if((wrap&&wrap.contains(e.target))||(pBtn&&pBtn.contains(e.target))||(seBtn&&seBtn.contains(e.target))||pop.contains(e.target))return;
   pop.classList.remove('show');
   resetBrushPopoverBindings();
 });
@@ -2233,7 +2233,7 @@ function seClearCanvas(){
 
 function toggleSeBrushPopover(){
   const pop=document.getElementById('brush-popover');
-  const btn=document.querySelector('#score-edit-screen [onclick="toggleSeBrushPopover()"]');
+  const btn=document.getElementById('se-brush-btn');
   const rect=btn.getBoundingClientRect();
   const showing=pop.classList.contains('show');
   pop.classList.toggle('show');
