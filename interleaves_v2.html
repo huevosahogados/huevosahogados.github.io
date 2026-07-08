@@ -241,6 +241,9 @@ html.eink #cards-back-btn{border-color:#999;color:#000;}html.eink #cards-panel-t
 #p-header{padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;background:var(--chrome);flex-shrink:0;flex-wrap:wrap;}
 #p-title{flex:1;font-family:var(--font-serif);font-size:14px;color:rgba(255,255,255,0.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:60px;}
 #p-timer{font-size:20px;font-weight:500;color:rgba(255,255,255,0.9);min-width:52px;text-align:right;font-variant-numeric:tabular-nums;}
+#p-timer.warning{color:#ffaaaa;}
+html.eink #p-timer.warning{color:#000;font-weight:700;text-decoration:underline;}
+html.pure-white #p-timer.warning{color:#000;font-weight:700;text-decoration:underline;}
 #p-img-wrap{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;background:var(--canvas-bg);}
 #p-img{max-width:100%;max-height:100%;object-fit:contain;display:block;}
 #p-annotation{position:absolute;pointer-events:none;}
@@ -755,7 +758,7 @@ html.eink #import-btn-files,html.eink #import-btn-camera{border-color:#000;color
     <div id="status">
       <span id="st-name">—</span>
       <span id="st-sessions">—</span>
-      <span id="st-tool">pen · 3px · score layer</span>
+      <span id="st-tool">pen · 3px</span>
       <span id="st-count" style="margin-left:auto">0 passages</span>
     </div>
   </div>
@@ -973,6 +976,7 @@ const canvasArea=document.getElementById('canvas-area');
 const dropZone=document.getElementById('drop-zone');
 
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
+function esc(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2500);}
 function yieldFrame(){return new Promise(res=>requestAnimationFrame(res));}
 function showLoading(msg){document.getElementById('loading-msg').textContent=msg||'Loading…';document.getElementById('loading-overlay').classList.add('show');}
@@ -1052,11 +1056,14 @@ document.getElementById('camera-input').addEventListener('change',async e=>{
   const file=e.target.files[0];e.target.value='';if(!file)return;await addFilesToPending([file]);
 });
 
-const ALLOWED_TYPES=['image/jpeg','image/png','image/gif','image/webp','image/heic','image/heif','application/pdf'];
-const ALLOWED_EXT=['.jpg','.jpeg','.png','.gif','.webp','.heic','.heif','.pdf'];
+const ALLOWED_TYPES=['image/jpeg','image/png','image/gif','image/webp','application/pdf'];
+const ALLOWED_EXT=['.jpg','.jpeg','.png','.gif','.webp','.pdf'];
+const HEIC_TYPES=['image/heic','image/heif'],HEIC_EXT=['.heic','.heif'];
+function isHeic(file){return HEIC_TYPES.includes(file.type)||HEIC_EXT.some(ext=>file.name.toLowerCase().endsWith(ext));}
 
 async function addFilesToPending(files){
   for(const file of files){
+    if(isHeic(file)){toast('HEIC not supported — set the camera to "Most Compatible" or export as JPEG');continue;}
     const allowed=ALLOWED_TYPES.includes(file.type)||ALLOWED_EXT.some(ext=>file.name.toLowerCase().endsWith(ext));
     if(!allowed){toast('Unsupported: '+file.name);continue;}
     const isPDF=file.type==='application/pdf'||file.name.toLowerCase().endsWith('.pdf');
@@ -1084,10 +1091,12 @@ async function addFilesToPending(files){
       hideLoading();
     } else {
       showLoading('Processing…');await yieldFrame();
-      const raw=await readFile(file);
-      const src=await compressImage(raw);
-      const name=nextPageName()||file.name.replace(/\.[^/.]+$/,'');
-      pendingImports.push({id:uid(),name,src,isScore:false});
+      try{
+        const raw=await readFile(file);
+        const src=await compressImage(raw);
+        const name=nextPageName()||file.name.replace(/\.[^/.]+$/,'');
+        pendingImports.push({id:uid(),name,src,isScore:false});
+      }catch(err){toast('Could not read '+file.name);}
       hideLoading();
     }
   }
@@ -1128,7 +1137,7 @@ async function commitImport(){
 // ── Image utils ───────────────────────────────────────────────────────────────
 const MAX_PX=1600,IMG_Q=0.82;
 function readFile(file){return new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result);r.readAsDataURL(file);});}
-function compressImage(src){return new Promise(res=>{const img=new Image();img.onload=()=>{const scale=Math.min(1,MAX_PX/Math.max(img.width,img.height));const w=Math.round(img.width*scale),h=Math.round(img.height*scale);const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);res(c.toDataURL('image/jpeg',IMG_Q));};img.src=src;});}
+function compressImage(src){return new Promise((res,rej)=>{const img=new Image();img.onload=()=>{const scale=Math.min(1,MAX_PX/Math.max(img.width,img.height));const w=Math.round(img.width*scale),h=Math.round(img.height*scale);const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);res(c.toDataURL('image/jpeg',IMG_Q));};img.onerror=()=>rej(new Error('Could not read image'));img.src=src;});}
 
 // ── Sidebar ───────────────────────────────────────────────────────────────────
 let sectionCollapsed={scores:false,passages:false};
@@ -1158,7 +1167,7 @@ function renderScoresList(){
     const head=document.createElement('div');head.className='score-item-head';
     const inPool=score.inPool!==false;
     head.innerHTML=`<span class="score-chevron ${isActive?'open':''}">▶</span>
-      <span class="score-name" title="${score.name}">${score.name}</span>
+      <span class="score-name" title="${esc(score.name)}">${esc(score.name)}</span>
       <span class="score-meta">${score.pages.length}p${passCount?` · ${passCount} passages`:''}</span>
       <label class="score-pool-toggle" title="Include in practice session" onclick="event.stopPropagation()">
         <input type="checkbox" ${inPool?'checked':''} onchange="toggleScorePool('${score.id}')">
@@ -1226,8 +1235,8 @@ function renderPassagesList(){
       <span class="item-check">✓</span>
       <span class="item-drag" onmousedown="event.stopPropagation()">⠿</span>
       <div class="item-info">
-        <div class="item-name" title="${p.name}">${p.name}</div>
-        ${sub?`<div class="item-sub">${sub}${p.pages.length>1?' · '+p.pages.length+'p':''}</div>`:''}
+        <div class="item-name" title="${esc(p.name)}">${esc(p.name)}</div>
+        ${sub?`<div class="item-sub">${esc(sub)}${p.pages.length>1?' · '+p.pages.length+'p':''}</div>`:''}
       </div>
       <span class="tier-badge${tierClass}" data-id="${p.id}"
         onclick="event.stopPropagation();cycleTier('${p.id}')"
@@ -1461,7 +1470,7 @@ function updateStatus(){
   else if(activeType==='passage'){const p=getPassage(activeId);if(p){name=p.name;sessions=(p.sessions||0)+' sessions';layerInfo='';}}
   document.getElementById('st-name').textContent=name;
   document.getElementById('st-sessions').textContent=sessions;
-  document.getElementById('st-tool').textContent=tool+'·'+brushSize+'px·'+layerInfo;
+  document.getElementById('st-tool').textContent=tool+' · '+brushSize+'px'+(layerInfo?' · '+layerInfo:'');
 }
 
 // ── Save Passage ──────────────────────────────────────────────────────────────
@@ -1562,11 +1571,14 @@ function removeScore(id){
   renderSidebar();
 }
 function removePassage(id){
+  const removed=getPassage(id);if(!removed)return;
   if(!confirm('Remove this passage?'))return;
   passages=passages.filter(p=>p.id!==id);dbDelete(S_PASSAGES,id);
   if(activeId===id){activeId=null;activeType=null;sheetImg.style.display='none';dropZone.style.display='flex';dctx.clearRect(0,0,drawCanvas.width,drawCanvas.height);}
-  // If score has no more passages, mark hasPassages=false
-  const p=passages.find(x=>x.id===id);// already removed, check via sourceId
+  // If the source score has no more passages, reset its informational flag
+  // (inPool is left as the user set it — deleting a passage shouldn't silently change the shuffle)
+  const src=getScore(removed.sourceId);
+  if(src&&!passages.some(p=>p.sourceId===src.id)){src.hasPassages=false;dbPut(S_SCORES,src);}
   renderSidebar();
 }
 
@@ -1683,6 +1695,10 @@ function anyModalOpen(){
   const ids=['save-passage-modal','name-prompt-modal','rename-modal','import-modal'];
   if(ids.some(id=>{const el=document.getElementById(id);return el&&getComputedStyle(el).display!=='none';}))return true;
   if(document.getElementById('help-panel').classList.contains('open'))return true;
+  if(document.getElementById('settings-panel').classList.contains('open'))return true;
+  // On-screen keyboard: any focused text/number field (incl. Compás BPM) fires a resize
+  const ae=document.activeElement;
+  if(ae&&(ae.tagName==='INPUT'||ae.tagName==='TEXTAREA'||ae.isContentEditable))return true;
   return document.getElementById('score-edit-screen').style.display!=='none';
 }
 setVH();window.addEventListener('resize',()=>{setVH();if(activeId&&!anyModalOpen())fitImage();if(seActive)fitSeImage();});
@@ -1831,9 +1847,10 @@ function startTimer(){
 }
 function updateTimerDisplay(){
   const m=Math.floor(timerLeft/60).toString().padStart(2,'0'),s=(timerLeft%60).toString().padStart(2,'0');
-  document.getElementById('p-timer').textContent=m+':'+s;
+  const tEl=document.getElementById('p-timer');
+  tEl.textContent=m+':'+s;
   document.getElementById('p-progress-bar').style.width=Math.max(0,timerLeft/timerTotal*100)+'%';
-  document.getElementById('p-timer').style.color=timerLeft<=10?'#ffaaaa':'rgba(255,255,255,0.9)';
+  tEl.classList.toggle('warning',timerLeft<=10);
 }
 
 function nextItem(){
@@ -1914,7 +1931,7 @@ function initPracticeDrawing(){
   canvas.addEventListener('mousedown',startDraw);canvas.addEventListener('mousemove',doDraw);canvas.addEventListener('touchstart',startDraw,{passive:false});canvas.addEventListener('touchmove',doDraw,{passive:false});
   canvas._pStartDraw=startDraw;canvas._pDoDraw=doDraw;const de=(e)=>endDraw(e);document.addEventListener('mouseup',de);document.addEventListener('touchend',de);canvas._docEndDraw=de;
 }
-function initToolbarDrag(){const toolbar=document.getElementById('p-draw-toolbar'),handle=document.getElementById('p-draw-handle');let dragging=false,startX,startY,origLeft,origTop;function startDrag(e){e.preventDefault();e.stopPropagation();dragging=true;const src=e.touches?e.touches[0]:e;const rect=toolbar.getBoundingClientRect();toolbar.classList.add('dragging');toolbar.style.left=rect.left+'px';toolbar.style.top=rect.top+'px';toolbar.style.bottom='auto';origLeft=rect.left;origTop=rect.top;startX=src.clientX;startY=src.clientY;}function moveDrag(e){if(!dragging)return;e.preventDefault();const src=e.touches?e.touches[0]:e;const wr=document.getElementById('p-img-wrap').getBoundingClientRect();toolbar.style.left=Math.max(wr.left,Math.min(origLeft+src.clientX-startX,wr.right-toolbar.offsetWidth))+'px';toolbar.style.top=Math.max(wr.top,Math.min(origTop+src.clientY-startY,wr.bottom-toolbar.offsetHeight-8))+'px';}function endDrag(){dragging=false;}handle.addEventListener('mousedown',startDrag);handle.addEventListener('touchstart',startDrag,{passive:false});document.addEventListener('mousemove',moveDrag);document.addEventListener('mouseup',endDrag);document.addEventListener('touchmove',moveDrag,{passive:false});document.addEventListener('touchend',endDrag);}
+function initToolbarDrag(){const toolbar=document.getElementById('p-draw-toolbar'),handle=document.getElementById('p-draw-handle');if(toolbar._dragInit)return;toolbar._dragInit=true;let dragging=false,startX,startY,origLeft,origTop;function startDrag(e){e.preventDefault();e.stopPropagation();dragging=true;const src=e.touches?e.touches[0]:e;const rect=toolbar.getBoundingClientRect();toolbar.classList.add('dragging');toolbar.style.left=rect.left+'px';toolbar.style.top=rect.top+'px';toolbar.style.bottom='auto';origLeft=rect.left;origTop=rect.top;startX=src.clientX;startY=src.clientY;}function moveDrag(e){if(!dragging)return;e.preventDefault();const src=e.touches?e.touches[0]:e;const wr=document.getElementById('p-img-wrap').getBoundingClientRect();toolbar.style.left=Math.max(wr.left,Math.min(origLeft+src.clientX-startX,wr.right-toolbar.offsetWidth))+'px';toolbar.style.top=Math.max(wr.top,Math.min(origTop+src.clientY-startY,wr.bottom-toolbar.offsetHeight-8))+'px';}function endDrag(){dragging=false;}handle.addEventListener('mousedown',startDrag);handle.addEventListener('touchstart',startDrag,{passive:false});document.addEventListener('mousemove',moveDrag);document.addEventListener('mouseup',endDrag);document.addEventListener('touchmove',moveDrag,{passive:false});document.addEventListener('touchend',endDrag);}
 
 // ── Text annotation ───────────────────────────────────────────────────────────
 let _textTargetCtx=null,_textCanvasEl=null,_textSnapshot=null;
@@ -2036,11 +2053,11 @@ function addCard(catId){const id='rc_custom_'+Date.now();const nc={id,category:c
 let restTimerTick=null,restLeft=0,restTotal=45,breatheTick=null;
 function toggleRestEnabled(){restEnabled=!restEnabled;const s=document.getElementById('rest-status');if(s)s.textContent=restEnabled?'on':'off';}
 function shouldRest(){if(!restEnabled)return false;return itemsSinceRest>=(parseInt(document.getElementById('rest-every').value)||5);}
-function startRest(){itemsSinceRest=0;restTotal=parseInt(document.getElementById('rest-dur').value)||45;restLeft=restTotal;const showSug=document.getElementById('rest-suggestions').checked;const actText=document.getElementById('rest-activity-text'),breatheWrap=document.getElementById('rest-breathe-wrap');if(showSug){const act=pickRestCard(restTotal);if(act){actText.textContent=act.text;actText.style.display='';breatheWrap.style.display=act.breathe?'flex':'none';if(act.breathe)startBreathe();}else{actText.style.display='none';breatheWrap.style.display='none';}}else{actText.style.display='none';breatheWrap.style.display='none';}updateRestTimerDisplay();document.getElementById('rest-screen').classList.add('show');restTimerTick=setInterval(()=>{restLeft--;updateRestTimerDisplay();if(restLeft<=0)endRest();},1000);}
+function startRest(){itemsSinceRest=0;restTotal=parseInt(document.getElementById('rest-dur').value)||45;restLeft=restTotal;const showSug=document.getElementById('rest-suggestions').checked;const actText=document.getElementById('rest-activity-text'),breatheWrap=document.getElementById('rest-breathe-wrap');if(showSug){const act=pickRestCard(restTotal);if(act){actText.textContent=act.text;actText.style.display='';breatheWrap.style.display=act.breathe?'flex':'none';if(act.breathe)startBreathe();}else{actText.style.display='none';breatheWrap.style.display='none';}}else{actText.style.display='none';breatheWrap.style.display='none';}updateRestTimerDisplay();document.getElementById('rest-screen').classList.add('show');const restEndAt=Date.now()+restTotal*1000;restTimerTick=setInterval(()=>{restLeft=Math.max(0,Math.ceil((restEndAt-Date.now())/1000));updateRestTimerDisplay();if(restLeft<=0)endRest();},250);}
 function updateRestTimerDisplay(){const m=Math.floor(restLeft/60).toString().padStart(2,'0'),s=(restLeft%60).toString().padStart(2,'0');document.getElementById('rest-timer').textContent=m+':'+s;}
 function endRest(){clearInterval(restTimerTick);clearInterval(breatheTick);clearInterval(window._breatheCountTick);document.getElementById('rest-screen').classList.remove('show');document.getElementById('rest-breathe-circle').classList.remove('expand');chimeAndSignal();showPracticeItem();startTimer();}
 function startBreathe(){let phase=0,cd=4;clearInterval(breatheTick);const circle=document.getElementById('rest-breathe-circle'),label=document.getElementById('rest-breathe-label'),count=document.getElementById('rest-breathe-count'),phases=['breathe in','hold','breathe out','hold'];function step(){circle.classList.toggle('expand',phase===0||phase===1);label.textContent=phases[phase];cd=4;count.textContent=cd;phase=(phase+1)%4;}step();breatheTick=setInterval(step,4000);const ct=setInterval(()=>{cd--;if(cd>0&&count)count.textContent=cd;},1000);window._breatheCountTick=ct;}
-function chimeAndSignal(){const flash=document.getElementById('rest-flash');if(flash){flash.classList.add('pop');setTimeout(()=>flash.classList.remove('pop'),300);}if(navigator.vibrate)navigator.vibrate([150,80,150]);try{const ctx=new(window.AudioContext||window.webkitAudioContext)();const osc=ctx.createOscillator();const gain=ctx.createGain();osc.connect(gain);gain.connect(ctx.destination);osc.type='sine';osc.frequency.setValueAtTime(523,ctx.currentTime);osc.frequency.setValueAtTime(659,ctx.currentTime+0.18);gain.gain.setValueAtTime(0.4,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.7);osc.start(ctx.currentTime);osc.stop(ctx.currentTime+0.75);}catch(e){}}
+function chimeAndSignal(){const flash=document.getElementById('rest-flash');if(flash){flash.classList.add('pop');setTimeout(()=>flash.classList.remove('pop'),300);}if(navigator.vibrate)navigator.vibrate([150,80,150]);try{const ctx=getMetroAudioCtx();const osc=ctx.createOscillator();const gain=ctx.createGain();osc.connect(gain);gain.connect(ctx.destination);osc.type='sine';osc.frequency.setValueAtTime(523,ctx.currentTime);osc.frequency.setValueAtTime(659,ctx.currentTime+0.18);gain.gain.setValueAtTime(0.4,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.7);osc.start(ctx.currentTime);osc.stop(ctx.currentTime+0.75);}catch(e){}}
 
 // ── Metronome ─────────────────────────────────────────────────────────────────
 let metroAudioCtx=null,metroBPM=120,metroBeatsPerBar=4,metroRunning=false,metroCurrentBeat=0,metroNextNoteTime=0,metroScheduleTimer=null;
