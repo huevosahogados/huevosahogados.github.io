@@ -31,8 +31,8 @@ html.eink #app-name{color:#aaa;}html.pure-white #app-name{color:#000;}
 .t-btn.active{background:rgba(255,255,255,0.2);color:#fff;border-color:rgba(255,255,255,0.6);}
 .t-btn.danger:hover{color:#ffaaaa;border-color:#ffaaaa;}
 .t-sep{width:1px;height:22px;background:rgba(255,255,255,0.2);flex-shrink:0;}
-#continue-practice-btn{background:var(--accent);border-color:var(--accent);color:var(--accent-fg);}
-#continue-practice-btn:hover{background:var(--accent2);color:var(--accent-fg);}
+#continue-practice-btn,#se-save-btn{background:var(--accent);border-color:var(--accent);color:var(--accent-fg);}
+#continue-practice-btn:hover,#se-save-btn:hover{background:var(--accent2);color:var(--accent-fg);}
 .t-spacer{flex:1;}
 html.eink .t-btn{border:1px solid #999;color:#000;background:#f0f0f0;}
 html.eink .t-btn:hover{background:#ddd;}html.eink .t-btn.active{background:#000;color:#fff;border-color:#000;}
@@ -368,6 +368,8 @@ html.eink #text-overlay-controls{background:#222;}
 .metro-accent-btn.beat1{background:rgba(255,255,255,0.9);color:#000;border-color:#fff;cursor:default;}
 .metro-accent-btn.accented{background:rgba(255,255,255,0.45);color:#fff;border-color:rgba(255,255,255,0.8);}
 #metro-controls{display:flex;gap:8px;width:100%;}
+#metro-save-passage-btn{width:100%;height:36px;border:1px solid rgba(255,255,255,0.25);border-radius:var(--radius);background:none;cursor:pointer;font-family:var(--font-mono);font-size:12px;color:rgba(255,255,255,0.75);}
+#metro-save-passage-btn:hover{background:rgba(255,255,255,0.12);color:#fff;}
 #metro-tap,#metro-start{flex:1;height:40px;border:1px solid rgba(255,255,255,0.25);border-radius:var(--radius);background:none;cursor:pointer;font-family:var(--font-mono);font-size:15px;color:rgba(255,255,255,0.85);}
 #metro-tap:hover,#metro-start:hover{background:rgba(255,255,255,0.12);color:#fff;}
 #metro-start.running{background:rgba(255,255,255,0.2);color:#fff;border-color:rgba(255,255,255,0.6);}
@@ -458,7 +460,7 @@ html.pure-white .metro-accent-btn{border-color:#000;background:#fff;color:#000;}
 html.pure-white .metro-accent-btn.accented,html.pure-white .metro-accent-btn.beat1{background:#000;color:#fff;border-color:#000;}
 html.pure-white #metro-tap,html.pure-white #metro-start{background:#fff;border:1.5px solid #000;color:#000;}
 html.pure-white #metro-start.running{background:#000;color:#fff;}
-html.pure-white #metro-save-passage-btn{background:#fff!important;border:1.5px solid #000!important;color:#000!important;}
+html.pure-white #metro-save-passage-btn{background:#fff;border:1.5px solid #000;color:#000;}
 html.pure-white #metro-dial circle{stroke:#ccc;}html.pure-white #metro-dial-needle{stroke:#000;}
 html.pure-white #metro-dial text{fill:#000!important;}html.pure-white #metro-dial line{stroke:#000!important;}
 html.pure-white #rest-screen{background:#fff;}
@@ -477,11 +479,13 @@ html.pure-white input[type=range]::-webkit-slider-thumb{background:#000;}
 html.pure-white #tool-pick,html.pure-white #se-tool-pick{color:#000;background:#fff;border:1.5px solid #000;}
 html.pure-white #tool-pick option,html.pure-white #se-tool-pick option{background:#fff;color:#000;}
 /* Score Edit + Help headers use inline chrome styles — needs !important; brush preview span excluded so its live color survives */
-html.pure-white #score-edit-screen>div:first-child{background:#fff!important;border-bottom:2px solid #000!important;}
-html.pure-white #score-edit-screen>div:first-child span:not(#se-brush-preview){color:#000!important;}
-html.pure-white #help-panel>div:first-child{background:#fff!important;border-bottom:2px solid #000;}
-html.pure-white #help-panel>div:first-child span{color:#000!important;}
-html.pure-white #help-panel>div:first-child button{color:#000!important;border-color:#000!important;}
+html.pure-white #score-edit-screen>div:first-child,html.eink #score-edit-screen>div:first-child{background:#fff!important;border-bottom:2px solid #000!important;}
+html.pure-white #score-edit-screen>div:first-child span:not(#se-brush-preview),html.eink #score-edit-screen>div:first-child span:not(#se-brush-preview){color:#000!important;}
+html.pure-white #help-panel>div:first-child,html.eink #help-panel>div:first-child{background:#fff!important;border-bottom:2px solid #000;}
+html.pure-white #help-panel>div:first-child span,html.eink #help-panel>div:first-child span{color:#000!important;}
+html.pure-white #help-panel>div:first-child button,html.eink #help-panel>div:first-child button{color:#000!important;border-color:#000!important;}
+html.eink #se-tool-pick{color:#000;background:#f0f0f0;border-color:#999;}
+html.eink #se-tool-pick option{background:#fff;color:#000;}
 </style>
 </head>
 <body>
@@ -749,8 +753,7 @@ html.pure-white #help-panel>div:first-child button{color:#000!important;border-c
       <button id="metro-start" onclick="toggleMetronome()">start</button>
     </div>
     <div id="metro-passage-row" style="display:none;width:100%;">
-      <button id="metro-save-passage-btn" onclick="saveCompasToPassage()"
-        style="width:100%;height:36px;border:1px solid rgba(255,255,255,0.25);border-radius:var(--radius);background:none;cursor:pointer;font-family:var(--font-mono);font-size:12px;color:rgba(255,255,255,0.75);">
+      <button id="metro-save-passage-btn" onclick="saveCompasToPassage()">
         💾 Save Compás to <span id="metro-passage-name">passage</span>
       </button>
     </div>
@@ -946,7 +949,7 @@ html.pure-white #help-panel>div:first-child button{color:#000!important;border-c
     </div>
     <div class="t-sep"></div>
     <button class="t-btn" onclick="closeScoreEdit(false)">Cancel</button>
-    <button class="t-btn" id="se-save-btn" onclick="saveScoreEdit()" style="background:var(--accent);border-color:var(--accent);">Save</button>
+    <button class="t-btn" id="se-save-btn" onclick="saveScoreEdit()">Save</button>
   </div>
   <div id="se-canvas-area" style="flex:1;position:relative;overflow:hidden;background:var(--canvas-bg);">
     <img id="se-sheet-img" alt="" style="position:absolute;display:none;">
