@@ -1880,7 +1880,6 @@ const REST_CARDS_SEED=[
   {id:'rc14',category:'posture',minDuration:0,breathe:false,text:'Neck rolls — slowly drop your chin to your chest, roll your head to one side, back, and the other.'},
   {id:'rc15',category:'posture',minDuration:0,breathe:false,text:'Chest opener — clasp hands behind your back, straighten arms, gently lift while opening your chest. Hold 10 seconds.'},
   {id:'rc16',category:'mental',minDuration:0,breathe:false,text:'Mental replay — close your eyes and play through the last passage in your mind as you want it to sound.'},
-  {id:'rc17',category:'mental',minDuration:0,breathe:false,text:'Intention reset — what is the one thing you most want to improve in the next block?'},
   {id:'rc18',category:'mental',minDuration:0,breathe:false,text:'Acknowledge progress — think of one specific thing that went better than before.'},
   {id:'rc19',category:'mental',minDuration:0,breathe:false,text:'Score map — close your eyes and mentally trace the structure of the piece you just worked on.'},
   {id:'rc20',category:'hydrate',minDuration:0,breathe:false,text:'Hydrate — take a moment to drink some water. Your brain and muscles will thank you.'},
@@ -1995,7 +1994,7 @@ async function saveCompasToPassage(){
   const panelPos=panel.classList.contains('show')?{left:parseInt(panel.style.left)||null,top:parseInt(panel.style.top)||null}:metroPanelPos;
   p.compasSettings={bpm:metroBPM,beats:metroBeatsPerBar,accentPattern:metroAccents.slice(),beat1mode:metroBeat1Mode,freeClick:metroFreeClick,panelPos};
   await dbPut(S_PASSAGES,p);
-  toast('Tempo & position saved to "'+p.name+'"');
+  toast('Compás settings saved to "'+p.name+'"');
 }
 
 // Apply a passage's saved Compás settings (tempo, meter, accents, beat-1, panel position) to the live metronome (does not auto-start).
