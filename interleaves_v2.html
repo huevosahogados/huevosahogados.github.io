@@ -621,7 +621,7 @@ html.eink #se-tool-pick option{background:#fff;color:#000;}
 
     <div>
       <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;">4 · Practice</div>
-      <p>Tap <strong style="color:var(--ink);">▶ practice</strong>. Passages (and pages of Scores that don't have passages yet) shuffle with a timer per page. Use <strong style="color:var(--ink);">− less / + more</strong> or the tier dot in the sidebar to change how often something comes up. Pause to draw practice marks on the current item — they save automatically as you draw. Tap <strong style="color:var(--ink);">Go to score</strong> to jump out and circle a brand-new passage, then <strong style="color:var(--ink);">▶ Back to passage</strong> (bottom-left of the canvas) to pick up right where you left off.</p>
+      <p>Tap <strong style="color:var(--ink);">▶ practice</strong>. Passages shuffle with a timer per page — only Passages are served in a session; a Score on its own is for browsing and Score Edit, not shuffled practice. Use <strong style="color:var(--ink);">− less / + more</strong> or the tier dot in the sidebar to change how often something comes up. Pause to draw practice marks on the current item — they save automatically as you draw. Tap <strong style="color:var(--ink);">Go to score</strong> to jump out and circle a brand-new passage, then <strong style="color:var(--ink);">▶ Back to passage</strong> (bottom-left of the canvas) to pick up right where you left off.</p>
     </div>
 
     <div>
@@ -1023,7 +1023,7 @@ let reorderState=null,renameTargetId=null,renameTargetType=null;
 // Practice
 let queue=[],qIdx=0,timerTotal=120,timerLeft=0,timerTick=null,timerEndAt=0;
 let isPaused=false,maxLoops=3,isIndefinite=false,currentLoop=0;
-let itemsPerLoop=0,poolSizePerLoop=0,itemsSinceRest=0,restEnabled=true;
+let loopBoundaries=[],itemsSinceRest=0,restEnabled=true;
 // Save-passage builder
 let spPages=[]; // [{scoreId,pageIdx}] being accumulated
 
@@ -1208,7 +1208,7 @@ function toggleSectionCollapse(section){
 function renderSidebar(){
   renderScoresList();
   renderPassagesList();
-  document.getElementById('go-btn').disabled=passages.length===0&&!scores.some(s=>s.inPool!==false);
+  document.getElementById('go-btn').disabled=passages.length===0;
 }
 
 function renderScoresList(){
@@ -1778,22 +1778,53 @@ document.getElementById('import-lib-input').addEventListener('change',async e=>{
 
 // ── Practice session ──────────────────────────────────────────────────────────
 function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
-function tierExpand(all){const out=[];for(const p of all){const t=p.tier||0;const copies=t===1?4:t===-1?1:2;for(let i=0;i<copies;i++)out.push(p);}return out;}
+// Tier −1 ("less often") skips alternating loops rather than appearing every loop.
+// It always plays on the first loop of a session (loopIndex 0), so nothing is silently
+// invisible in a short session — and with only 1 loop total, loopIndex is always 0,
+// so it naturally behaves exactly like tier 0. enableSkip exists to make that explicit
+// (and to force skipping on for indefinite mode, where "loop count" has no ceiling).
+function tierExpandForLoop(pool,loopIndex,enableSkip){
+  const out=[];
+  for(const p of pool){
+    const t=p.tier||0;
+    if(t===1){for(let i=0;i<3;i++)out.push(p);}
+    else if(t===-1){if(!enableSkip||loopIndex%2===0)out.push(p);}
+    else out.push(p);
+  }
+  return out;
+}
 function shuffleNoConsecutive(arr){for(let a=0;a<50;a++){const s=shuffle(arr);let ok=true;for(let i=1;i<s.length;i++){if(s[i].id===s[i-1].id){ok=false;break;}}if(ok)return s;}const s=shuffle(arr);for(let i=1;i<s.length;i++){if(s[i].id===s[i-1].id){for(let j=i+1;j<s.length;j++){if(s[j].id!==s[i].id){[s[i],s[j]]=[s[j],s[i]];break;}}}}return s;}
-function buildShufflePerLoopQueue(all,loops){const q=[];for(let loop=0;loop<loops;loop++){let la=shuffle(all);if(q.length>0&&la.length>1&&la[0].id===q[q.length-1].id){const si=1+Math.floor(Math.random()*(la.length-1));[la[0],la[si]]=[la[si],la[0]];}q.push(...la);}return q;}
-function buildFullShuffleQueue(all,loops){const exp=[];for(let i=0;i<loops;i++)exp.push(...all);return shuffleNoConsecutive(exp);}
+function buildShufflePerLoopQueue(pool,loops,enableSkip){
+  const q=[];loopBoundaries=[];
+  for(let loop=0;loop<loops;loop++){
+    let la=shuffle(tierExpandForLoop(pool,loop,enableSkip));
+    if(q.length>0&&la.length>1&&la[0].id===q[q.length-1].id){const si=1+Math.floor(Math.random()*(la.length-1));[la[0],la[si]]=[la[si],la[0]];}
+    q.push(...la);loopBoundaries.push(q.length);
+  }
+  return q;
+}
+function buildFullShuffleQueue(pool,loops,enableSkip){
+  const exp=[];loopBoundaries=[];let running=0;
+  for(let loop=0;loop<loops;loop++){exp.push(...tierExpandForLoop(pool,loop,enableSkip));running=exp.length;loopBoundaries.push(running);}
+  // Boundaries mark periodic count checkpoints for progress/loop-toast purposes —
+  // the shuffle below mixes items across them, same approximation the app always made here.
+  return shuffleNoConsecutive(exp);
+}
+// Returns {loopNum, posInLoop, sizeOfLoop} for a queue index, from the boundary array
+// built above. Loop sizes can differ (a tier −1 item skipped this loop = one fewer item).
+function loopInfoForIdx(idx){
+  let prev=0;
+  for(let i=0;i<loopBoundaries.length;i++){
+    if(idx<loopBoundaries[i])return{loopNum:i+1,posInLoop:idx-prev+1,sizeOfLoop:loopBoundaries[i]-prev};
+    prev=loopBoundaries[i];
+  }
+  const last=loopBoundaries.length?loopBoundaries[loopBoundaries.length-1]-prev:1;
+  return{loopNum:Math.max(loopBoundaries.length,1),posInLoop:idx-prev+1,sizeOfLoop:last||1};
+}
 
 function buildPracticePool(){
-  // Passages always included
-  let pool=[...passages];
-  // Scores without passages: add as page-by-page items
-  scores.filter(s=>s.inPool!==false).forEach(score=>{
-    score.pages.forEach((page,idx)=>{
-      // Wrap as pseudo-passage for queue
-      pool.push({id:score.id+'__p'+idx,_scoreId:score.id,_pageIdx:idx,name:score.name+' p.'+(idx+1),tier:0,weight:1,sessions:0,_isScorePage:true});
-    });
-  });
-  return pool;
+  // Passages are the only practiceable unit — Scores are no longer served directly in sessions.
+  return [...passages];
 }
 
 function startSession(){
@@ -1803,13 +1834,12 @@ function startSession(){
   timerTotal=parseInt(document.getElementById('timer-input').value)||120;
   maxLoops=parseInt(document.getElementById('loop-count').value)||3;
   isIndefinite=document.getElementById('loop-indefinite').checked;
-  const expanded=tierExpand(pool);
-  itemsPerLoop=pool.length;poolSizePerLoop=expanded.length;
+  const enableSkip=isIndefinite||maxLoops>=2; // tier −1 only skips loops when there's room to
   const loops=isIndefinite?1:maxLoops;
   const mode=document.getElementById('random-mode').value;
-  if(orderMode==='manual'){queue=[];for(let i=0;i<loops;i++)queue.push(...pool);}
-  else if(mode==='full-shuffle')queue=buildFullShuffleQueue(expanded,loops);
-  else queue=buildShufflePerLoopQueue(expanded,loops);
+  if(orderMode==='manual'){queue=[];loopBoundaries=[];for(let i=0;i<loops;i++){queue.push(...pool);loopBoundaries.push(queue.length);}}
+  else if(mode==='full-shuffle')queue=buildFullShuffleQueue(pool,loops,enableSkip);
+  else queue=buildShufflePerLoopQueue(pool,loops,enableSkip);
   qIdx=0;document.getElementById('practice-screen').classList.add('show');initToolbarDrag();showPracticeItem();
 }
 
@@ -1819,9 +1849,8 @@ function showPracticeItem(){
   const entry=queue[qIdx];if(!entry)return;
   practicePageIdx=0;
   document.getElementById('p-title').textContent=entry.name;
-  const loopNum=poolSizePerLoop>0?Math.floor(qIdx/poolSizePerLoop)+1:1;
-  const posInLoop=poolSizePerLoop>0?(qIdx%poolSizePerLoop)+1:qIdx+1;
-  document.getElementById('p-counter').textContent=posInLoop+'/'+itemsPerLoop+'  loop '+loopNum+(isIndefinite?'':'/'+maxLoops);
+  const{loopNum,posInLoop,sizeOfLoop}=loopInfoForIdx(qIdx);
+  document.getElementById('p-counter').textContent=posInLoop+'/'+sizeOfLoop+'  loop '+loopNum+(isIndefinite?'':'/'+maxLoops);
   document.getElementById('tap-prev').classList.remove('active');
   document.getElementById('tap-next').classList.remove('active');
   renderPracticeImage();
@@ -1906,10 +1935,15 @@ function nextItem(){
   const entry=queue[qIdx];
   if(entry&&!entry._isScorePage){const p=getPassage(entry.id);if(p){p.sessions=(p.sessions||0)+1;dbPut(S_PASSAGES,p);}}
   if(metroRunning)stopMetronome();
-  if(poolSizePerLoop>0&&(qIdx+1)%poolSizePerLoop===0){
+  if(loopBoundaries[currentLoop]===qIdx+1){
     currentLoop++;toast('Loop '+currentLoop+' complete');
     if(!isIndefinite&&currentLoop>=maxLoops){toast('Session complete!');setTimeout(()=>endSession(),1500);return;}
-    if(isIndefinite){const pool=buildPracticePool();const expanded=tierExpand(pool);let next=shuffle(expanded);if(queue.length>0&&next[0].id===queue[queue.length-1].id&&next.length>1){const si=1+Math.floor(Math.random()*(next.length-1));[next[0],next[si]]=[next[si],next[0]];}queue.push(...next);}
+    if(isIndefinite){
+      const pool=buildPracticePool();
+      let next=shuffle(tierExpandForLoop(pool,currentLoop,true));
+      if(queue.length>0&&next.length>1&&next[0].id===queue[queue.length-1].id){const si=1+Math.floor(Math.random()*(next.length-1));[next[0],next[si]]=[next[si],next[0]];}
+      queue.push(...next);loopBoundaries.push(queue.length);
+    }
   }
   qIdx++;itemsSinceRest++;if(shouldRest()){startRest();return;}showPracticeItem();
 }
@@ -1936,6 +1970,9 @@ function continuePracticing(){
   const valid=e=>e._isScorePage?!!getScore(e._scoreId):!!getPassage(e.id);
   const cur=queue[qIdx],curValid=cur&&valid(cur);
   const before=queue.slice(0,qIdx).filter(valid).length;
+  const keep=queue.map(valid); // per-index keep/drop, same length as the old queue
+  // Shift each loop boundary down by however many dropped items preceded it
+  loopBoundaries=loopBoundaries.map(b=>keep.slice(0,b).filter(Boolean).length);
   queue=queue.filter(valid);
   if(!queue.length){toast('All practice items were removed — session ended');endSession();return;}
   qIdx=Math.min(before,queue.length-1);
@@ -1955,7 +1992,7 @@ function continuePracticing(){
 
 function endSession(){
   document.getElementById('back-to-practice-btn').style.display='none';
-  clearInterval(timerTick);clearInterval(restTimerTick);clearInterval(breatheTick);isPaused=false;currentLoop=0;itemsSinceRest=0;if(metroRunning)stopMetronome();
+  clearInterval(timerTick);clearInterval(restTimerTick);clearInterval(breatheTick);isPaused=false;currentLoop=0;itemsSinceRest=0;loopBoundaries=[];if(metroRunning)stopMetronome();
   document.getElementById('rest-screen').classList.remove('show');document.getElementById('practice-screen').classList.remove('show');
   const tb=document.getElementById('p-draw-toolbar');tb.classList.remove('show','dragging');tb.style.left='50%';tb.style.top='';tb.style.bottom='16px';
   document.getElementById('p-pause-overlay').classList.remove('show');renderSidebar();updateStatus();
