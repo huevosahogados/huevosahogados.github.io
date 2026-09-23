@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Monday Night Guitar Classes in Seattle | Stuart Zobel</title>
-  <meta name="description" content="Weekly group guitar classes in Seattle on Monday nights. Fundamentals from 7 to 8pm for any level, then Explorations from 8 to 9pm: rotating topics like Brazilian guitar, lead sheets, and chord progressions." />
+  <title>Fundamentals and Explorations: Monday Night Guitar Classes in Seattle | Stuart Zobel</title>
+  <meta name="description" content="Weekly group guitar classes on Monday nights at the Phinney Neighborhood Center in Seattle. Fundamentals from 7 to 8pm for any level, then Explorations from 8 to 9pm: rotating topics like Brazilian guitar, lead sheets, and chord progressions." />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -121,7 +121,11 @@
       font-size: 0.95rem;
       color: var(--ink);
     }
-    .lineup li span:last-child { color: var(--ink3); font-size: 0.85rem; white-space: nowrap; }
+    .lineup li .when-tag { color: var(--ink3); font-size: 0.85rem; white-space: nowrap; }
+    .lineup-label { margin-top: 1.25rem; }
+    .next-up .status { font-size: 0.8rem; color: var(--ink3); margin-bottom: 0.25rem; }
+    .next-up a.inline { font-size: 0.9rem; }
+    .loading { color: var(--ink3); font-size: 0.9rem; }
 
     /* Prices */
     .prices {
@@ -154,8 +158,8 @@
 
   <main>
     <div class="classes-hero">
-      <p class="eyebrow">Group guitar classes · Seattle</p>
-      <h1>Monday nights</h1>
+      <p class="eyebrow">Monday nights · Phinney Ridge, Seattle</p>
+      <h1>Fundamentals and Explorations</h1>
       <p class="lead">Two classes, back to back. The first hour keeps your hands and ears in shape. The second hour goes somewhere new. Come for one or stay for both.</p>
 
       <div class="evening" aria-label="The evening">
@@ -189,20 +193,10 @@
         <h2>Explorations</h2>
         <p>One topic at a time, for as long as it needs. Some fit in a single night. Others take four or eight weeks. Series build week to week, so they're sold as a set.</p>
 
-        <!-- UPDATE for each new topic -->
-        <div class="next-up">
-          <div class="topic">[Next topic]</div>
-          <div class="meta">[N] Mondays, starting [date]</div>
-          <p>[Two sentences on what we'll play and what you'll leave with.]</p>
+        <!-- Pulled from the Explorations sheet (see script at bottom) -->
+        <div id="explorations-content">
+          <p class="loading">Loading the lineup…</p>
         </div>
-
-        <p>On the horizon:</p>
-        <ul class="lineup">
-          <li><span>Brazilian Guitar 101</span><span>series</span></li>
-          <li><span>Dealing with Lead Sheets</span><span>series</span></li>
-          <li><span>Essential Chord Progressions</span><span>series</span></li>
-          <li><span>13 Ways to Play Blackbird</span><span>one night</span></li>
-        </ul>
         <p style="margin-top:1rem;">Have a topic you want? <a class="inline" href="contact.html">Suggest one.</a></p>
       </div>
 
@@ -236,7 +230,7 @@
         <h2>The practical part</h2>
         <dl class="details">
           <dt>Where</dt>
-          <dd>[Venue name and address]</dd>
+          <dd><a class="inline" href="https://www.phinneycenter.org/venue/phinney-center-campus-blue-building/" target="_blank" rel="noopener">Phinney Neighborhood Center, Blue Building</a><br>6532 Phinney Ave N, Seattle, WA 98103</dd>
           <dt>When</dt>
           <dd>Most Monday nights. Skipped weeks are marked on the sign-up calendar.</dd>
           <dt>Bring</dt>
@@ -258,6 +252,103 @@
   <script>
     fetch('nav.html').then(r => r.text()).then(h => document.getElementById('nav-placeholder').innerHTML = h);
     fetch('footer.html').then(r => r.text()).then(h => document.getElementById('footer-placeholder').innerHTML = h);
+  </script>
+  <script>
+    // Explorations lineup: published CSV of the Explorations sheet.
+    // Columns: Title | Start | Weeks | Description | Link
+    //   Start: date of the first class (leave blank for "on the horizon" ideas)
+    //   Weeks: number of Mondays (1 = one night)
+    //   Link:  optional, e.g. the Ubindi sign-up for that series
+    const EXPLORATIONS_CSV = 'PASTE-PUBLISHED-CSV-URL-HERE';
+
+    function parseCSV(text) {
+      const lines = text.replace(/\r/g, '').trim().split('\n');
+      const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+      return lines.slice(1).map(line => {
+        const cols = [];
+        let current = '', inQuotes = false;
+        for (let i = 0; i < line.length; i++) {
+          const ch = line[i];
+          if (ch === '"') { inQuotes = !inQuotes; }
+          else if (ch === ',' && !inQuotes) { cols.push(current.trim()); current = ''; }
+          else { current += ch; }
+        }
+        cols.push(current.trim());
+        const obj = {};
+        headers.forEach((h, i) => obj[h] = (cols[i] || '').replace(/^"|"$/g, ''));
+        return obj;
+      });
+    }
+
+    // Parse "2026-10-05" as a local date (plain new Date() would shift it a day in Seattle)
+    function parseDate(str) {
+      if (!str) return null;
+      const iso = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+      const d = iso ? new Date(+iso[1], iso[2] - 1, +iso[3]) : new Date(str);
+      return isNaN(d) ? null : d;
+    }
+
+    function esc(t) {
+      return (t || '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    }
+
+    function lengthLabel(weeks) {
+      const n = parseInt(weeks, 10);
+      if (!n) return 'series';
+      return n === 1 ? 'one night' : `${n} Mondays`;
+    }
+
+    function fmt(d) {
+      return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+    }
+
+    function renderExplorations(rows) {
+      const box = document.getElementById('explorations-content');
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+
+      const items = rows.filter(r => r.Title).map(r => {
+        const start = parseDate(r.Start);
+        const weeks = parseInt(r.Weeks, 10) || 1;
+        const end = start ? new Date(start.getFullYear(), start.getMonth(), start.getDate() + (weeks - 1) * 7) : null;
+        return { ...r, start, end };
+      });
+
+      const dated = items.filter(i => i.start && i.end >= today).sort((a, b) => a.start - b.start);
+      const horizon = items.filter(i => !i.start);
+
+      let html = '';
+
+      if (dated.length) {
+        const n = dated[0];
+        const running = n.start <= today;
+        html += `
+          <div class="next-up">
+            <p class="status">${running ? 'Running now' : 'Next up'}</p>
+            <div class="topic">${esc(n.Title)}</div>
+            <div class="meta">${lengthLabel(n.Weeks)}, ${running ? 'through' : 'starting'} ${fmt(running ? n.end : n.start)}</div>
+            ${n.Description ? `<p>${esc(n.Description)}</p>` : ''}
+            ${n.Link ? `<a class="inline" href="${esc(n.Link)}" target="_blank" rel="noopener">Sign up for this series</a>` : ''}
+          </div>`;
+      }
+
+      const later = dated.slice(1).map(i =>
+        `<li><span>${esc(i.Title)}</span><span class="when-tag">${fmt(i.start)} · ${lengthLabel(i.Weeks)}</span></li>`);
+      const ideas = horizon.map(i =>
+        `<li><span>${esc(i.Title)}</span><span class="when-tag">${lengthLabel(i.Weeks)}</span></li>`);
+
+      if (later.length) html += `<p class="lineup-label">After that:</p><ul class="lineup">${later.join('')}</ul>`;
+      if (ideas.length) html += `<p class="lineup-label">On the horizon:</p><ul class="lineup">${ideas.join('')}</ul>`;
+
+      box.innerHTML = html || '<p>The next topic is still being chosen.</p>';
+    }
+
+    fetch(EXPLORATIONS_CSV)
+      .then(r => r.text())
+      .then(text => renderExplorations(parseCSV(text)))
+      .catch(() => {
+        document.getElementById('explorations-content').innerHTML =
+          '<p>Could not load the lineup. The <a class="inline" href="https://app.ubindi.com/Stuart.Zobel" target="_blank" rel="noopener">sign-up calendar</a> has current dates.</p>';
+      });
   </script>
 </body>
 </html>
