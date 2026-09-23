@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monday Night Guitar Classes in Seattle | Stuart Zobel</title>
+  <meta name="description" content="Weekly group guitar classes in Seattle on Monday nights. Fundamentals from 7 to 8pm for any level, then Explorations from 8 to 9pm: rotating topics like Brazilian guitar, lead sheets, and chord progressions." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    .classes-hero {
+      padding: 4rem 1.5rem 3rem;
+      max-width: 720px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--border);
+    }
+    .classes-hero .eyebrow {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .classes-hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.4rem, 7vw, 3.8rem);
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.05;
+      margin-bottom: 1.25rem;
+    }
+    .classes-hero .lead {
+      font-size: 1.05rem;
+      color: var(--ink2);
+      line-height: 1.75;
+      max-width: 52ch;
+    }
+
+    /* The evening, as two blocks of time */
+    .evening {
+      display: grid;
+      grid-template-columns: 1fr;
+      margin-top: 2.5rem;
+      border-left: 2px solid var(--accent);
+    }
+    .hour {
+      display: grid;
+      grid-template-columns: 5.5rem 1fr;
+      align-items: baseline;
+      padding: 0.9rem 0 0.9rem 1.25rem;
+    }
+    .hour + .hour { border-top: 1px solid var(--border); }
+    .hour time {
+      font-family: var(--serif);
+      font-size: 1.9rem;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .hour .name { color: var(--ink); font-weight: 500; }
+    .hour .gist { display: block; color: var(--ink3); font-size: 0.88rem; }
+
+    .cta-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem; }
+    .btn-primary, .btn-secondary {
+      border-radius: 3px;
+      padding: 0.75rem 1.5rem;
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: inline-block;
+    }
+    .btn-primary { background: var(--accent); color: var(--accent-fg); transition: background 0.15s; }
+    .btn-primary:hover { background: var(--accent2); }
+    .btn-secondary { border: 1px solid var(--border2); color: var(--ink); transition: border-color 0.15s, color 0.15s; }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+    .classes-body { max-width: 720px; margin: 0 auto; padding: 0 1.5rem 5rem; }
+    .classes-section { padding: 2.75rem 0; border-bottom: 1px solid var(--border); }
+    .classes-section:last-child { border-bottom: none; }
+    .when {
+      font-size: 0.85rem;
+      color: var(--ink3);
+      margin-bottom: 0.6rem;
+    }
+    .classes-section h2 {
+      font-family: var(--serif);
+      font-size: 1.75rem;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+    }
+    .classes-section p {
+      font-size: 0.95rem;
+      color: var(--ink2);
+      line-height: 1.8;
+      margin-bottom: 0.75rem;
+      max-width: 58ch;
+    }
+    .classes-section a.inline { color: var(--accent); border-bottom: 1px solid var(--border2); }
+
+    /* Explorations lineup */
+    .next-up {
+      margin: 1.5rem 0;
+      padding: 1.25rem 1.25rem 1rem;
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 3px;
+    }
+    .next-up .topic { font-family: var(--serif); font-size: 1.5rem; color: var(--ink); line-height: 1.2; }
+    .next-up .meta { font-size: 0.85rem; color: var(--accent); margin: 0.3rem 0 0.6rem; }
+    .next-up p { margin-bottom: 0.25rem; }
+    .lineup { list-style: none; margin-top: 1rem; }
+    .lineup li {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.6rem 0;
+      border-top: 1px solid var(--border);
+      font-size: 0.95rem;
+      color: var(--ink);
+    }
+    .lineup li span:last-child { color: var(--ink3); font-size: 0.85rem; white-space: nowrap; }
+
+    /* Prices */
+    .prices {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 1.5rem;
+    }
+    .price { background: var(--bg); padding: 1.25rem; }
+    .price .amount { font-family: var(--serif); font-size: 2.2rem; color: var(--ink); line-height: 1; }
+    .price .what { color: var(--accent); font-size: 0.85rem; font-weight: 500; margin: 0.5rem 0 0.3rem; }
+    .price p { font-size: 0.82rem; line-height: 1.55; margin: 0; max-width: none; }
+
+    .details { display: grid; grid-template-columns: 7rem 1fr; gap: 0.6rem 1rem; margin-top: 1rem; }
+    .details dt { color: var(--ink3); font-size: 0.88rem; }
+    .details dd { color: var(--ink2); font-size: 0.95rem; line-height: 1.6; }
+
+    @media (min-width: 640px) {
+      .classes-hero { padding: 5rem 2.5rem 3.5rem; }
+      .classes-body { padding: 0 2.5rem 5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="nav-placeholder"></div>
+
+  <main>
+    <div class="classes-hero">
+      <p class="eyebrow">Group guitar classes · Seattle</p>
+      <h1>Monday nights</h1>
+      <p class="lead">Two classes, back to back. The first hour keeps your hands and ears in shape. The second hour goes somewhere new. Come for one or stay for both.</p>
+
+      <div class="evening" aria-label="The evening">
+        <div class="hour">
+          <time>7:00</time>
+          <span><span class="name">Fundamentals</span><span class="gist">Every week. Any level.</span></span>
+        </div>
+        <div class="hour">
+          <time>8:00</time>
+          <span><span class="name">Explorations</span><span class="gist">A rotating topic, one night to eight weeks.</span></span>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a href="https://app.ubindi.com/Stuart.Zobel" target="_blank" rel="noopener" class="btn-primary">See the schedule and sign up</a>
+        <a href="contact.html" class="btn-secondary">Ask a question</a>
+      </div>
+    </div>
+
+    <div class="classes-body">
+
+      <div class="classes-section" id="fundamentals">
+        <p class="when">7 to 8pm</p>
+        <h2>Fundamentals</h2>
+        <p>The same hour every week, and it changes you slowly. We warm up, work on time and tone, and practice changing chords without a hitch. A lot of it is listening: hearing where the bass goes before your hand gets there.</p>
+        <p>Beginners and working players do the same exercises. Each person gets something different out of them, and nobody is behind.</p>
+      </div>
+
+      <div class="classes-section" id="explorations">
+        <p class="when">8 to 9pm</p>
+        <h2>Explorations</h2>
+        <p>One topic at a time, for as long as it needs. Some fit in a single night. Others take four or eight weeks. Series build week to week, so they're sold as a set.</p>
+
+        <!-- UPDATE for each new topic -->
+        <div class="next-up">
+          <div class="topic">[Next topic]</div>
+          <div class="meta">[N] Mondays, starting [date]</div>
+          <p>[Two sentences on what we'll play and what you'll leave with.]</p>
+        </div>
+
+        <p>On the horizon:</p>
+        <ul class="lineup">
+          <li><span>Brazilian Guitar 101</span><span>series</span></li>
+          <li><span>Dealing with Lead Sheets</span><span>series</span></li>
+          <li><span>Essential Chord Progressions</span><span>series</span></li>
+          <li><span>13 Ways to Play Blackbird</span><span>one night</span></li>
+        </ul>
+        <p style="margin-top:1rem;">Have a topic you want? <a class="inline" href="contact.html">Suggest one.</a></p>
+      </div>
+
+      <div class="classes-section" id="prices">
+        <h2>Prices</h2>
+        <div class="prices">
+          <div class="price">
+            <div class="amount">$25</div>
+            <p class="what">One class</p>
+            <p>Drop in to Fundamentals or a one-night Exploration.</p>
+          </div>
+          <div class="price">
+            <div class="amount">$45</div>
+            <p class="what">Both hours</p>
+            <p>Fundamentals and Explorations on the same night.</p>
+          </div>
+          <div class="price">
+            <div class="amount">$110</div>
+            <p class="what">4-week series</p>
+            <p>A full Exploration series. Longer series are priced to match.</p>
+          </div>
+          <div class="price">
+            <div class="amount">$200</div>
+            <p class="what">Five Mondays</p>
+            <p>Both hours, five nights, used within three months.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="classes-section" id="details">
+        <h2>The practical part</h2>
+        <dl class="details">
+          <dt>Where</dt>
+          <dd>[Venue name and address]</dd>
+          <dt>When</dt>
+          <dd>Most Monday nights. Skipped weeks are marked on the sign-up calendar.</dd>
+          <dt>Bring</dt>
+          <dd>A guitar, nylon or steel string. A tuner helps.</dd>
+          <dt>Minimums</dt>
+          <dd>An Exploration series runs with four or more people. If one doesn't fill, you get a full refund.</dd>
+        </dl>
+        <p style="margin-top:1.5rem;">Mondays don't work? The <a class="inline" href="workout.html">Wednesday Morning Workout</a> covers similar ground on Zoom.</p>
+        <div class="cta-row">
+          <a href="https://app.ubindi.com/Stuart.Zobel" target="_blank" rel="noopener" class="btn-primary">See the schedule and sign up</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    fetch('nav.html').then(r => r.text()).then(h => document.getElementById('nav-placeholder').innerHTML = h);
+    fetch('footer.html').then(r => r.text()).then(h => document.getElementById('footer-placeholder').innerHTML = h);
+  </script>
+</body>
+</html>
